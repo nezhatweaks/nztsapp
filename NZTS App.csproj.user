@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <ApplicationDefinition Update="App.xaml">
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="ContextSwitchDeadband.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="LatencySensitivityHint.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="PowerPlan.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MMCSS.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="SettingsUserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="WelcomeUserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Win32PrioritySeparation.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="ContextSwitchDeadband.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="LatencySensitivityHint.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="PowerPlan.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MMCSS.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="SettingsUserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="WelcomeUserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Win32PrioritySeparation.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>
