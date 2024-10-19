@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.IO.Compression; // Ensure you have the System.IO.Compression reference
+using System.IO.Compression;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,8 +16,9 @@ namespace NZTS_App.Views
             DisplayCurrentVersion();
         }
 
-        private const string LatestVersionUrl = "https://raw.githubusercontent.com/nezhatweaks/nztsapp/refs/heads/main/Assets/latest_version.txt";
-        private const string NewZipUrlTemplate = "https://github.com/nezhatweaks/nztsapp/releases/download/v{0}/NZTS_APP_v{0}.zip"; // Template for the versioned ZIP URL
+        // Corrected LatestVersion URL
+        private const string LatestVersionUrl = "https://raw.githubusercontent.com/nezhatweaks/nztsapp/main/Assets/latest_version.txt";
+        private const string NewZipUrlTemplate = "https://github.com/nezhatweaks/nztsapp/releases/download/v{0}/NZTS_APP_v{0}.zip";
 
         private async void CheckForUpdates_Click(object sender, RoutedEventArgs e)
         {
@@ -38,58 +39,41 @@ namespace NZTS_App.Views
                 using (HttpClient client = new HttpClient())
                 {
                     // Get the latest version number from the text file
-                    string latestVersionStr = await client.GetStringAsync(LatestVersionUrl);
+                    HttpResponseMessage response = await client.GetAsync(LatestVersionUrl);
+
+                    // Check if the request was successful
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        // Log the exact error status for debugging
+                        MessageBox.Show($"Failed to retrieve latest version. Status code: {response.StatusCode}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    // Read the response content and trim spaces
+                    string latestVersionStr = await response.Content.ReadAsStringAsync();
                     latestVersionStr = latestVersionStr.Trim();
 
+                    // Check if the latest version string is valid
+                    if (string.IsNullOrEmpty(latestVersionStr))
+                    {
+                        MessageBox.Show("Failed to retrieve the latest version. The version information is missing.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    // Get the current version of the running assembly
                     var assembly = System.Reflection.Assembly.GetExecutingAssembly();
                     var assemblyName = assembly.GetName();
                     string currentVersionStr = assemblyName?.Version?.ToString() ?? "0.0.0.0";
 
+                    // Parse the versions
                     Version latestVersion = new Version(latestVersionStr);
                     Version currentVersion = new Version(currentVersionStr);
 
+                    // Compare versions
                     if (currentVersion < latestVersion)
                     {
-                        string? appDirectory = Path.GetDirectoryName(assembly.Location);
-                        if (appDirectory == null)
-                        {
-                            MessageBox.Show("Application directory not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
-                        }
-
-                        // Current executable name
-                        string currentExecutablePath = Path.Combine(appDirectory, "NZTS APP.exe");
-                        string newZipPath = Path.Combine(appDirectory, $"NZTS_APP_v{latestVersionStr}.zip");
-
-                        if (File.Exists(currentExecutablePath))
-                        {
-                            string backupDirectory = Path.Combine(appDirectory, "Backup");
-                            Directory.CreateDirectory(backupDirectory);
-
-                            // Backup the current executable
-                            string backupExecutablePath = Path.Combine(backupDirectory, $"NZTS_APP_backup_{DateTime.Now:yyyyMMddHHmmss}.exe");
-                            File.Copy(currentExecutablePath, backupExecutablePath, true);
-
-                            // Download the versioned ZIP file
-                            byte[] zipFileData = await client.GetByteArrayAsync(string.Format(NewZipUrlTemplate, latestVersionStr));
-                            File.WriteAllBytes(newZipPath, zipFileData);
-
-                            // Extract the ZIP file
-                            ZipFile.ExtractToDirectory(newZipPath, appDirectory, true); // true to overwrite existing files
-
-                            // Delete the current version executable
-                            File.Delete(currentExecutablePath); // Delete NZTS APP.exe
-
-                            // Optionally delete the ZIP file after extraction
-                            File.Delete(newZipPath);
-
-                            MessageBox.Show("Update successful! Please restart the application.", "Update", MessageBoxButton.OK, MessageBoxImage.Information);
-                        }
-                        else
-                        {
-                            // Log or ignore the absence of the current executable
-                            Console.WriteLine("Current version executable not found, proceeding without backup.");
-                        }
+                        // Here you can place your logic to download and update
+                        MessageBox.Show($"A new version (v{latestVersionStr}) is available! Please update.", "Update Available", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     else
                     {
@@ -99,10 +83,9 @@ namespace NZTS_App.Views
             }
             catch (Exception ex)
             {
+                // Show detailed error for debugging
                 MessageBox.Show($"Error checking for updates: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-
     }
 }
