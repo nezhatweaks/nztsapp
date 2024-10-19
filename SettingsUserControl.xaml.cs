@@ -57,17 +57,18 @@ namespace NZTS_App.Views
                             return;
                         }
 
-                        string oldExecutablePath = Path.Combine(appDirectory, "NZTS_App_v0.1.0.exe");
+                        // Current executable name
+                        string currentExecutablePath = Path.Combine(appDirectory, "NZTS APP.exe");
                         string newZipPath = Path.Combine(appDirectory, $"NZTS_APP_v{latestVersionStr}.zip");
 
-                        if (File.Exists(oldExecutablePath))
+                        if (File.Exists(currentExecutablePath))
                         {
                             string backupDirectory = Path.Combine(appDirectory, "Backup");
                             Directory.CreateDirectory(backupDirectory);
 
-                            // Backup the old executable
-                            string backupExecutablePath = Path.Combine(backupDirectory, $"NZTS_App_v0.1.0_backup_{DateTime.Now:yyyyMMddHHmmss}.exe");
-                            File.Copy(oldExecutablePath, backupExecutablePath, true);
+                            // Backup the current executable
+                            string backupExecutablePath = Path.Combine(backupDirectory, $"NZTS_APP_backup_{DateTime.Now:yyyyMMddHHmmss}.exe");
+                            File.Copy(currentExecutablePath, backupExecutablePath, true);
 
                             // Download the versioned ZIP file
                             byte[] zipFileData = await client.GetByteArrayAsync(string.Format(NewZipUrlTemplate, latestVersionStr));
@@ -76,8 +77,8 @@ namespace NZTS_App.Views
                             // Extract the ZIP file
                             ZipFile.ExtractToDirectory(newZipPath, appDirectory, true); // true to overwrite existing files
 
-                            // Delete the old version executable
-                            File.Delete(oldExecutablePath); // Delete NZTS_App_v0.1.0.exe
+                            // Delete the current version executable
+                            File.Delete(currentExecutablePath); // Delete NZTS APP.exe
 
                             // Optionally delete the ZIP file after extraction
                             File.Delete(newZipPath);
@@ -86,7 +87,8 @@ namespace NZTS_App.Views
                         }
                         else
                         {
-                            MessageBox.Show("Old version executable not found. Please install the application first.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            // Log or ignore the absence of the current executable
+                            Console.WriteLine("Current version executable not found, proceeding without backup.");
                         }
                     }
                     else
@@ -100,5 +102,7 @@ namespace NZTS_App.Views
                 MessageBox.Show($"Error checking for updates: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+
     }
 }
