@@ -8,14 +8,13 @@ namespace NZTS_App
 {
     public partial class PowerPlan : UserControl
     {
-        private string? selectedDirectory; // Nullable string
-        
+        private string? selectedDirectory;
 
         public PowerPlan()
         {
             InitializeComponent();
-            LoadPowerPlans(); // Load plans initially if you have a default directory set
-            CheckPlatformAoAcOverride(); // Check the registry value on load
+            LoadPowerPlans();
+            CheckPlatformAoAcOverride();
         }
 
         private void LoadPowerPlans()
@@ -26,9 +25,9 @@ namespace NZTS_App
 
                 foreach (string file in powFiles)
                 {
-                    // Add the filename (without path) to the ListBox
                     PowerPlanListBox.Items.Add(Path.GetFileName(file));
                 }
+                App.changelogUserControl?.AddLog("Applied", "Loaded power plans from directory.");
             }
         }
 
@@ -37,83 +36,66 @@ namespace NZTS_App
             string registryPath = @"SYSTEM\CurrentControlSet\Control\Power";
             string registryValue = "PlatformAoAcOverride";
 
-            // Open the registry key
             using var key = Registry.LocalMachine.OpenSubKey(registryPath);
-
-            if (key != null) // Ensure the key is not null
+            if (key != null)
             {
-                // Use var to retrieve the value
                 var value = key.GetValue(registryValue);
 
-                // Check if the value is not null and is of type int
-                if (value is int intValue) // Pattern matching to check the type
+                if (value is int intValue)
                 {
-                    // Set the toggle state based on the registry value
-                    if (intValue == 1)
-                    {
-                        PlatformAoAcToggleButton.IsChecked = false; // Toggle off
-                        BrowseButton.IsEnabled = false; // Disable the Browse button
-                        
-                    }
-                    else if (intValue == 0)
-                    {
-                        PlatformAoAcToggleButton.IsChecked = true; // Toggle on
-                        BrowseButton.IsEnabled = true; // Enable the Browse button
-                        
-                    }
+                    PlatformAoAcToggleButton.IsChecked = intValue == 0;
+                    BrowseButton.IsEnabled = intValue == 0;
+                    
                 }
                 else
                 {
-                    // Handle the case where the value is not found or is not an integer
-                    MessageBox.Show("PlatformAoAcOverride value not found or is not an integer.");
+                    string errorMsg = "PlatformAoAcOverride value not found or is not an integer.";
+                    MessageBox.Show(errorMsg);
+                    App.changelogUserControl?.AddLog("Failed", errorMsg);
                 }
             }
             else
             {
-                MessageBox.Show("Failed to open registry key.");
+                string errorMsg = "Failed to open registry key.";
+                MessageBox.Show(errorMsg);
+                App.changelogUserControl?.AddLog("Failed", errorMsg);
             }
         }
 
         private void BrowseButton_Click(object sender, RoutedEventArgs e)
         {
-            // Use OpenFileDialog to allow the user to select a .pow file
             var dialog = new OpenFileDialog
             {
                 Filter = "Power Plan Files (*.pow)|*.pow",
                 Title = "Select a Power Plan File",
-                Multiselect = false // Prevent multiple selections
+                Multiselect = false
             };
 
             bool? result = dialog.ShowDialog();
             if (result == true)
             {
-                // Set the directory to the folder where the selected file is located
                 selectedDirectory = Path.GetDirectoryName(dialog.FileName);
-                PowerPlanListBox.Items.Clear(); // Clear previous items
-                LoadPowerPlans(); // Load power plans from the selected directory
-                PowerPlanListBox.SelectedItem = Path.GetFileName(dialog.FileName); // Select the chosen file
+                PowerPlanListBox.Items.Clear();
+                LoadPowerPlans();
+                PowerPlanListBox.SelectedItem = Path.GetFileName(dialog.FileName);
+                
             }
         }
 
         private void PlatformAoAcToggleButton_Checked(object sender, RoutedEventArgs e)
         {
-            // Set the registry value to 0
             SetPlatformAoAcOverride(0);
-            BrowseButton.IsEnabled = true; // Enable Browse button
-
-            
-
-            
+            BrowseButton.IsEnabled = true;
+            ImportPresetPlanButton.IsEnabled = true; // Enable the preset import button
         }
-
 
         private void PlatformAoAcToggleButton_Unchecked(object sender, RoutedEventArgs e)
         {
-            // Set the registry value to 1
             SetPlatformAoAcOverride(1);
-            BrowseButton.IsEnabled = false; // Disable Browse button
-            
+            BrowseButton.IsEnabled = false;
+            ImportPresetPlanButton.IsEnabled = false; // Disable the preset import button
         }
+
 
         private void SetPlatformAoAcOverride(int value)
         {
@@ -123,34 +105,28 @@ namespace NZTS_App
                 if (key != null)
                 {
                     key.SetValue("PlatformAoAcOverride", value, RegistryValueKind.DWord);
+                    
+                }
+                else
+                {
+                    string errorMsg = "Failed to open registry key for PlatformAoAcOverride.";
+                    MessageBox.Show(errorMsg);
+                    App.changelogUserControl?.AddLog("Failed", errorMsg);
                 }
             }
         }
 
         private void PromptRestart()
         {
-            MessageBoxResult result = MessageBox.Show("Do you want to restart the computer now or later?",
-                                                        "Restart Required",
-                                                        MessageBoxButton.YesNoCancel);
+            MessageBoxResult result = MessageBox.Show("Do you want to restart the computer now or later?", "Restart Required", MessageBoxButton.YesNoCancel);
             if (result == MessageBoxResult.Yes)
             {
-                RestartComputer(); // Call the method to restart the computer
-            }
-            else if (result == MessageBoxResult.No)
-            {
-                // Logic for postponing the restart can go here
-                
-            }
-            else if (result == MessageBoxResult.Cancel)
-            {
-                // Logic for cancelling the prompt, if needed
-                
+                RestartComputer();
             }
         }
 
         private void RestartComputer()
         {
-            // Command to restart the computer
             var processInfo = new System.Diagnostics.ProcessStartInfo("shutdown", "/r /t 0")
             {
                 CreateNoWindow = true,
@@ -159,37 +135,33 @@ namespace NZTS_App
                 RedirectStandardError = true
             };
 
-            // Start the process
             System.Diagnostics.Process.Start(processInfo);
+            App.changelogUserControl?.AddLog("Applied", "Initiated system restart.");
         }
-
 
         private void PowerPlanListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Check if any item is selected
-            ImportPowerPlanButton.IsEnabled = PowerPlanListBox.SelectedItem != null; // Enable or disable button
+            ImportPowerPlanButton.IsEnabled = PowerPlanListBox.SelectedItem != null;
         }
 
         private void ImportPowerPlan_Click(object sender, RoutedEventArgs e)
         {
-            // Check if the toggle is off (indicating PlatformAoAcOverride is set to 1)
             if (PlatformAoAcToggleButton.IsChecked == false)
             {
-                MessageBox.Show("Please enable the Power Plan Import toggle to fully import a power plan.",
-                                "Toggle Required",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Warning);
-                return; // Exit the method early
+                string errorMsg = "Please enable the Power Plan Import toggle to fully import a power plan.";
+                MessageBox.Show(errorMsg, "Toggle Required", MessageBoxButton.OK, MessageBoxImage.Warning);
+                App.changelogUserControl?.AddLog("Failed", errorMsg);
+                return;
             }
 
-            if (PowerPlanListBox.SelectedItem != null)
+            // Check if PowerPlanListBox is not null and has a selected item
+            if (PowerPlanListBox != null && PowerPlanListBox.SelectedItem is string selectedFile)
             {
-                string selectedFile = (string)PowerPlanListBox.SelectedItem;
-
-                // Ensure selectedDirectory is not null before using it
                 if (string.IsNullOrEmpty(selectedDirectory))
                 {
-                    MessageBox.Show("No directory selected. Please select a power plan file first.");
+                    string errorMsg = "No directory selected. Please select a power plan file first.";
+                    MessageBox.Show(errorMsg);
+                    App.changelogUserControl?.AddLog("Failed", errorMsg);
                     return;
                 }
 
@@ -197,10 +169,8 @@ namespace NZTS_App
 
                 if (File.Exists(fullPath))
                 {
-                    // Logic to import the power plan
                     try
                     {
-                        // Command to import the power plan using PowerShell
                         string command = $"powercfg -import \"{fullPath}\"";
 
                         var processInfo = new System.Diagnostics.ProcessStartInfo("powershell", command)
@@ -213,76 +183,138 @@ namespace NZTS_App
 
                         using (var process = System.Diagnostics.Process.Start(processInfo))
                         {
-                            string output = string.Empty;
-                            string error = string.Empty;
-
                             if (process != null)
                             {
-                                try
+                                string output = process.StandardOutput.ReadToEnd();
+                                string error = process.StandardError.ReadToEnd();
+
+                                process.WaitForExit();
+
+                                if (string.IsNullOrEmpty(error))
                                 {
-                                    // Ensure the process has started and redirect the standard output/error
-                                    if (process.StartInfo.RedirectStandardOutput && process.StartInfo.RedirectStandardError)
-                                    {
-                                        // Wait for the process to exit
-                                        process.WaitForExit();
-
-                                        // Read the output and error streams
-                                        output = process.StandardOutput.ReadToEnd();
-                                        error = process.StandardError.ReadToEnd();
-
-                                        // Display output or handle errors
-                                        if (string.IsNullOrEmpty(error))
-                                        {
-                                            MessageBox.Show($"Successfully imported {selectedFile}.");
-                                        }
-                                        else
-                                        {
-                                            MessageBox.Show($"Error importing {selectedFile}: {error}");
-                                        }
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show("Standard output or error redirection is not enabled.");
-                                    }
+                                    MessageBox.Show($"Successfully imported {selectedFile}.");
+                                    App.changelogUserControl?.AddLog("Applied", $"Successfully imported {selectedFile}.");
                                 }
-                                catch (Exception ex)
+                                else
                                 {
-                                    // Log the exception
-                                    MessageBox.Show($"Error during process execution: {ex.Message}");
+                                    string errorMsg = $"Error importing {selectedFile}: {error}";
+                                    MessageBox.Show(errorMsg);
+                                    App.changelogUserControl?.AddLog("Failed", errorMsg);
                                 }
                             }
                             else
                             {
-                                // Log an error if the process is null
-                                MessageBox.Show("Error: The process is null and cannot be accessed.");
-                            }
-
-                            // Display output or handle errors
-                            if (string.IsNullOrEmpty(error))
-                            {
-                                Console.WriteLine($"Successfully imported {selectedFile}.");
-                            }
-                            else
-                            {
-                                Console.WriteLine($"Error importing {selectedFile}: {error}");
+                                string errorMsg = "Error: The process is null and cannot be accessed.";
+                                MessageBox.Show(errorMsg);
+                                App.changelogUserControl?.AddLog("Failed", errorMsg);
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"An error occurred while importing the power plan: {ex.Message}");
+                        string errorMsg = $"An error occurred while importing the power plan: {ex.Message}";
+                        MessageBox.Show(errorMsg);
+                        App.changelogUserControl?.AddLog("Failed", errorMsg);
                     }
                 }
                 else
                 {
-                    Console.WriteLine($"The selected file does not exist: {fullPath}");
+                    string errorMsg = $"The selected file does not exist: {fullPath}";
+                    MessageBox.Show(errorMsg);
+                    App.changelogUserControl?.AddLog("Failed", errorMsg);
                 }
             }
             else
             {
-                Console.WriteLine("Please select a power plan to import.");
+                string errorMsg = "Please select a power plan to import.";
+                MessageBox.Show(errorMsg);
+                App.changelogUserControl?.AddLog("Failed", errorMsg);
             }
         }
+        private void ImportPresetPlan_Click(object sender, RoutedEventArgs e)
+        {
+            // Construct the full path for the preset directory
+            string presetDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Presets");
+
+            // Check if the preset directory exists
+            if (Directory.Exists(presetDirectory))
+            {
+                // Get all .pow files in the directory
+                string[] presetFiles = Directory.GetFiles(presetDirectory, "*.pow");
+
+                if (presetFiles.Length > 0)
+                {
+                    foreach (string presetFile in presetFiles)
+                    {
+                        string fileName = Path.GetFileName(presetFile);
+                        try
+                        {
+                            // Ensure the full path is correctly formatted and quoted
+                            string command = $"\"{presetFile}\"";  // Just the path to the file
+
+                            var processInfo = new System.Diagnostics.ProcessStartInfo("powercfg", $"-import {command}")
+                            {
+                                RedirectStandardOutput = true,
+                                RedirectStandardError = true,
+                                UseShellExecute = false,
+                                CreateNoWindow = true
+                            };
+
+                            using (var process = System.Diagnostics.Process.Start(processInfo))
+                            {
+                                if (process != null)
+                                {
+                                    string output = process.StandardOutput.ReadToEnd();
+                                    string error = process.StandardError.ReadToEnd();
+
+                                    process.WaitForExit();
+
+                                    if (string.IsNullOrEmpty(error))
+                                    {
+                                        MessageBox.Show($"Successfully imported preset {fileName}.");
+                                        App.changelogUserControl?.AddLog("Applied", $"Successfully imported preset {fileName}.");
+                                    }
+                                    else
+                                    {
+                                        string errorMsg = $"Error importing preset {fileName}: {error}";
+                                        MessageBox.Show(errorMsg);
+                                        App.changelogUserControl?.AddLog("Failed", errorMsg);
+                                    }
+                                }
+                                else
+                                {
+                                    string errorMsg = "Error: The process is null and cannot be accessed.";
+                                    MessageBox.Show(errorMsg);
+                                    App.changelogUserControl?.AddLog("Failed", errorMsg);
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            string errorMsg = $"An error occurred while importing the preset power plan {fileName}: {ex.Message}";
+                            MessageBox.Show(errorMsg);
+                            App.changelogUserControl?.AddLog("Failed", errorMsg);
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("No preset power plans found in the directory.");
+                    App.changelogUserControl?.AddLog("Info", "No preset power plans found in the directory.");
+                }
+            }
+            else
+            {
+                string errorMsg = "Preset directory does not exist.";
+                MessageBox.Show(errorMsg);
+                App.changelogUserControl?.AddLog("Failed", errorMsg);
+            }
+        }
+
+
+
+
+
 
     }
 }

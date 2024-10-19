@@ -30,11 +30,14 @@ namespace NZTS_App.Views
                     {
                         key.SetValue("ContextSwitchDeadband", 1, RegistryValueKind.DWord);
                         MessageBox.Show("ContextSwitchDeadband optimization applied!");
-                        (Application.Current.MainWindow as MainWindow)?.MarkSettingsApplied();
+                        App.changelogUserControl?.AddLog("Applied", "Changed the ContextSwitchDeadband setting.");
+                        // Mark settings as applied
+                        mainWindow?.MarkSettingsApplied(); // Use the stored MainWindow reference
                     }
                     else
                     {
                         MessageBox.Show("Failed to open registry key for ContextSwitchDeadband.");
+                        App.changelogUserControl?.AddLog("Failed", "Failed to change ContextSwitchDeadband setting.");
                     }
                 }
             }
@@ -55,10 +58,12 @@ namespace NZTS_App.Views
                     {
                         key.DeleteValue("ContextSwitchDeadband", false); // false = do not throw an exception if the value does not exist
                         MessageBox.Show("ContextSwitchDeadband has been deleted!");
+                        App.changelogUserControl?.AddLog("Deleted", "Deleted the ContextSwitchDeadband setting.");
                     }
                     else
                     {
                         MessageBox.Show("Failed to open registry key for ContextSwitchDeadband.");
+                        App.changelogUserControl?.AddLog("Failed", "Failed to delete ContextSwitchDeadband setting.");
                     }
                 }
             }

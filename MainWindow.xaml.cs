@@ -16,6 +16,7 @@ using System.Drawing;
 using System.Windows.Interop;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Diagnostics;
 
 
 
@@ -27,7 +28,8 @@ namespace NZTS_App
     
     public partial class MainWindow : Window
     {
-        private bool settingsApplied = false;
+        private bool settingsApplied = false; // Existing flag for settings
+        private bool isClosing = false; // New flag to prevent re-entrance
         public enum ValueType
         {
             DWord,
@@ -42,6 +44,9 @@ namespace NZTS_App
     {"SystemResponsiveness", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "00000000", ValueType.DWord, false, "00000002")},
     {"NoLazyMode", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "00000001", ValueType.DWord, false, "00000000")},
     {"LazyModeTimeout", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "0098967f", ValueType.DWord, false, "00005000")},
+    {"DisableDynamicPstate", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "00000001", ValueType.DWord, false, "00000000")}, // default is 0
+    {"EnableUlps", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "00000000", ValueType.DWord, false, "00000001")}, // default is 1
+    {"PP_ThermalAutoThrottlingEnable", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "00000000", ValueType.DWord, false, "00000001")}, // default is 1
     {"Start", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\MMCSS", "00000002", ValueType.DWord, false, "00000002")}
 };
 
@@ -50,7 +55,9 @@ namespace NZTS_App
 
 
 
+        
 
+        
 
 
 
@@ -60,12 +67,40 @@ namespace NZTS_App
             InitializeComponent();
             LoadGames();
             this.SizeChanged += MainWindow_SizeChanged; // Subscribe to size changed event
-                                                        // Show the game content and hide other content on startup
+            this.Closing += Window_Closing;
+
+            DisplayCurrentVersion(); // Display the current version when the control is initialized
             var welcomeControl = new WelcomeUserControl();
             welcomeControl.OptimizeAllClicked += WelcomeControl_OptimizeAllClicked;
             welcomeControl.RestoreAllClicked += WelcomeControl_RestoreAllClicked;
 
         }
+
+        private void DisplayCurrentVersion()
+        {
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var currentVersion = assembly?.GetName().Version?.ToString() ?? "unknown version";
+            VersionTextBlock.Text = $"v{currentVersion}"; // Set the version text
+        }
+
+        
+        
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -79,6 +114,7 @@ namespace NZTS_App
                 }
 
                 MessageBox.Show("All optimizations have been applied successfully!");
+                
 
                 // Prompt the user to restart the computer
                 var result = MessageBox.Show("Changes have been applied. Would you like to restart your computer now?", "Restart Required", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -91,6 +127,7 @@ namespace NZTS_App
             catch (Exception ex)
             {
                 MessageBox.Show($"Error during optimization: {ex.Message}");
+                
             }
         }
 
@@ -106,6 +143,7 @@ namespace NZTS_App
 
             Console.WriteLine("RestoreAll_Click completed.");
             MessageBox.Show("All settings have been restored to default.");
+            
 
             // Prompt the user to restart the computer
             var result = MessageBox.Show("Settings have been restored to default. Would you like to restart your computer now?", "Restart Required", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -126,6 +164,7 @@ namespace NZTS_App
                 }
 
                 MessageBox.Show("All optimizations have been applied successfully!");
+                
 
                 // Prompt the user to restart the computer
                 var result = MessageBox.Show("Changes have been applied. Would you like to restart your computer now?", "Restart Required", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -138,6 +177,8 @@ namespace NZTS_App
             catch (Exception ex)
             {
                 MessageBox.Show($"Error during optimization: {ex.Message}");
+                
+
             }
         }
 
@@ -153,6 +194,7 @@ namespace NZTS_App
 
             Console.WriteLine("RestoreAll_Click completed.");
             MessageBox.Show("All settings have been restored to default.");
+            
 
             // Prompt the user to restart the computer
             var result = MessageBox.Show("Settings have been restored to default. Would you like to restart your computer now?", "Restart Required", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -162,6 +204,7 @@ namespace NZTS_App
                 System.Diagnostics.Process.Start("shutdown", "/r /t 0");
             }
         }
+
 
 
 
@@ -182,16 +225,22 @@ namespace NZTS_App
                     {
                         // Parse the value as a DWORD (integer)
                         int intValue = int.Parse(value, System.Globalization.NumberStyles.HexNumber);
+                        
                         Registry.SetValue(path, key, intValue, RegistryValueKind.DWord);
+                        App.changelogUserControl?.AddLog("Applied", $"Changed the {key} setting to {value}.");
                     }
                     else if (valueType == ValueType.String)
                     {
                         Registry.SetValue(path, key, value);
+                        
                     }
+                    
+
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Error applying {key}: {ex.Message}");
+                    App.changelogUserControl?.AddLog("Failed", $"Unable to change the {key} setting.");
                 }
             }
         }
@@ -234,10 +283,12 @@ namespace NZTS_App
                             {
                                 regKey.DeleteValue(key, false); // Use false to suppress exception if it doesn't exist
                                 Console.WriteLine($"Successfully deleted {key} from {subKeyPath}.");
+                                App.changelogUserControl?.AddLog("Applied", $"Changed the {key} setting.");
                             }
                             else
                             {
                                 Console.WriteLine($"Key {key} does not exist; nothing to delete.");
+                                App.changelogUserControl?.AddLog("Failed", $"Unable to change the {key} setting.");
                             }
                         }
                     }
@@ -249,26 +300,31 @@ namespace NZTS_App
                             uint uintDefaultValue = Convert.ToUInt32(defaultValue, 16); // Convert hex string to uint
                             Registry.SetValue(fullPath, key, uintDefaultValue, RegistryValueKind.DWord);
                             Console.WriteLine($"Successfully restored {key} to {defaultValue} at {fullPath}.");
+                            App.changelogUserControl?.AddLog("Restored", $"Changed the {key} setting back to {defaultValue} .");
                         }
                         else if (valueType == ValueType.String)
                         {
                             Registry.SetValue(fullPath, key, defaultValue, RegistryValueKind.String);
                             Console.WriteLine($"Successfully restored {key} to {defaultValue} at {fullPath}.");
+                            App.changelogUserControl?.AddLog("Restored", $"Changed the {key} setting back to {defaultValue} .");
                         }
                     }
                 }
                 catch (UnauthorizedAccessException)
                 {
                     Console.WriteLine($"Access denied for {key} at {fullPath}. Check permissions.");
+                    App.changelogUserControl?.AddLog("Failed", $"Unable to change the {key} setting.");
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Error resetting {key}: {ex.Message}");
+                    App.changelogUserControl?.AddLog("Failed", $"Unable to change the {key} setting.");
                 }
             }
             else
             {
                 Console.WriteLine($"Error: {key} not found in registryTweaks.");
+                App.changelogUserControl?.AddLog("Failed", $"Unable to change the {key} setting.");
             }
         }
 
@@ -294,6 +350,7 @@ namespace NZTS_App
                         if (value is bool boolValue && !boolValue)
                         {
                             MessageBox.Show($"Key {key} is false in the registry; nothing to delete.");
+                            App.changelogUserControl?.AddLog("Failed", $"Unable to change the {key} setting.");
                         }
                         else
                         {
@@ -301,22 +358,26 @@ namespace NZTS_App
                             {
                                 regKey.DeleteValue(key, false);
                                 MessageBox.Show($"Successfully deleted {key} from {path}.");
+                                App.changelogUserControl?.AddLog("Deleted", $"Deleted the {key} setting.");
                             }
                             else
                             {
                                 MessageBox.Show($"Key {key} does not exist; nothing to delete.");
+                                App.changelogUserControl?.AddLog("Failed", $"Unable to change the {key} setting.");
                             }
                         }
                     }
                     else
                     {
                         MessageBox.Show($"Error: Registry path not found: {path}");
+                        App.changelogUserControl?.AddLog("Failed", $"Unable to change the {key} setting.");
                     }
                 }
             }
             else
             {
                 MessageBox.Show("Deletion not performed as the condition was false.");
+                App.changelogUserControl?.AddLog("Failed", $"Unable to change the {key} setting.");
             }
         }
 
@@ -332,36 +393,91 @@ namespace NZTS_App
                     uint uintDefaultValue = Convert.ToUInt32(defaultValue, 16);
                     Registry.SetValue(path, key, uintDefaultValue, RegistryValueKind.DWord);
                     Console.WriteLine($"Successfully restored {key} to {defaultValue} at {path}.");
+                    App.changelogUserControl?.AddLog("Restored", $"Restored the {key} to {defaultValue} setting.");
                 }
                 else if (valueType == ValueType.String)
                 {
                     Registry.SetValue(path, key, defaultValue, RegistryValueKind.String);
                     Console.WriteLine($"Successfully restored {key} to {defaultValue} at {path}.");
+                    App.changelogUserControl?.AddLog("Restored", $"Restored the {key} to {defaultValue} setting.");
                 }
             }
             catch (FormatException)
             {
                 Console.WriteLine($"Error: Default value '{defaultValue}' is not in the correct format for {valueType}.");
+                App.changelogUserControl?.AddLog("Failed", $"Unable to restore the {key} to {defaultValue} setting.");
             }
         }
 
+        private void Button_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button button) return; // Use pattern matching for safety
 
+            Border? border = FindVisualChild<Border>(button); // Use nullable Border type
+            if (border == null) return; // Ensure border is not null
 
+            // Create a new LinearGradientBrush for the border
+            var gradientBrush = new LinearGradientBrush
+            {
+                StartPoint = new System.Windows.Point(0, 0),
+                EndPoint = new System.Windows.Point(1, 1)
+            };
 
+            // Create the color stops for the gradient
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Red, 0));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Orange, 0.2));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Yellow, 0.4));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Green, 0.6));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Blue, 0.8));
+            gradientBrush.GradientStops.Add(new GradientStop(Colors.Purple, 1));
 
+            // Set the gradient brush as the border's border brush
+            border.BorderBrush = gradientBrush;
 
+            // Create and start the color animation
+            var animation = new ColorAnimation
+            {
+                From = Colors.Red,
+                To = Colors.Purple,
+                Duration = new Duration(TimeSpan.FromSeconds(2)),
+                RepeatBehavior = RepeatBehavior.Forever,
+                AutoReverse = true
+            };
 
+            // Apply the animation to the border's background
+            if (border.Background is SolidColorBrush solidColorBrush)
+            {
+                solidColorBrush.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+            }
+            else
+            {
+                // Create a new SolidColorBrush if the background is not a SolidColorBrush
+                var newBrush = new SolidColorBrush(Colors.Transparent);
+                border.Background = newBrush;
+                newBrush.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+            }
+        }
 
+        // Helper method to find child elements
+        private T? FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+        {
+            if (parent == null) return null; // Ensure parent is not null
 
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (child is T childType)
+                {
+                    return childType; // Return the child if it matches the type
+                }
 
-
-
-
-
-
-
-
-
+                // Recursively search for children
+                var childOfChild = FindVisualChild<T>(child);
+                if (childOfChild != null)
+                    return childOfChild;
+            }
+            return null; // Return null if no child of type T is found
+        }
 
 
 
@@ -434,8 +550,13 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
 
 
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+
+        private void Window_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (isClosing) return; // Prevent re-entrance
+
+            isClosing = true; // Set the flag
+
             if (settingsApplied)
             {
                 var result = MessageBox.Show("You have applied settings that require a restart. Do you want to restart now?",
@@ -450,11 +571,23 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
             }
         }
 
+
+
+
+
+
+
+
         // Method to mark that settings have been applied
         public void MarkSettingsApplied()
         {
-            settingsApplied = true;
+            if (!settingsApplied) // Check if settings have not been applied yet
+            {
+                settingsApplied = true;
+                
+            }
         }
+
 
 
 
@@ -496,10 +629,40 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
             ShowContentWithAnimation(mmcssControl); // Call the method to display with animation
         }
 
+        private void Nvidia_Click(object sender, RoutedEventArgs e)
+        {
+            var nvidiaControl = new NVIDIA(this);
+            ShowContentWithAnimation(nvidiaControl); // Call the method to display with animation
+        }
+
+        private void AMD_Click(object sender, RoutedEventArgs e)
+        {
+            var amdControl = new AMD(this);
+            ShowContentWithAnimation(amdControl); // Call the method to display with animation
+        }
+
+        private void CPUPriority_Click(object sender, RoutedEventArgs e)
+        {
+            var cpuPriorityControl = new CPUPriorityControl();
+            ShowContentWithAnimation(cpuPriorityControl); // Call the method to display with animation
+        }
+
+        private void MSI_Click(object sender, RoutedEventArgs e)
+        {
+            var msiControl = new MSI();
+            ShowContentWithAnimation(msiControl); // Call the method to display with animation
+        }
+
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
             var settingsControl = new SettingsUserControl(); // Use the correct class name
             ShowContentWithAnimation(settingsControl); // Call the method to display with animation
+        }
+
+        private void Changelog_Click(object sender, RoutedEventArgs e)
+        {
+            var changeLog = new ChangelogUserControl(); // Use the correct class name
+            ShowContentWithAnimation(changeLog); // Call the method to display with animation
         }
 
 

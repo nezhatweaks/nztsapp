@@ -7,10 +7,28 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="ActiveProcessesWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="AMD.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ChangelogUserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="ContextSwitchDeadband.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="CPUPriorityControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="LatencySensitivityHint.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MSI.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="NVIDIA.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="PowerPlan.xaml.cs">
@@ -30,6 +48,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="ActiveProcessesWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="AMD.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="ChangelogUserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="CPUPriorityControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -37,6 +67,12 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="LatencySensitivityHint.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MSI.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="NVIDIA.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="PowerPlan.xaml">

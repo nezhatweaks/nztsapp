@@ -9,7 +9,7 @@
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,20">
         <!-- Border for Text -->
         <Border Background="#36393F" Padding="10" CornerRadius="10" BorderBrush="Transparent" BorderThickness="2">
-            <TextBlock Text="ContextSwitchDeadband" FontSize="20" FontWeight="Bold" Foreground="White"/>
+            <TextBlock Text="ContextSwitchDeadband" FontSize="20" FontWeight="Bold" Foreground="White" ToolTip="Adjusting the Context Switch Deadband helps control the frequency of context switches. A larger value may reduce CPU overhead but can increase latency in task switching."/>
         </Border>
 
         <!-- Border for Buttons -->

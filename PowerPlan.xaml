@@ -6,13 +6,11 @@
              xmlns:local="clr-namespace:NZTS_App"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    
-    
+
     <UserControl.Resources>
         <!-- Discord-like Button Style -->
         <Style x:Key="DiscordButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#5865F2"/>
-            <!-- Discord's blue -->
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="Bold"/>
@@ -28,7 +26,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                                CornerRadius="8"
+                                CornerRadius="1"
                                 BorderBrush="{TemplateBinding BorderBrush}" 
                                 BorderThickness="0">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -36,39 +34,38 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="#4752C4"/>
-                                <!-- Darker blue on hover -->
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter Property="Background" Value="#3A45A8"/>
-                                <!-- Even darker blue on press -->
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+
         <Style x:Key="iOSToggleButton" TargetType="ToggleButton">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ToggleButton">
                         <Grid>
                             <Border x:Name="Border" 
-                            Background="{TemplateBinding Background}" 
-                            BorderBrush="{TemplateBinding BorderBrush}" 
-                            BorderThickness="1" 
-                            CornerRadius="15" 
-                            Padding="5">
+                                    Background="{TemplateBinding Background}" 
+                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                    BorderThickness="1" 
+                                    CornerRadius="10" 
+                                    Padding="5">
                                 <Ellipse x:Name="Ellipse" 
-                                 Fill="White" 
-                                 Width="30" 
-                                 Height="30" 
-                                 HorizontalAlignment="Left" 
-                                 VerticalAlignment="Center" 
-                                 Margin="0,0,0,0" />
+                                         Fill="White" 
+                                         Width="10" 
+                                         Height="10" 
+                                         HorizontalAlignment="Left" 
+                                         VerticalAlignment="Center" 
+                                         Margin="20,0,0,0" />
                             </Border>
                             <ContentPresenter HorizontalAlignment="Center" 
-                                      VerticalAlignment="Center" 
-                                      Margin="35,0,0,0" />
+                                              VerticalAlignment="Center" 
+                                              Margin="35,0,0,0" />
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
@@ -93,33 +90,44 @@
                            Margin="60,0,20,0"
                            FontSize="14"/>
                 <ToggleButton x:Name="PlatformAoAcToggleButton" 
-                              Width="50"
-                              Height="30"
                               Style="{StaticResource iOSToggleButton}"
                               Checked="PlatformAoAcToggleButton_Checked" 
                               Unchecked="PlatformAoAcToggleButton_Unchecked"/>
             </StackPanel>
 
             <!-- List of Power Plans -->
-            <TextBlock Text="Select a Power Plan to Import:" FontWeight="Bold" Margin="60,0,0,10"/>
-            <ListBox x:Name="PowerPlanListBox" Width="350" Height="150" Margin="60,-5,0,10" SelectionChanged="PowerPlanListBox_SelectionChanged">
+            <TextBlock Text="Select a Power Plan to Import:" FontWeight="Bold" Margin="60,10,0,10"/>
+
+            
+                
+                <Button x:Name="ImportPresetPlanButton" 
+        Content="Presets" 
+        Style="{StaticResource DiscordButtonStyle}" 
+        IsEnabled="False"
+        Click="ImportPresetPlan_Click" Width="60" Height="20"/>
+            
+
+            <ListBox x:Name="PowerPlanListBox" Width="350" Height="190" Margin="60,-5,-10,10" 
+                     SelectionChanged="PowerPlanListBox_SelectionChanged">
                 <!-- Items will be populated in the code-behind -->
             </ListBox>
 
-            <!-- Discord-like Browse Button -->
-            <Button x:Name="BrowseButton" 
-                    Content="Browse Power Plans" 
-                    Style="{StaticResource DiscordButtonStyle}" 
-                    IsEnabled="False" 
-                    Click="BrowseButton_Click"/>
+            <StackPanel Orientation="Horizontal">
+                <!-- Discord-like Browse Button -->
+                <Button x:Name="BrowseButton" 
+                        Content="Browse" 
+                        Style="{StaticResource DiscordButtonStyle}" 
+                        IsEnabled="False" 
+                        Click="BrowseButton_Click" Width="120" Height="30"/>
 
-            <!-- Discord-like Import Button -->
-            <Button x:Name="ImportPowerPlanButton" 
-                    Content="Import Power Plan" 
-                    Style="{StaticResource DiscordButtonStyle}" 
-                    IsEnabled="False" 
-                    Click="ImportPowerPlan_Click" 
-                    Margin="60,10,0,0"/>
+                <!-- Discord-like Import Button -->
+                <Button x:Name="ImportPowerPlanButton" 
+                        Content="Import" 
+                        Style="{StaticResource DiscordButtonStyle}" 
+                        IsEnabled="False" 
+                        Click="ImportPowerPlan_Click" 
+                        Margin="70,-10,0,0" Width="120" Height="30"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>

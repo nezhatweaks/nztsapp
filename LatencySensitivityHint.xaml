@@ -9,7 +9,8 @@
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,20">
         <!-- Border for Text -->
         <Border Background="#36393F" Padding="10" CornerRadius="10" BorderBrush="Transparent" BorderThickness="2">
-            <TextBlock Text="LatencySensitivityHint" FontSize="20" FontWeight="Bold" Foreground="White"/>
+            <TextBlock Text="LatencySensitivityHint" FontSize="20" FontWeight="Bold" Foreground="White" ToolTip="Specifies the priority for latency-sensitive applications, optimizing task scheduling to reduce response times."/>
+            
         </Border>
 
         <!-- Border for Buttons -->

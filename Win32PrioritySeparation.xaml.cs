@@ -29,10 +29,18 @@ namespace NZTS_App.Views
                     CurrentValueTextBlock.Text = $"Current Value: 0x{currentValue:X8}";
                     key.Close();
                 }
+                else
+                {
+                    string errorMsg = "Failed to access PriorityControl registry key.";
+                    MessageBox.Show(errorMsg);
+                    App.changelogUserControl?.AddLog("Failed", errorMsg);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading current value: {ex.Message}");
+                string errorMsg = $"Error loading current value: {ex.Message}";
+                MessageBox.Show(errorMsg);
+                App.changelogUserControl?.AddLog("Failed", errorMsg);
             }
         }
 
@@ -63,15 +71,24 @@ namespace NZTS_App.Views
                 {
                     key.SetValue("Win32PrioritySeparation", value, RegistryValueKind.DWord);
                     key.Close();
-                    MessageBox.Show($"Win32PrioritySeparation value set to 0x{value:X8}");
+                    string successMsg = $"Win32PrioritySeparation value set to 0x{value:X8}";
+                    MessageBox.Show(successMsg);
+                    App.changelogUserControl?.AddLog("Applied", successMsg); // Log success
                     LoadCurrentWin32PrioritySeparationValue();  // Update the displayed current value
-                    // Mark settings as applied
                     mainWindow?.MarkSettingsApplied(); // Use the stored MainWindow reference
+                }
+                else
+                {
+                    string errorMsg = "Failed to access PriorityControl registry key.";
+                    MessageBox.Show(errorMsg);
+                    App.changelogUserControl?.AddLog("Failed", errorMsg); // Log failure
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error applying value: {ex.Message}");
+                string errorMsg = $"Error applying value: {ex.Message}";
+                MessageBox.Show(errorMsg);
+                App.changelogUserControl?.AddLog("Failed", errorMsg); // Log failure
             }
         }
 

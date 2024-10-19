@@ -22,7 +22,7 @@
                         <Border Background="{TemplateBinding Background}" 
                                 BorderBrush="{TemplateBinding BorderBrush}" 
                                 BorderThickness="{TemplateBinding BorderThickness}" 
-                                CornerRadius="5">
+                                CornerRadius="5" Height="30">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
@@ -65,8 +65,6 @@
                                               Content="{TemplateBinding SelectionBoxItem}" 
                                               VerticalAlignment="Center" 
                                               HorizontalAlignment="Left" />
-                                    <!-- Down arrow icon -->
-                                    
                                 </Grid>
                             </ToggleButton>
                             <Popup Name="Popup" 
@@ -90,46 +88,45 @@
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="#E0E0E0"/>
-                    <!-- Change to a lighter gray on hover -->
                 </Trigger>
                 <Trigger Property="IsDropDownOpen" Value="True">
                     <Setter Property="Background" Value="#D0D0D0"/>
-                    <!-- Change to a slightly darker gray when open -->
                 </Trigger>
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
 
-    <Grid Margin="10">
-        <StackPanel Margin="10">
-            <TextBlock Text="Select a Win32 Priority Separation Value:" FontWeight="Bold"  Margin="0,0,0,10"/>
-            <TextBlock Text="Choose a preset..." FontStyle="Italic" Margin="0,0,0,5" Foreground="Gray"/>
-            <!-- This line serves as an indicator -->
-            <ComboBox x:Name="Win32PrioritySeparationComboBox" 
-                      Style="{StaticResource DiscordComboBox}" 
-                      SelectionChanged="PresetSelectionChanged" 
-                      Margin="10">
-                <ComboBoxItem Content="Preset 1 (Value: 0x00fa332a)" Tag="0x00fa332a"/>
-                <ComboBoxItem Content="Preset 2 (Value: 0x0000e82a)" Tag="0x0000e82a"/>
-                <ComboBoxItem Content="Preset 3 (Value: 0xfb882828)" Tag="0xfb882828"/>
-                <ComboBoxItem Content="Preset 4 (Value: 0x00fa2a2a)" Tag="0x00fa2a2a"/>
-                <ComboBoxItem Content="Preset 5 (Value: 0x00000028)" Tag="0x00000028"/>
-                <ComboBoxItem Content="Preset 6 (Value: 0x00fa002a)" Tag="0x00fa002a"/>
-                <ComboBoxItem Content="Preset 7 (Value: 0x0000002a)" Tag="0x0000002a"/>
-                <ComboBoxItem Content="Preset 8 (Value: 0x00000026)" Tag="0x00000026"/>
-                <ComboBoxItem Content="Preset 9 (Value: 0x0fff9887)" Tag="0x0fff9887"/>
-                <ComboBoxItem Content="Preset 10 (Value: 0xfb000000)" Tag="0xfb000000"/>
-                <ComboBoxItem Content="Default (Value: 0x00000002)" Tag="0x00000002"/>
-            </ComboBox>
-            <TextBlock x:Name="CurrentValueTextBlock" FontWeight="Bold" Margin="0,10,0,0"/>
-            <Button x:Name="ApplyPresetButton" 
-                    Content="Apply Selected Preset" 
-                    Style="{StaticResource DiscordButton}" 
-                    Click="ApplyPreset_Click"/>
-            <Button x:Name="RestoreWin32PrioritySeparationButton" 
-                    Content="Restore Default" 
-                    Style="{StaticResource DiscordButton}" 
-                    Click="RestoreWin32PrioritySeparation_Click"/>
-        </StackPanel>
-    </Grid>
+    <Border BorderBrush="#36393F" BorderThickness="1" CornerRadius="20" Margin="10" Background="#36393F" ToolTip="Determines how Windows prioritizes threads and processes, affecting their responsiveness and overall performance.">
+        <Grid Margin="10">
+            <StackPanel Margin="10">
+                <TextBlock Text="Select a Win32 Priority Separation Value:" FontWeight="Bold" Margin="0,0,0,10" ToolTip="Determines how Windows prioritizes threads and processes, affecting their responsiveness and overall performance."/>
+                <TextBlock Text="Choose a preset..." FontStyle="Italic" Margin="0,0,0,5" Foreground="AntiqueWhite"/>
+                <ComboBox x:Name="Win32PrioritySeparationComboBox" 
+                          Style="{StaticResource DiscordComboBox}" 
+                          SelectionChanged="PresetSelectionChanged" 
+                          Margin="10">
+                    <ComboBoxItem Content="Preset 1 (Value: 0x00fa332a)" Tag="0x00fa332a"/>
+                    <ComboBoxItem Content="Preset 2 (Value: 0x0000e82a)" Tag="0x0000e82a"/>
+                    <ComboBoxItem Content="Preset 3 (Value: 0xfb882828)" Tag="0xfb882828"/>
+                    <ComboBoxItem Content="Preset 4 (Value: 0x00fa2a2a)" Tag="0x00fa2a2a"/>
+                    <ComboBoxItem Content="Preset 5 (Value: 0x00000028)" Tag="0x00000028"/>
+                    <ComboBoxItem Content="Preset 6 (Value: 0x00fa002a)" Tag="0x00fa002a"/>
+                    <ComboBoxItem Content="Preset 7 (Value: 0x0000002a)" Tag="0x0000002a"/>
+                    <ComboBoxItem Content="Preset 8 (Value: 0x00000026)" Tag="0x00000026"/>
+                    <ComboBoxItem Content="Preset 9 (Value: 0x0fff9887)" Tag="0x0fff9887"/>
+                    <ComboBoxItem Content="Preset 10 (Value: 0xfb000000)" Tag="0xfb000000"/>
+                    <ComboBoxItem Content="Default (Value: 0x00000002)" Tag="0x00000002"/>
+                </ComboBox>
+                <TextBlock x:Name="CurrentValueTextBlock" FontWeight="Bold" Margin="0,10,0,0"/>
+                <Button x:Name="ApplyPresetButton" 
+                        Content="Apply Selected Preset" 
+                        Style="{StaticResource DiscordButton}" 
+                        Click="ApplyPreset_Click" Height="26"/>
+                <Button x:Name="RestoreWin32PrioritySeparationButton" 
+                        Content="Restore Default" 
+                        Style="{StaticResource DiscordButton}" 
+                        Click="RestoreWin32PrioritySeparation_Click" Height="25"/>
+            </StackPanel>
+        </Grid>
+    </Border>
 </UserControl>
