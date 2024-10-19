@@ -36,7 +36,7 @@ namespace NZTS_App
             string registryPath = @"SYSTEM\CurrentControlSet\Control\Power";
             string registryValue = "PlatformAoAcOverride";
 
-            using var key = Registry.LocalMachine.OpenSubKey(registryPath);
+            using var key = Registry.LocalMachine.OpenSubKey(registryPath, writable: true);
             if (key != null)
             {
                 var value = key.GetValue(registryValue);
@@ -45,13 +45,16 @@ namespace NZTS_App
                 {
                     PlatformAoAcToggleButton.IsChecked = intValue == 0;
                     BrowseButton.IsEnabled = intValue == 0;
-                    
                 }
                 else
                 {
-                    string errorMsg = "PlatformAoAcOverride value not found or is not an integer.";
-                    MessageBox.Show(errorMsg);
-                    App.changelogUserControl?.AddLog("Failed", errorMsg);
+                    // Value is null or not an int, create it with a default value
+                    key.SetValue(registryValue, 0, RegistryValueKind.DWord);
+                    PlatformAoAcToggleButton.IsChecked = true; // Set toggle based on the new value
+                    BrowseButton.IsEnabled = true; // Enable the button
+                    string infoMsg = "PlatformAoAcOverride value was not found and has been created with a default value of 0.";
+                    MessageBox.Show(infoMsg);
+                    App.changelogUserControl?.AddLog("Info", infoMsg);
                 }
             }
             else
@@ -61,6 +64,7 @@ namespace NZTS_App
                 App.changelogUserControl?.AddLog("Failed", errorMsg);
             }
         }
+
 
         private void BrowseButton_Click(object sender, RoutedEventArgs e)
         {
