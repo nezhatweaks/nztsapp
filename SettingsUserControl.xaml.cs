@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using Newtonsoft.Json.Linq; // Make sure to install Newtonsoft.Json via NuGet
 
 namespace NZTS_App.Views
 {
@@ -16,8 +17,8 @@ namespace NZTS_App.Views
             DisplayCurrentVersion();
         }
 
-        // Corrected LatestVersion URL
-        private const string LatestVersionUrl = "https://raw.githubusercontent.com/nezhatweaks/nztsapp/main/Assets/latest_version.txt";
+        // GitHub API URL for latest release
+        private const string LatestReleaseUrl = "https://api.github.com/repos/nezhatweaks/nztsapp/releases/latest";
         private const string NewZipUrlTemplate = "https://github.com/nezhatweaks/nztsapp/releases/download/v{0}/NZTS_APP_v{0}.zip";
 
         private async void CheckForUpdates_Click(object sender, RoutedEventArgs e)
@@ -36,56 +37,110 @@ namespace NZTS_App.Views
         {
             try
             {
-                using (HttpClient client = new HttpClient())
+                string? latestVersionStr = await GetLatestVersion();
+                if (string.IsNullOrEmpty(latestVersionStr))
                 {
-                    // Get the latest version number from the text file
-                    HttpResponseMessage response = await client.GetAsync(LatestVersionUrl);
+                    ShowErrorMessage("Failed to retrieve the latest version.");
+                    return;
+                }
 
-                    // Check if the request was successful
-                    if (!response.IsSuccessStatusCode)
+                // Remove the 'v' prefix if present
+                latestVersionStr = latestVersionStr.TrimStart('v');
+
+                // Get current version
+                var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+                string currentVersionStr = assembly.GetName().Version?.ToString() ?? "0.0.0.0";
+
+                // Compare versions
+                if (new Version(currentVersionStr) < new Version(latestVersionStr))
+                {
+                    // Prompt user for update
+                    if (MessageBox.Show($"A new version (v{latestVersionStr}) is available! Would you like to download and update now?",
+                                        "Update Available", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
                     {
-                        // Log the exact error status for debugging
-                        MessageBox.Show($"Failed to retrieve latest version. Status code: {response.StatusCode}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
+                        await DownloadAndApplyUpdate(latestVersionStr);
                     }
-
-                    // Read the response content and trim spaces
-                    string latestVersionStr = await response.Content.ReadAsStringAsync();
-                    latestVersionStr = latestVersionStr.Trim();
-
-                    // Check if the latest version string is valid
-                    if (string.IsNullOrEmpty(latestVersionStr))
-                    {
-                        MessageBox.Show("Failed to retrieve the latest version. The version information is missing.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-
-                    // Get the current version of the running assembly
-                    var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-                    var assemblyName = assembly.GetName();
-                    string currentVersionStr = assemblyName?.Version?.ToString() ?? "0.0.0.0";
-
-                    // Parse the versions
-                    Version latestVersion = new Version(latestVersionStr);
-                    Version currentVersion = new Version(currentVersionStr);
-
-                    // Compare versions
-                    if (currentVersion < latestVersion)
-                    {
-                        // Here you can place your logic to download and update
-                        MessageBox.Show($"A new version (v{latestVersionStr}) is available! Please update.", "Update Available", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    else
-                    {
-                        MessageBox.Show("You are using the latest version.", "No Updates", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
+                }
+                else
+                {
+                    MessageBox.Show("You are using the latest version.", "No Updates", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (Exception ex)
             {
-                // Show detailed error for debugging
-                MessageBox.Show($"Error checking for updates: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ShowErrorMessage($"Error checking for updates: {ex.Message}");
             }
+        }
+
+
+        private async Task<string?> GetLatestVersion()
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Add("User-Agent", "NZTS_App"); // Required by GitHub API
+                HttpResponseMessage response = await client.GetAsync(LatestReleaseUrl);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    ShowErrorMessage($"Failed to retrieve latest release.\nStatus code: {response.StatusCode}\nReason: {response.ReasonPhrase}");
+                    return null; // Explicitly return null on error
+                }
+
+                var json = await response.Content.ReadAsStringAsync();
+                var release = JObject.Parse(json);
+                return release["tag_name"]?.ToString(); // This will return something like "v1.0.0"
+            }
+        }
+
+
+        private async Task DownloadAndApplyUpdate(string latestVersionStr)
+        {
+            try
+            {
+                string zipUrl = string.Format(NewZipUrlTemplate, latestVersionStr.TrimStart('v'));
+                string tempFilePath = Path.Combine(Path.GetTempPath(), $"NZTS_APP_v{latestVersionStr}.zip");
+
+                using (HttpClient client = new HttpClient())
+                {
+                    client.Timeout = TimeSpan.FromSeconds(30);
+
+                    HttpResponseMessage response = await client.GetAsync(zipUrl);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        ShowErrorMessage($"Failed to download update.\nStatus code: {response.StatusCode}\nReason: {response.ReasonPhrase}");
+                        return;
+                    }
+
+                    using (var fileStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                    {
+                        await response.Content.CopyToAsync(fileStream);
+                    }
+                }
+
+                // Extract the ZIP file
+                string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                ZipFile.ExtractToDirectory(tempFilePath, appDirectory, overwriteFiles: true);
+
+                MessageBox.Show("The update has been successfully downloaded and applied. Please restart the application for the changes to take effect.", "Update Applied", MessageBoxButton.OK, MessageBoxImage.Information);
+                Application.Current.Shutdown();
+            }
+            catch (HttpRequestException httpEx)
+            {
+                ShowErrorMessage($"HTTP Error: {httpEx.Message}");
+            }
+            catch (IOException ioEx)
+            {
+                ShowErrorMessage($"File Error: {ioEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                ShowErrorMessage($"Error applying the update: {ex.Message}");
+            }
+        }
+
+        private void ShowErrorMessage(string message)
+        {
+            MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }
