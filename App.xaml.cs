@@ -19,20 +19,26 @@ namespace NZTS_App
 
             LoadLogs();
 
-            // Initialize the changelog user control
-            changelogUserControl = new ChangelogUserControl
+            // Create the main window instance first
+            var mainWindow = new MainWindow
+            {
+                TitleTextBlock = { Content = "Home" } // Set the title of the main window
+            };
+
+            // Initialize the changelog user control and pass the main window
+            changelogUserControl = new ChangelogUserControl(mainWindow)
             {
                 ChangelogEntries = ChangelogEntries // Set the entries
             };
 
-            // Create and show the main window
-            var mainWindow = new MainWindow
-            {
-                Content = changelogUserControl // Set the content of the main window
-            };
+            // Set the content of the main window
+            mainWindow.Content = changelogUserControl;
 
            
+            
         }
+
+
         public static void SaveLogs()
         {
             try

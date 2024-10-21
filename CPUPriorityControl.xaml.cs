@@ -5,6 +5,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.ComponentModel;
+using Newtonsoft.Json.Linq;
+using System.Windows.Controls.Primitives;
 
 namespace NZTS_App
 {
@@ -12,12 +14,16 @@ namespace NZTS_App
     {
         private ObservableCollection<Game> games;
         private bool settingsChanged = false;
+        private MainWindow mainWindow;
 
-        public CPUPriorityControl()
+        public CPUPriorityControl(MainWindow window)
         {
             InitializeComponent();
             games = new ObservableCollection<Game>();
             GameListView.ItemsSource = games;
+            mainWindow = window;
+            mainWindow.TitleTextBlock.Content = "Process";
+
 
             // Initialize priority options
             InitializePriorityOptions();
@@ -46,6 +52,11 @@ namespace NZTS_App
                     OnPropertyChanged(nameof(Name));
                 }
             }
+
+            
+
+
+
 
             public required string Priority
             {
@@ -166,10 +177,14 @@ namespace NZTS_App
                 // Update ComboBox with the correct priority
                 UpdateComboBoxForSelectedGame(selectedGame);
 
+                // Initialize Use Large Pages toggle
+                InitializeUseLargePagesToggle(selectedGame);
+
                 // Refresh the ListView to reflect the selected game's priority in the UI
                 GameListView.Items.Refresh();
             }
         }
+
 
         private bool isUpdatingComboBox = false; // Add a flag to prevent recursion
 
@@ -244,6 +259,16 @@ namespace NZTS_App
                                 if (perfOptionsKey != null)
                                 {
                                     perfOptionsKey.SetValue("CpuPriorityClass", priorityValue, RegistryValueKind.DWord);
+
+                                    // Save Use Large Pages setting for the game
+                                    bool useLargePages = UseLargePagesToggle.IsChecked == true;
+                                    perfOptionsKey.SetValue("UseLargePages", useLargePages ? 1 : 0, RegistryValueKind.DWord);
+
+                                    // Log and show message for Use Large Pages
+                                    string largePagesMessage = useLargePages ? "enabled" : "disabled";
+                                    App.changelogUserControl?.AddLog("Applied", $"Use Large Pages for {game.Name} set to {largePagesMessage}.");
+                                    MessageBox.Show($"Use Large Pages for {game.Name} has been {largePagesMessage}.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
                                     MessageBox.Show($"Priority for {game.Name} set to {game.Priority}.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                                     App.changelogUserControl?.AddLog("Applied", $"Priority for {game.Name} set to {game.Priority}.");
 
@@ -261,6 +286,8 @@ namespace NZTS_App
                 }
             }
         }
+
+
 
         private void ResetPriorityButton_Click(object sender, RoutedEventArgs e)
         {
@@ -319,10 +346,116 @@ namespace NZTS_App
             games.Add(newGame);
             settingsChanged = true;
 
+            // Set default UseLargePages value
+            SetUseLargePagesForNewGame(newGame, false); // Default to false, change as needed
+
             // Automatically select the newly added game
             GameListView.SelectedItem = newGame;
             UpdateComboBoxForSelectedGame(newGame);
+
+            // Initialize Use Large Pages toggle
+            InitializeUseLargePagesToggle(newGame);
         }
+
+        private void SetUseLargePagesForNewGame(Game game, bool useLargePages)
+        {
+            string registryPath = $@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{game.Name}";
+            using (var gameKey = Registry.LocalMachine.CreateSubKey(registryPath, true))
+            {
+                if (gameKey != null)
+                {
+                    gameKey.SetValue("UseLargePages", useLargePages ? 1 : 0, RegistryValueKind.DWord);
+                }
+            }
+        }
+
+
+        private void UseLargePagesToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (UseLargePagesToggle.IsChecked == true)
+            {
+                UseLargePagesStatusTextBlock.Text = "Enabled";
+                SetUseLargePages(true);
+            }
+            else
+            {
+                UseLargePagesStatusTextBlock.Text = "Disabled";
+                SetUseLargePages(false);
+            }
+        }
+
+        private void SetUseLargePages(bool useLargePages)
+        {
+            string registryPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\";
+            foreach (var game in games)
+            {
+                using (var gameKey = Registry.LocalMachine.CreateSubKey(registryPath + game.Name, true))
+                {
+                    if (gameKey != null)
+                    {
+                        gameKey.SetValue("UseLargePages", useLargePages ? 1 : 0, RegistryValueKind.DWord);
+                    }
+                }
+            }
+        }
+
+
+        private void InitializeUseLargePagesToggle(Game selectedGame)
+        {
+            string registryPath = $@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{selectedGame.Name}";
+            object? value = null;
+
+            try
+            {
+                using (var gameKey = Registry.LocalMachine.OpenSubKey(registryPath))
+                {
+                    if (gameKey != null)
+                    {
+                        value = gameKey.GetValue("UseLargePages");
+                        // Debugging message to check the registry value
+                        MessageBox.Show($"Registry Value: {value}");
+
+                        if (value != null && value is int intValue)
+                        {
+                            if (intValue == 1)
+                            {
+                                UseLargePagesToggle.IsChecked = true;
+                                UseLargePagesStatusTextBlock.Text = "Enabled";
+                            }
+                            else
+                            {
+                                UseLargePagesToggle.IsChecked = false;
+                                UseLargePagesStatusTextBlock.Text = "Disabled";
+                            }
+                        }
+                        else
+                        {
+                            UseLargePagesToggle.IsChecked = false;
+                            UseLargePagesStatusTextBlock.Text = "Disabled";
+                        }
+                    }
+                    else
+                    {
+                        UseLargePagesToggle.IsChecked = false;
+                        UseLargePagesStatusTextBlock.Text = "Disabled";
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                MessageBox.Show("You do not have permission to access the registry. Please run the application as an administrator.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while reading the registry: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
+
+
+
+
 
     }
 }

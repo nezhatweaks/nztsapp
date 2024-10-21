@@ -26,10 +26,12 @@ namespace NZTS_App
 {
 
     
+
     public partial class MainWindow : Window
     {
         private bool settingsApplied = false; // Existing flag for settings
         private bool isClosing = false; // New flag to prevent re-entrance
+        
         public enum ValueType
         {
             DWord,
@@ -55,9 +57,6 @@ namespace NZTS_App
 
 
 
-        
-
-        
 
 
 
@@ -66,28 +65,38 @@ namespace NZTS_App
         {
             InitializeComponent();
             LoadGames();
+            // Set default title if needed
+            TitleTextBlock.Content = "Home";
+        }
+
+
+        public MainWindow(MainWindow window)
+        {
+            InitializeComponent();
+            LoadGames();
+            TitleTextBlock.Content = window.TitleTextBlock.Content; // Example usage
+
             this.SizeChanged += MainWindow_SizeChanged; // Subscribe to size changed event
             this.Closing += Window_Closing;
-
-            DisplayCurrentVersion(); // Display the current version when the control is initialized
-            var welcomeControl = new WelcomeUserControl();
+            
+            var welcomeControl = new WelcomeUserControl(this);
             welcomeControl.OptimizeAllClicked += WelcomeControl_OptimizeAllClicked;
             welcomeControl.RestoreAllClicked += WelcomeControl_RestoreAllClicked;
 
         }
 
-        private void DisplayCurrentVersion()
-        {
-            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-            var currentVersion = assembly?.GetName().Version?.ToString() ?? "unknown version";
-            VersionTextBlock.Text = $"v{currentVersion}"; // Set the version text
-        }
-
-        
         
 
 
         
+
+        
+
+
+
+        
+
+
 
 
 
@@ -536,7 +545,7 @@ namespace NZTS_App
 
 private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            Placeholder.Visibility = Visibility.Collapsed; // Hide placeholder when focused
+            
         }
 
         private void SearchBox_LostFocus(object sender, RoutedEventArgs e)
@@ -544,7 +553,7 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
             // Show placeholder if the TextBox is empty when losing focus
             if (string.IsNullOrEmpty(SearchBox.Text))
             {
-                Placeholder.Visibility = Visibility.Visible;
+                
             }
         }
 
@@ -588,6 +597,9 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
             }
         }
 
+        
+
+
 
 
 
@@ -619,7 +631,7 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
 
         private void PowerPlan_Click(object sender, RoutedEventArgs e)
         {
-            var powerPlanControl = new PowerPlan();
+            var powerPlanControl = new PowerPlan(this);
             ShowContentWithAnimation(powerPlanControl); // Call the method to display with animation
         }
 
@@ -631,8 +643,14 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
 
         private void Nvidia_Click(object sender, RoutedEventArgs e)
         {
-            var nvidiaControl = new NVIDIA(this);
+            var nvidiaControl = new NVIDIAUserControl(this);
             ShowContentWithAnimation(nvidiaControl); // Call the method to display with animation
+        }
+
+        private void Monitor_Click(object sender, RoutedEventArgs e)
+        {
+            var monitorControl = new MonitorUserControl(this);
+            ShowContentWithAnimation(monitorControl); // Call the method to display with animation
         }
 
         private void AMD_Click(object sender, RoutedEventArgs e)
@@ -643,25 +661,25 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
 
         private void CPUPriority_Click(object sender, RoutedEventArgs e)
         {
-            var cpuPriorityControl = new CPUPriorityControl();
+            var cpuPriorityControl = new CPUPriorityControl(this);
             ShowContentWithAnimation(cpuPriorityControl); // Call the method to display with animation
         }
 
         private void MSI_Click(object sender, RoutedEventArgs e)
         {
-            var msiControl = new MSI();
+            var msiControl = new MSI(this);
             ShowContentWithAnimation(msiControl); // Call the method to display with animation
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            var settingsControl = new SettingsUserControl(); // Use the correct class name
+            var settingsControl = new SettingsUserControl(this); // Use the correct class name
             ShowContentWithAnimation(settingsControl); // Call the method to display with animation
         }
 
         private void Changelog_Click(object sender, RoutedEventArgs e)
         {
-            var changeLog = new ChangelogUserControl(); // Use the correct class name
+            var changeLog = new ChangelogUserControl(this); // Use the correct class name
             ShowContentWithAnimation(changeLog); // Call the method to display with animation
         }
 
@@ -670,7 +688,7 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
         private void Home_Click(object sender, RoutedEventArgs e)
         {
             // Show the welcome page
-            var welcomeControl = new WelcomeUserControl(); // Create a new instance of the Welcome UserControl
+            var welcomeControl = new WelcomeUserControl(this); // Create a new instance of the Welcome UserControl
             ShowContentWithAnimation(welcomeControl); // Call the method to show the content
             welcomeControl.OptimizeAllClicked += WelcomeControl_OptimizeAllClicked;
             welcomeControl.RestoreAllClicked += WelcomeControl_RestoreAllClicked;

@@ -11,19 +11,17 @@ namespace NZTS_App
     {
         public event RoutedEventHandler? OptimizeAllClicked; // Nullable event
         public event RoutedEventHandler? RestoreAllClicked;  // Nullable event
-
-        public WelcomeUserControl()
+        private MainWindow mainWindow;
+        public WelcomeUserControl(MainWindow window)
         {
             InitializeComponent();
-            DisplayCurrentVersion(); // Display the current version when the control is initialized
+            
+            mainWindow = window;
+            mainWindow.TitleTextBlock.Content = "Home";
+
         }
 
-        private void DisplayCurrentVersion()
-        {
-            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-            var currentVersion = assembly?.GetName().Version?.ToString() ?? "unknown version";
-            VersionTextBlock.Text = $"v{currentVersion}"; // Set the version text
-        }
+        
 
         private void OptimizeAll_Click(object sender, RoutedEventArgs e)
         {

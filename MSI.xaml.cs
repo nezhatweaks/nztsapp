@@ -27,12 +27,15 @@ namespace NZTS_App.Views
     {
         private const string PciRegistryKeyPath = @"SYSTEM\CurrentControlSet\Enum\PCI";
         private ObservableCollection<PciDevice> devices = new ObservableCollection<PciDevice>();
+        private MainWindow mainWindow;
 
-        public MSI()
+        public MSI(MainWindow window)
         {
             InitializeComponent();
             DataContext = this; // Ensure DataContext is set
             LoadPciDevicesAsync();
+            mainWindow = window;
+            mainWindow.TitleTextBlock.Content = "MSI";
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)

@@ -14,8 +14,10 @@ namespace NZTS_App.Views
         public MMCSS(MainWindow window)
         {
             InitializeComponent();
-            mainWindow = window;
             LoadCurrentSettings();
+            mainWindow = window;
+            mainWindow.TitleTextBlock.Content = "MMCSS";
+
         }
 
         private void MMCSSToggle_Click(object sender, RoutedEventArgs e)

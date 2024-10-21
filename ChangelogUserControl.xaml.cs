@@ -10,12 +10,14 @@ namespace NZTS_App
     {
         // ObservableCollection to hold log entries
         public ObservableCollection<ChangelogEntry> ChangelogEntries { get; set; } = new ObservableCollection<ChangelogEntry>();
-
-        public ChangelogUserControl()
+        private MainWindow mainWindow;
+        public ChangelogUserControl(MainWindow window)
         {
             InitializeComponent();
             // Use the static collection from App
             ChangeLogListView.ItemsSource = App.ChangelogEntries;
+            mainWindow = window;
+            mainWindow.TitleTextBlock.Content = "Log";
         }
 
         public void AddLog(string action, string description)

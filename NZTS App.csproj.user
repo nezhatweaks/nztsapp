@@ -25,10 +25,13 @@
     <Compile Update="LatencySensitivityHint.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="MonitorUserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="MSI.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="NVIDIA.xaml.cs">
+    <Compile Update="NVIDIAUserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="PowerPlan.xaml.cs">
@@ -69,10 +72,13 @@
     <Page Update="LatencySensitivityHint.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="MonitorUserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="MSI.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="NVIDIA.xaml">
+    <Page Update="NVIDIAUserControl.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="PowerPlan.xaml">

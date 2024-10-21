@@ -50,6 +50,40 @@
             </Setter>
         </Style>
 
+        <!-- Rounded Button Style with Hover/Click Animations -->
+        <Style x:Key="RoundedButtonStyle2"  TargetType="Button">
+            <Setter Property="Background" Value="#141414"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="280"/>
+            <Setter Property="Margin" Value="10,5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                    CornerRadius="10"
+                    BorderBrush="Transparent">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- Hover effect -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#121212"/>
+                            </Trigger>
+                            <!-- Pressed effect -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#080808"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- Hamburger Button Style -->
         <Style x:Key="HamburgerButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
@@ -115,20 +149,31 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid VerticalAlignment="Top" Background="#23272A" Height="40" MouseDown="TitleBar_MouseDown">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/> <!-- Placeholder for potential future use -->
+        <ColumnDefinition Width="*"/>   <!-- Title space -->
+        <ColumnDefinition Width="Auto"/> <!-- Minimize button -->
+        <ColumnDefinition Width="Auto"/> <!-- Maximize button -->
+        <ColumnDefinition Width="Auto"/> <!-- Close button -->
+    </Grid.ColumnDefinitions>
+                
+                <Button x:Name="TitleTextBlock"  
+        VerticalAlignment="Center" 
+        FontWeight="Bold" 
+        FontSize="9"
+        Style="{StaticResource RoundedButtonStyle2}" 
+        Width="80" 
+        Height="33"
+        Grid.Column="0"
+        HorizontalAlignment="Left"
+        Click="ToggleSidebar" 
+        Margin="5,0,0,0" />
 
-                <!-- Hamburger menu -->
-                <Button Content="☰" Width="40" Height="40" Click="ToggleSidebar" Background="Transparent" 
-                    Foreground="White" BorderThickness="0" FontSize="24" HorizontalAlignment="Left"/>
 
-                <TextBlock Text="NZTS APP" VerticalAlignment="Center" Margin="10,0,0,0" FontWeight="Bold" Grid.Column="1"/>
-                <Button Content="_" Width="30" Height="30" Grid.Column="2" Background="Transparent" 
+
+
+
+                    <Button Content="_" Width="30" Height="30" Grid.Column="2" Background="Transparent" 
                     Foreground="White" BorderThickness="0" Click="Minimize_Click"/>
                 <Button Content="🗖" Width="30" Height="30" Grid.Column="3" Background="Transparent" 
                     Foreground="White" BorderThickness="0" Click="Maximize_Click"/>
@@ -181,52 +226,59 @@
 
                 <!-- Main layout with two columns: Sidebar and Main Content -->
                 <Grid>
+                    
                     <Grid.ColumnDefinitions>
-                        <!-- Sidebar: Fixed width -->
                         <ColumnDefinition Width="200"/>
-                        <!-- Main content: Dynamic width -->
+                        <!-- Sidebar Width -->
                         <ColumnDefinition Width="*"/>
+                        <!-- Main Content Area -->
                     </Grid.ColumnDefinitions>
 
                     <StackPanel x:Name="Sidebar" Orientation="Vertical" Background="#23272A" 
-                VerticalAlignment="Stretch" Visibility="Collapsed">
-                        <Grid Margin="10" Background="Transparent">
-                            <TextBlock x:Name="Placeholder" Text="Search..." Foreground="Gray" 
-                       VerticalAlignment="Center" Margin="5,0,0,0" Visibility="Visible"/>
+            VerticalAlignment="Stretch" Visibility="Collapsed">
+
+                        <!-- Header -->
+                        <TextBlock Text="" FontWeight="Bold" FontSize="16" Foreground="White" Margin="0,0,0,10"/>
+
+                        <!-- Search Bar -->
+                        <Grid Margin="0,0,0,20" Background="Transparent">
                             <TextBox x:Name="SearchBox" Padding="5" Width="180" Height="30"  
-                     TextChanged="SearchBox_TextChanged" GotFocus="SearchBox_GotFocus" 
-                     LostFocus="SearchBox_LostFocus"/>
+                 Background="#343B40" Foreground="White" BorderBrush="Gray" 
+                 BorderThickness="1" TextChanged="SearchBox_TextChanged" 
+                 GotFocus="SearchBox_GotFocus" LostFocus="SearchBox_LostFocus"
+                 />
                             <Button x:Name="CancelButton" Content="✖" Width="30" Height="30" 
-                    Background="Transparent" Foreground="Gray" BorderThickness="0" 
-                    HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="Collapsed"/>
+                Background="Transparent" Foreground="Gray" BorderThickness="0" 
+                HorizontalAlignment="Right" VerticalAlignment="Center" 
+                Visibility="Collapsed"/>
                         </Grid>
 
-                        <Button Content="Home" FontWeight="Bold" Style="{StaticResource RoundedButtonStyle}" Click="Home_Click"/>
-                        <Button Content="Change Log" FontWeight="Bold" Style="{StaticResource RoundedButtonStyle}" Click="Changelog_Click"/>
-                        <Button Content="Settings" FontWeight="Bold" Style="{StaticResource RoundedButtonStyle}" Click="Settings_Click"/>
-                        <Separator Margin="0,10,0,10"/>
-                        <Button Content="PowerPlan" FontWeight="Bold" Style="{StaticResource RoundedButtonStyle}" Click="PowerPlan_Click"/>
-                        <Button Content="Win32PrioritySeparation" FontWeight="Bold"
-                Style="{StaticResource RoundedButtonStyle}" Click="Win32PrioritySeparation_Click"/>
-                        <Button Content="ContextSwitchDeadband" FontWeight="Bold" 
-                Style="{StaticResource RoundedButtonStyle}" Click="ContextSwitchDeadband_Click"/>
-                        <Button Content="LatencySensitivityHint" FontWeight="Bold"
-                Style="{StaticResource RoundedButtonStyle}" Click="LatencySensitivityHint_Click"/>
-                        <Button Content="MMCSS" FontWeight="Bold" Style="{StaticResource RoundedButtonStyle}" Click="MMCSS_Click"/>
-                        <Button Content="NVIDIA" FontWeight="Bold" Style="{StaticResource RoundedButtonStyle}" Click="Nvidia_Click"/>
-                        <Button Content="AMD" FontWeight="Bold" Style="{StaticResource RoundedButtonStyle}" Click="AMD_Click"/>
-                        <Button Content="CPU Priority" FontWeight="Bold" Style="{StaticResource RoundedButtonStyle}" Click="CPUPriority_Click"/>
-                        <Button Content="MSI Mode" FontWeight="Bold" Style="{StaticResource RoundedButtonStyle}" Click="MSI_Click"/>
+                        <!-- Buttons Section -->
                         
+                        <Button Content="Home" Style="{StaticResource RoundedButtonStyle}" Click="Home_Click"/>
+                        <Button Content="Change Log" Style="{StaticResource RoundedButtonStyle}" Click="Changelog_Click"/>
+                        <Button Content="Settings" Style="{StaticResource RoundedButtonStyle}" Click="Settings_Click"/>
+                        <Separator Margin="0,20,0,10"/>
+                        <Button Content="PowerPlan" Style="{StaticResource RoundedButtonStyle}" Click="PowerPlan_Click"/>
+                        <Button Content="Win32PrioritySeparation" Style="{StaticResource RoundedButtonStyle}" Click="Win32PrioritySeparation_Click"/>
+                        <Button Content="ContextSwitchDeadband" Style="{StaticResource RoundedButtonStyle}" Click="ContextSwitchDeadband_Click"/>
+                        <Button Content="LatencySensitivityHint" Style="{StaticResource RoundedButtonStyle}" Click="LatencySensitivityHint_Click"/>
+                        <Button Content="MMCSS" Style="{StaticResource RoundedButtonStyle}" Click="MMCSS_Click"/>
+                        <Button Content="NVIDIA" Style="{StaticResource RoundedButtonStyle}" Click="Nvidia_Click"/>
+                        <Button Content="Monitor" Style="{StaticResource RoundedButtonStyle}" Click="Monitor_Click"/>
+                        <Button Content="AMD" Style="{StaticResource RoundedButtonStyle}" Click="AMD_Click"/>
+                        <Button Content="Process" Style="{StaticResource RoundedButtonStyle}" Click="CPUPriority_Click"/>
+                        <Button Content="MSI Mode" Style="{StaticResource RoundedButtonStyle}" Click="MSI_Click"/>
                     </StackPanel>
+
+                    <Frame x:Name="MainUIApp" NavigationUIVisibility="Hidden"/>
                 </Grid>
             </ScrollViewer>
 
-
+            
             <ContentControl x:Name="ContentArea" Background="#2C2F33" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,60,0,0" Height="354" Grid.RowSpan="2" Width="409">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="400">
                     <TextBlock Text="Welcome to NZTS APP" FontSize="24" FontWeight="Bold" Margin="0,0,0,0"/>
-                    <TextBlock x:Name="VersionTextBlock" FontSize="14" Margin="0,10,0,0"/>
                     <TextBlock Text="Select an optimization category from the sidebar." FontSize="16" Margin="0,10,0,10" Height="27"/>
                     
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">

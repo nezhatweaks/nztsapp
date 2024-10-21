@@ -10,11 +10,14 @@ namespace NZTS_App
     {
         private string? selectedDirectory;
 
-        public PowerPlan()
+        private MainWindow mainWindow;
+        public PowerPlan(MainWindow window)
         {
             InitializeComponent();
             LoadPowerPlans();
             CheckPlatformAoAcOverride();
+            mainWindow = window;
+            mainWindow.TitleTextBlock.Content = "Power Plan";
         }
 
         private void LoadPowerPlans()

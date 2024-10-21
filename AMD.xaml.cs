@@ -17,6 +17,7 @@ namespace NZTS_App.Views
             InitializeComponent();
             LoadCurrentSettings();
             mainWindow = window;
+            mainWindow.TitleTextBlock.Content = "AMD";
         }
 
         private void LoadCurrentSettings()

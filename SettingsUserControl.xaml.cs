@@ -11,10 +11,13 @@ namespace NZTS_App.Views
 {
     public partial class SettingsUserControl : UserControl
     {
-        public SettingsUserControl()
+        private MainWindow mainWindow;
+        public SettingsUserControl(MainWindow window)
         {
             InitializeComponent();
             DisplayCurrentVersion();
+            mainWindow = window;
+            mainWindow.TitleTextBlock.Content = "Settings";
         }
 
         // GitHub API URL for latest release
