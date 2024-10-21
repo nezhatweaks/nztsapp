@@ -13,7 +13,7 @@ namespace NZTS_App
     public partial class CPUPriorityControl : UserControl
     {
         private ObservableCollection<Game> games;
-        private bool settingsChanged = false;
+        
         private MainWindow mainWindow;
 
         public CPUPriorityControl(MainWindow window)
@@ -142,48 +142,66 @@ namespace NZTS_App
                 var newGame = new Game { Name = gameName, Priority = "Normal" }; // Initialize Priority to a default value
                 newGame.SetPriorityFromRegistry(); // Optionally fetch the priority from the registry
                 games.Add(newGame);
-                settingsChanged = true;
-
+                
 
                 // Automatically select the newly added game
                 GameListView.SelectedItem = newGame;
-                UpdateComboBoxForSelectedGame(newGame);
+
+                // Call the method to initialize UI elements based on the new game
+                UpdateUIForSelectedGame(newGame);
 
                 GameListView.Items.Refresh(); // Refresh the ListView to reflect the priority
             }
             else
             {
                 MessageBox.Show("Please enter a valid executable name ending with .exe.", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Warning);
-                App.changelogUserControl?.AddLog("Invalid", "Invalid executable name.");
+                App.changelogUserControl?.AddLog("Cancelled", "Exit the Process 'Add By Name'.");
             }
         }
 
+
+
         private void RemoveGameButton_Click(object sender, RoutedEventArgs e)
         {
-            if (GameListView.SelectedItem != null)
+            if (GameListView.SelectedItem is Game selectedGame)
             {
-                games.Remove((Game)GameListView.SelectedItem);
-                settingsChanged = true;
+                // Remove the game from the collection
+                games.Remove(selectedGame);
+                
+
+                // Clear the toggle and priority UI elements
+                UseLargePagesToggle.IsChecked = false; // Turn off the toggle
+                UseLargePagesStatusTextBlock.Text = "Disabled"; // Update the status text
+
+                // Clear the selection in the ComboBox
+                PriorityComboBox.SelectedIndex = -1; // Clear the selection in the ComboBox
             }
         }
+
+
 
         private void GameListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (GameListView.SelectedItem is Game selectedGame)
             {
-                // Ensure priority is fetched from the registry before updating UI
+                // Fetch the priority and large pages setting from the registry for the selected game
                 selectedGame.SetPriorityFromRegistry();
 
-                // Update ComboBox with the correct priority
-                UpdateComboBoxForSelectedGame(selectedGame);
-
-                // Initialize Use Large Pages toggle
-                InitializeUseLargePagesToggle(selectedGame);
-
-                // Refresh the ListView to reflect the selected game's priority in the UI
-                GameListView.Items.Refresh();
+                // Update the UI elements
+                UpdateUIForSelectedGame(selectedGame);
             }
         }
+
+        private void UpdateUIForSelectedGame(Game selectedGame)
+        {
+            // Update ComboBox selection
+            UpdateComboBoxForSelectedGame(selectedGame);
+
+            // Initialize Use Large Pages toggle
+            InitializeUseLargePagesToggle(selectedGame);
+        }
+
+
 
 
         private bool isUpdatingComboBox = false; // Add a flag to prevent recursion
@@ -223,7 +241,7 @@ namespace NZTS_App
                 if (!string.IsNullOrEmpty(selectedPriority))
                 {
                     selectedGame.Priority = selectedPriority; // This should trigger PropertyChanged
-                    settingsChanged = true;
+                    
 
                     // Refresh the ListView to reflect the new priority
                     GameListView.Items.Refresh();
@@ -298,7 +316,7 @@ namespace NZTS_App
 
                 // Update ComboBox selection to reflect the reset
                 UpdateComboBoxForSelectedGame(selectedGame);
-                settingsChanged = true;
+                
             }
         }
 
@@ -315,15 +333,7 @@ namespace NZTS_App
             };
         }
 
-        public bool CheckForChangesAndPromptRestart()
-        {
-            if (settingsChanged)
-            {
-                var result = MessageBox.Show("Changes were made. Do you want to restart your computer now?", "Restart Required", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                return result == MessageBoxResult.Yes;
-            }
-            return false;
-        }
+        
 
         private void AddActiveProcessButton_Click(object sender, RoutedEventArgs e)
         {
@@ -344,7 +354,7 @@ namespace NZTS_App
 
             var newGame = new Game { Name = executableName, Priority = "Normal" };
             games.Add(newGame);
-            settingsChanged = true;
+            
 
             // Set default UseLargePages value
             SetUseLargePagesForNewGame(newGame, false); // Default to false, change as needed
@@ -372,17 +382,42 @@ namespace NZTS_App
 
         private void UseLargePagesToggle_Click(object sender, RoutedEventArgs e)
         {
-            if (UseLargePagesToggle.IsChecked == true)
+            try
             {
-                UseLargePagesStatusTextBlock.Text = "Enabled";
-                SetUseLargePages(true);
+                bool useLargePages = UseLargePagesToggle.IsChecked == true;
+                UseLargePagesStatusTextBlock.Text = useLargePages ? "Enabled" : "Disabled";
+
+                // Set the value in the registry
+                string registryPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\";
+                foreach (var game in games)
+                {
+                    using (var gameKey = Registry.LocalMachine.CreateSubKey(registryPath + game.Name, true))
+                    {
+                        if (gameKey != null)
+                        {
+                            gameKey.SetValue("UseLargePages", useLargePages ? 1 : 0, RegistryValueKind.DWord);
+                            App.changelogUserControl?.AddLog("Applied", $"Use Large Pages for {game.Name} set to {(useLargePages ? "enabled" : "disabled")}");
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Failed to access the registry key for {game.Name}.");
+                            App.changelogUserControl?.AddLog("Failed", $"Registry key for {game.Name} not found.");
+                        }
+                    }
+                }
             }
-            else
+            catch (UnauthorizedAccessException)
             {
-                UseLargePagesStatusTextBlock.Text = "Disabled";
-                SetUseLargePages(false);
+                MessageBox.Show("You do not have permission to modify the registry. Please run the application as an administrator.");
+                App.changelogUserControl?.AddLog("Failed", "Unauthorized access to modify Use Large Pages.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating Use Large Pages: {ex.Message}");
+                App.changelogUserControl?.AddLog("Failed", $"Error updating Use Large Pages: {ex.Message}");
             }
         }
+
 
         private void SetUseLargePages(bool useLargePages)
         {
@@ -402,8 +437,7 @@ namespace NZTS_App
 
         private void InitializeUseLargePagesToggle(Game selectedGame)
         {
-            string registryPath = $@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{selectedGame.Name}";
-            object? value = null;
+            string registryPath = $@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{selectedGame.Name}\PerfOptions";
 
             try
             {
@@ -411,45 +445,38 @@ namespace NZTS_App
                 {
                     if (gameKey != null)
                     {
-                        value = gameKey.GetValue("UseLargePages");
-                        // Debugging message to check the registry value
-                        MessageBox.Show($"Registry Value: {value}");
+                        object? value = gameKey.GetValue("UseLargePages");
 
-                        if (value != null && value is int intValue)
+                        // Check if the value is an integer and set the toggle accordingly
+                        if (value is int intValue)
                         {
-                            if (intValue == 1)
-                            {
-                                UseLargePagesToggle.IsChecked = true;
-                                UseLargePagesStatusTextBlock.Text = "Enabled";
-                            }
-                            else
-                            {
-                                UseLargePagesToggle.IsChecked = false;
-                                UseLargePagesStatusTextBlock.Text = "Disabled";
-                            }
+                            UseLargePagesToggle.IsChecked = intValue == 1; // Set toggle based on registry value
+                            UseLargePagesStatusTextBlock.Text = intValue == 1 ? "Enabled" : "Disabled";
                         }
                         else
                         {
-                            UseLargePagesToggle.IsChecked = false;
+                            UseLargePagesToggle.IsChecked = false; // Default if value is not set
                             UseLargePagesStatusTextBlock.Text = "Disabled";
                         }
                     }
                     else
                     {
-                        UseLargePagesToggle.IsChecked = false;
+                        UseLargePagesToggle.IsChecked = false; // No key found
                         UseLargePagesStatusTextBlock.Text = "Disabled";
                     }
                 }
             }
             catch (UnauthorizedAccessException)
             {
-                MessageBox.Show("You do not have permission to access the registry. Please run the application as an administrator.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("You do not have permission to access the registry. Please run the application as an administrator.");
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred while reading the registry: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"An error occurred while reading the registry: {ex.Message}");
             }
         }
+
+
 
 
 

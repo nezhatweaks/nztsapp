@@ -82,13 +82,24 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Limit" DisplayMemberBinding="{Binding MessageNumberLimit}" Width="40"/>
+                        <GridViewColumn Header="Limit" Width="150">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBox Width="40" MaxLength="3" Text="{Binding MessageNumberLimit, UpdateSourceTrigger=PropertyChanged}" />
+                                        <Button Content="Set Limit" Click="SetLimitButton_Click" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                         <GridViewColumn Header="Modes" DisplayMemberBinding="{Binding SupportedModes}" Width="150"/>
                         <GridViewColumn Header="Priority" Width="120">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ComboBox ItemsSource="{Binding Path=PriorityOptions}" SelectedItem="{Binding Path=InterruptPriority}" />
-
+                                    <StackPanel Orientation="Horizontal">
+                                        
+                                        <ComboBox ItemsSource="{Binding Path=PriorityOptions}" SelectedItem="{Binding Path=InterruptPriority, Mode=TwoWay}" />
+                                    </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

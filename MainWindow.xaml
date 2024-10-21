@@ -261,11 +261,10 @@
                         <Separator Margin="0,20,0,10"/>
                         <Button Content="PowerPlan" Style="{StaticResource RoundedButtonStyle}" Click="PowerPlan_Click"/>
                         <Button Content="Win32PrioritySeparation" Style="{StaticResource RoundedButtonStyle}" Click="Win32PrioritySeparation_Click"/>
-                        <Button Content="ContextSwitchDeadband" Style="{StaticResource RoundedButtonStyle}" Click="ContextSwitchDeadband_Click"/>
-                        <Button Content="LatencySensitivityHint" Style="{StaticResource RoundedButtonStyle}" Click="LatencySensitivityHint_Click"/>
+                        <Button Content="Memory" Style="{StaticResource RoundedButtonStyle}" Click="MemoryMan_Click"/>
                         <Button Content="MMCSS" Style="{StaticResource RoundedButtonStyle}" Click="MMCSS_Click"/>
                         <Button Content="NVIDIA" Style="{StaticResource RoundedButtonStyle}" Click="Nvidia_Click"/>
-                        <Button Content="Monitor" Style="{StaticResource RoundedButtonStyle}" Click="Monitor_Click"/>
+                        <Button Content="Monitor/Graphics" Style="{StaticResource RoundedButtonStyle}" Click="Monitor_Click"/>
                         <Button Content="AMD" Style="{StaticResource RoundedButtonStyle}" Click="AMD_Click"/>
                         <Button Content="Process" Style="{StaticResource RoundedButtonStyle}" Click="CPUPriority_Click"/>
                         <Button Content="MSI Mode" Style="{StaticResource RoundedButtonStyle}" Click="MSI_Click"/>

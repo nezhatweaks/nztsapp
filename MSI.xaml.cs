@@ -339,6 +339,29 @@ namespace NZTS_App.Views
             }
         }
 
+        private void SetLimitButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            if (button != null)
+            {
+                var device = button.DataContext as PciDevice;
+
+                if (device != null && int.TryParse(device.MessageNumberLimit, out int newLimit) && newLimit >= 0 && newLimit <= 128)
+                {
+                    device.UpdateLimitInRegistry(newLimit);
+                }
+                else
+                {
+                    MessageBox.Show("Please enter a valid limit value (0 - 128).");
+                }
+            }
+        }
+
+
+
+
+
+
         private void ShowError(string message)
         {
             MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -435,12 +458,14 @@ namespace NZTS_App.Views
             }
         }
 
-        private void UpdateLimitInRegistry(int newValue)
+        public void UpdateLimitInRegistry(int newValue)
         {
+            // Construct the correct registry path for the specific device
             string registryPath = @$"SYSTEM\CurrentControlSet\Enum\PCI\{InstanceId}";
 
             try
             {
+                // Open the registry key with write access
                 using (var key = Registry.LocalMachine.OpenSubKey(registryPath, writable: true))
                 {
                     if (key == null)
@@ -449,17 +474,35 @@ namespace NZTS_App.Views
                         return;
                     }
 
+                    // Iterate through the subkeys to find the Device Parameters key
                     foreach (var subKeyName in key.GetSubKeyNames())
                     {
                         using (var subKey = key.OpenSubKey(subKeyName, writable: true))
                         {
                             if (subKey != null)
                             {
+                                // Open the Device Parameters subkey
                                 var parametersKey = subKey.OpenSubKey("Device Parameters", writable: true);
                                 if (parametersKey != null)
                                 {
-                                    parametersKey.SetValue("Limit", newValue, RegistryValueKind.DWord);
-                                    return;
+                                    // Open the Interrupt Management key
+                                    using (var interruptManagementKey = parametersKey.OpenSubKey("Interrupt Management", writable: true))
+                                    {
+                                        if (interruptManagementKey != null)
+                                        {
+                                            // Open the MessageSignaledInterruptProperties key
+                                            using (var msiPropertiesKey = interruptManagementKey.OpenSubKey("MessageSignaledInterruptProperties", writable: true))
+                                            {
+                                                if (msiPropertiesKey != null)
+                                                {
+                                                    // Set the new limit value
+                                                    msiPropertiesKey.SetValue("MessageNumberLimit", newValue, RegistryValueKind.DWord);
+                                                    MessageBox.Show($"MessageNumberLimit successfully updated to {newValue}.");
+                                                    return; // Exit once the update is done
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -472,9 +515,12 @@ namespace NZTS_App.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error updating Limit value: {ex.Message}");
+                MessageBox.Show($"Error updating MessageNumberLimit value: {ex.Message}");
             }
         }
+
+
+
 
         private void UpdateInterruptPriorityInRegistry(string? newValue)
         {

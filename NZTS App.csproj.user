@@ -25,6 +25,9 @@
     <Compile Update="LatencySensitivityHint.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="MemoryMan.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="MonitorUserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -70,6 +73,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="LatencySensitivityHint.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MemoryMan.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MonitorUserControl.xaml">

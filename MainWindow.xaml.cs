@@ -635,6 +635,12 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
             ShowContentWithAnimation(powerPlanControl); // Call the method to display with animation
         }
 
+        private void MemoryMan_Click(object sender, RoutedEventArgs e)
+        {
+            var memmanControl = new MemoryMan(this);
+            ShowContentWithAnimation(memmanControl); // Call the method to display with animation
+        }
+
         private void MMCSS_Click(object sender, RoutedEventArgs e)
         {
             var mmcssControl = new MMCSS(this);
