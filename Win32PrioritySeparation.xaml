@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="373.6" Background="#2C2F33">
+             >
     <UserControl.Resources>
         <!-- Discord-like Button Style -->
         <Style TargetType="Button" x:Key="DiscordButton">
@@ -96,7 +95,7 @@
         </Style>
     </UserControl.Resources>
 
-    <Border BorderBrush="#36393F" BorderThickness="1" CornerRadius="20" Margin="10" Background="#36393F" ToolTip="Determines how Windows prioritizes threads and processes, affecting their responsiveness and overall performance.">
+    <Border BorderBrush="#36393F" BorderThickness="1" CornerRadius="20" Margin="10,0,0,0" Background="#36393F" ToolTip="Determines how Windows prioritizes threads and processes, affecting their responsiveness and overall performance.">
         <Grid Margin="10">
             <StackPanel Margin="10">
                 <TextBlock Text="Select a Win32 Priority Separation Value:" FontWeight="Bold" Margin="0,0,0,10" ToolTip="Determines how Windows prioritizes threads and processes, affecting their responsiveness and overall performance."/>

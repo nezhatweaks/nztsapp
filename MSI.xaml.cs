@@ -7,6 +7,9 @@ using Microsoft.Win32;
 using System.Threading.Tasks;
 using System.Globalization;
 using System.Windows.Data;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
+using System.Windows.Input;
 
 namespace NZTS_App.Views
 {
@@ -54,7 +57,10 @@ namespace NZTS_App.Views
             }
         }
 
-        private async void LoadPciDevicesAsync()
+        
+
+
+private async void LoadPciDevicesAsync()
         {
             try
             {
@@ -147,10 +153,16 @@ namespace NZTS_App.Views
                                     }
                                 }
 
-                                var msixKeyValue = parametersKey.GetValue("0x00000010");
-                                if (msixKeyValue != null)
+                                using (var interruptManagementKey = parametersKey.OpenSubKey("Interrupt Management\\MessageSignaledInterruptProperties"))
                                 {
-                                    supportsMsix = true;
+                                    if (interruptManagementKey != null)
+                                    {
+                                        var msixValue = interruptManagementKey.GetValue("0x00000010");
+                                        if (msixValue != null && msixValue is string)
+                                        {
+                                            supportsMsix = true;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -170,6 +182,12 @@ namespace NZTS_App.Views
 
             return modes;
         }
+
+        
+
+
+
+
 
         private string GetMsiValue(RegistryKey deviceKey)
         {
@@ -346,17 +364,34 @@ namespace NZTS_App.Views
             {
                 var device = button.DataContext as PciDevice;
 
-                if (device != null && int.TryParse(device.MessageNumberLimit, out int newLimit) && newLimit >= 0 && newLimit <= 128)
+                if (device != null && int.TryParse(device.MessageNumberLimit, out int newLimit) && newLimit >= 0 && newLimit <= 2048)
                 {
                     device.UpdateLimitInRegistry(newLimit);
                 }
                 else
                 {
-                    MessageBox.Show("Please enter a valid limit value (0 - 128).");
+                    MessageBox.Show("Please enter a valid limit value (0 - 2048).");
                 }
             }
         }
 
+        private void BackupButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenCreateRestorePointDialog();
+        }
+
+        private void OpenCreateRestorePointDialog()
+        {
+            try
+            {
+                // Open the System Properties dialog for creating a restore point
+                System.Diagnostics.Process.Start("SystemPropertiesProtection.exe");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to open the restore point dialog. Exception: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
 
 
@@ -636,6 +671,9 @@ namespace NZTS_App.Views
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        
     }
 }
+
 

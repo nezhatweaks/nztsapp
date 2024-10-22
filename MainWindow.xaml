@@ -282,7 +282,7 @@
                     
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
     <!-- Green Optimize Button styled as a card -->
-                        <Button Content="Optimize All" 
+                        <Button x:Name="OptimizeAllButton" Content="Optimize All" 
         Background="Black" 
         Foreground="White" 
         Width="180" 

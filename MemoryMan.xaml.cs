@@ -19,7 +19,7 @@ namespace NZTS_App.Views
             mainWindow.TitleTextBlock.Content = "Memory";
 
             DisablePagingExecutiveToggle.Click += DisablePagingExecutiveToggle_Click;
-            SecondLevelDataCacheToggle.Click += SecondLevelDataCacheToggle_Click;
+            
             ContextSwitchDeadbandToggle.Click += ContextSwitchDeadbandToggle_Click;
             LatencySensitivityHintToggle.Click += LatencySensitivityHintToggle_Click;
             DisableHeapCoalesceOnFreeToggle.Click += DisableHeapCoalesceOnFreeToggle_Click; // New toggle click event
@@ -38,8 +38,7 @@ namespace NZTS_App.Views
                         DisablePagingExecutiveToggle.IsChecked = (disablePagingValue is int disablePagingInt && disablePagingInt == 1);
 
                         // SecondLevelDataCache
-                        var secondLevelValue = key.GetValue("SecondLevelDataCache");
-                        SecondLevelDataCacheToggle.IsChecked = (secondLevelValue is int && (int)secondLevelValue == 400);
+                        
 
                         // ContextSwitchDeadband
                         var contextSwitchValue = key.GetValue("ContextSwitchDeadband");
@@ -74,17 +73,7 @@ namespace NZTS_App.Views
             UpdateRegistryValue("DisablePagingExecutive", DisablePagingExecutiveToggle.IsChecked == true ? 1 : 0);
         }
 
-        private void SecondLevelDataCacheToggle_Click(object sender, RoutedEventArgs e)
-        {
-            if (SecondLevelDataCacheToggle.IsChecked == true)
-            {
-                UpdateRegistryValue("SecondLevelDataCache", 400);
-            }
-            else
-            {
-                DeleteRegistryValue("SecondLevelDataCache");
-            }
-        }
+        
 
         private void ContextSwitchDeadbandToggle_Click(object sender, RoutedEventArgs e)
         {

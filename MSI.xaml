@@ -49,18 +49,26 @@
         </Grid.RowDefinitions>
 
         <!-- Title -->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Grid.Row="0">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0" Grid.Row="0">
             <TextBlock Text="MSI MODE" FontSize="20" FontWeight="Bold" Foreground="White" ToolTip="Enables Message Signaled Interrupts (MSI) for this device, allowing it to send interrupts via messages rather than traditional line-based methods."/>
             <Border BorderBrush="Yellow" BorderThickness="2" Margin="10,-1,0,0" CornerRadius="5" Background="#2A2A2A">
-                <TextBlock Text="No Logging, Proceed With Caution" 
-               Foreground="Yellow" 
-               FontSize="14" 
-               FontWeight="Bold" 
-               Padding="5" 
-               HorizontalAlignment="Center" 
-               VerticalAlignment="Center" ToolTip="If you are not sure about this settings, please leave the settings alone."/>
+                <TextBlock Text="No Logging!" 
+                   Foreground="Yellow" 
+                   FontSize="14" 
+                   FontWeight="Bold" 
+                   Padding="5" 
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center" ToolTip="If you are not sure about this settings, please leave the settings alone."/>
             </Border>
+
+            <!-- Backup Button -->
+            <Button Content="Create A Restore Point" 
+            Style="{StaticResource RoundedButtonStyle}" 
+            Click="BackupButton_Click" 
+            Margin="10,0,0,0" 
+            HorizontalAlignment="Left" />
         </StackPanel>
+
 
         <!-- Warning Border -->
         
@@ -72,7 +80,7 @@
                     <GridView>
                         <GridViewColumn Header="Name" DisplayMemberBinding="{Binding DeviceName}" Width="150"/>
                         <GridViewColumn Header="IRQ" DisplayMemberBinding="{Binding Irq}" Width="30"/>
-                        <GridViewColumn Header="MSI" Width="50">
+                        <GridViewColumn Header="MSI" Width="30">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <CheckBox IsChecked="{Binding Msi, Converter={StaticResource MsiToBoolConverter}}"
@@ -82,11 +90,11 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Limit" Width="150">
+                        <GridViewColumn Header="Limit" Width="110">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBox Width="40" MaxLength="3" Text="{Binding MessageNumberLimit, UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBox Width="40" MaxLength="4" Text="{Binding MessageNumberLimit, UpdateSourceTrigger=PropertyChanged}" />
                                         <Button Content="Set Limit" Click="SetLimitButton_Click" />
                                     </StackPanel>
                                 </DataTemplate>

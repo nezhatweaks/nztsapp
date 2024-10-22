@@ -49,7 +49,15 @@ namespace NZTS_App
     {"DisableDynamicPstate", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "00000001", ValueType.DWord, false, "00000000")}, // default is 0
     {"EnableUlps", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "00000000", ValueType.DWord, false, "00000001")}, // default is 1
     {"PP_ThermalAutoThrottlingEnable", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "00000000", ValueType.DWord, false, "00000001")}, // default is 1
-    {"Start", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\MMCSS", "00000002", ValueType.DWord, false, "00000002")}
+    {"Start", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\MMCSS", "00000002", ValueType.DWord, false, "00000002")},
+    {"VsyncIdleTimeout", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler", "00000000", ValueType.DWord, false, "00000001")},
+    {"MonitorLatencyTolerance", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power", "00000001", ValueType.DWord, false, "00000000")},
+    {"MonitorRefreshLatencyTolerance", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power", "00000001", ValueType.DWord, false, "00000000")},
+    {"DisablePagingExecutive", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "00000001", ValueType.DWord, false, "00000000")},
+    {"DisableHeapCoalesceOnFree", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "00000001", ValueType.DWord, false, "00000000")},
+    {"AllowMaxPerf", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\nvlddmkm", "00000001", ValueType.DWord, false, "00000000")},
+    {"DisableMshybridNvsrSwitch", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\nvlddmkm", "00000001", ValueType.DWord, false, "00000000")}
+    
 };
 
 
@@ -85,16 +93,17 @@ namespace NZTS_App
 
         }
 
-        
 
 
         
 
-        
 
 
 
-        
+
+
+
+
 
 
 

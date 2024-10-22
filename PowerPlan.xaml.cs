@@ -3,9 +3,20 @@ using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Diagnostics;
+
 
 namespace NZTS_App
 {
+
+    public class PowerPlanInfo
+    {
+        public string? Name { get; set; }
+        public string? Description { get; set; }
+        public bool IsActive { get; set; }
+    }
+
+
     public partial class PowerPlan : UserControl
     {
         private string? selectedDirectory;
@@ -150,6 +161,28 @@ namespace NZTS_App
         {
             ImportPowerPlanButton.IsEnabled = PowerPlanListBox.SelectedItem != null;
         }
+
+        private void OpenPowerOptionsButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var startInfo = new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = "control.exe",
+                    Arguments = "powercfg.cpl",
+                    UseShellExecute = true,
+                    CreateNoWindow = true
+                };
+                System.Diagnostics.Process.Start(startInfo);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
+
 
         private void ImportPowerPlan_Click(object sender, RoutedEventArgs e)
         {
@@ -317,6 +350,12 @@ namespace NZTS_App
                 App.changelogUserControl?.AddLog("Failed", errorMsg);
             }
         }
+
+        
+
+
+
+
 
 
 

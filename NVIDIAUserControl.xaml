@@ -1,6 +1,7 @@
 ﻿<UserControl x:Class="NZTS_App.Views.NVIDIAUserControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             >
     <UserControl.Resources>
         <Style x:Key="iOSToggleButton" TargetType="ToggleButton">
             <Setter Property="Template">
@@ -46,7 +47,7 @@
         </Style>
     </UserControl.Resources>
 
-    <ContentControl x:Name="ContentNVIDIA" Background="#2C2F33" Width="400" Height="400" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,60,0,0">
+    <ContentControl x:Name="ContentNVIDIA" Background="#2C2F33"  HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,40,0,0">
         <StackPanel>
             <!-- Header -->
             
@@ -85,7 +86,7 @@
             </Border>
 
             <!-- Disable Preemption -->
-            <Border Background="#63150f" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+            <Border Background="#63150f" BorderBrush="Red" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="Disable Preemption" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disabling preemption may reduce input lag in certain applications."/>
                     <ToggleButton x:Name="DisablePreemptionSwitch"
@@ -97,7 +98,7 @@
 
 
             <!-- Disable CUDA Context Preemption -->
-            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+            <Border Background="#63150f" BorderBrush="Red" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="Disable CUDA Context Preemption" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disabling CUDA context preemption may help reduce latency in specific applications."/>
                     <ToggleButton x:Name="DisableCudaContextPreemptionSwitch"
