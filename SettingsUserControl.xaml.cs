@@ -123,18 +123,12 @@ namespace NZTS_App.Views
                 // Notify the user and close the application
                 MessageBox.Show("The application will now close to apply the update. Please restart it afterward.", "Updating...", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                // Close the application
-                Application.Current.Shutdown();
+                // Close the application forcefully
+                Environment.Exit(0); // This will terminate the app immediately
 
-                // Wait for the application to close before extracting
-                await Task.Delay(2000); // Optional delay to ensure the app closes
-
-                // Extract the ZIP file (should be done in a separate process if this runs synchronously)
-                string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                ZipFile.ExtractToDirectory(tempFilePath, appDirectory, overwriteFiles: true);
-
-                // Optionally, you could launch the application again here, if desired.
-                // System.Diagnostics.Process.Start(Path.Combine(appDirectory, "YourApp.exe"));
+                // Extraction logic after the application is closed (optional)
+                // You can start a separate process to handle the extraction if desired.
+                // System.Diagnostics.Process.Start("YourExtractionScript.exe", tempFilePath);
             }
             catch (HttpRequestException httpEx)
             {
@@ -149,6 +143,7 @@ namespace NZTS_App.Views
                 ShowErrorMessage($"Error applying the update: {ex.Message}");
             }
         }
+
 
 
         private void ShowErrorMessage(string message)
