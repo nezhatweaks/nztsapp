@@ -256,11 +256,13 @@
                         <!-- Buttons Section -->
                         
                         <Button Content="Home" Style="{StaticResource RoundedButtonStyle}" Click="Home_Click"/>
-                        <Button Content="Change Log" Style="{StaticResource RoundedButtonStyle}" Click="Changelog_Click"/>
+                        <Button Content="Logs" Style="{StaticResource RoundedButtonStyle}" Click="Changelog_Click"/>
                         <Button Content="Settings" Style="{StaticResource RoundedButtonStyle}" Click="Settings_Click"/>
                         <Separator Margin="0,20,0,10"/>
                         <Button Content="PowerPlan" Style="{StaticResource RoundedButtonStyle}" Click="PowerPlan_Click"/>
-                        <Button Content="Win32PrioritySeparation" Style="{StaticResource RoundedButtonStyle}" Click="Win32PrioritySeparation_Click"/>
+                        <Button Content="WinPriority" Style="{StaticResource RoundedButtonStyle}" Click="Win32PrioritySeparation_Click"/>
+                        <Button Content="Gaming" Style="{StaticResource RoundedButtonStyle}" Click="Windows_Click"/>
+                        <Button Content="Storage" Style="{StaticResource RoundedButtonStyle}" Click="Storage_Click"/>
                         <Button Content="Memory" Style="{StaticResource RoundedButtonStyle}" Click="MemoryMan_Click"/>
                         <Button Content="MMCSS" Style="{StaticResource RoundedButtonStyle}" Click="MMCSS_Click"/>
                         <Button Content="NVIDIA" Style="{StaticResource RoundedButtonStyle}" Click="Nvidia_Click"/>

@@ -17,7 +17,7 @@ namespace NZTS_App
             // Use the static collection from App
             ChangeLogListView.ItemsSource = App.ChangelogEntries;
             mainWindow = window;
-            mainWindow.TitleTextBlock.Content = "Log";
+            mainWindow.TitleTextBlock.Content = "Logs";
         }
 
         public void AddLog(string action, string description)

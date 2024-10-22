@@ -623,6 +623,19 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
             
         }
 
+        private void Storage_Click(object sender, RoutedEventArgs e)
+        {
+            var storageControl = new Views.Storage(this);
+            ShowContentWithAnimation(storageControl); // Call the method without animation
+
+        }
+
+        private void Windows_Click(object sender, RoutedEventArgs e)
+        {
+            var windowsControl = new WindowsUserControl(this);
+            ShowContentWithAnimation(windowsControl); // Call the method to display with animation
+        }
+
         private void ContextSwitchDeadband_Click(object sender, RoutedEventArgs e)
         {
             // Load ContextSwitchDeadband UserControl with MainWindow reference

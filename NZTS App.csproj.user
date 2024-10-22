@@ -46,10 +46,16 @@
     <Compile Update="SettingsUserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Storage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="WelcomeUserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Win32PrioritySeparation.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="WindowsUserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -96,10 +102,16 @@
     <Page Update="SettingsUserControl.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Storage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="WelcomeUserControl.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Win32PrioritySeparation.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="WindowsUserControl.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

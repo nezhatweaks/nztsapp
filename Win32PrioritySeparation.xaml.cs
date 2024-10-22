@@ -15,8 +15,10 @@ namespace NZTS_App.Views
             InitializeComponent();
             LoadCurrentWin32PrioritySeparationValue();  // Load current value when the window loads
             mainWindow = window; // Store the reference
-            mainWindow.TitleTextBlock.Content = "Win32 Priority";
+            mainWindow.TitleTextBlock.Content = "WinPriority";
         }
+
+
 
         // Load current registry value and display it
         private void LoadCurrentWin32PrioritySeparationValue()
