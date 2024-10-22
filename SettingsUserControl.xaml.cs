@@ -120,15 +120,29 @@ namespace NZTS_App.Views
                     }
                 }
 
-                // Notify the user and close the application
+                // Notify the user and prepare to close the application
                 MessageBox.Show("The application will now close to apply the update. Please restart it afterward.", "Updating...", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                // Close the application forcefully
-                Environment.Exit(0); // This will terminate the app immediately
+                // Construct the path to UpdateExtractor.exe in the Updates folder
+                string updatesFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Updates");
+                string extractorPath = Path.Combine(updatesFolderPath, "UpdateExtractor.exe");
 
-                // Extraction logic after the application is closed (optional)
-                // You can start a separate process to handle the extraction if desired.
-                // System.Diagnostics.Process.Start("YourExtractionScript.exe", tempFilePath);
+                // Start the extraction process in the new console application
+                var extractionProcess = new System.Diagnostics.Process
+                {
+                    StartInfo = new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = extractorPath,
+                        Arguments = tempFilePath,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    }
+                };
+
+                extractionProcess.Start();
+
+                // Close the application forcefully
+                Environment.Exit(0);
             }
             catch (HttpRequestException httpEx)
             {
@@ -143,6 +157,7 @@ namespace NZTS_App.Views
                 ShowErrorMessage($"Error applying the update: {ex.Message}");
             }
         }
+
 
 
 
