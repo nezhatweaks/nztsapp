@@ -120,12 +120,21 @@ namespace NZTS_App.Views
                     }
                 }
 
-                // Extract the ZIP file
+                // Notify the user and close the application
+                MessageBox.Show("The application will now close to apply the update. Please restart it afterward.", "Updating...", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                // Close the application
+                Application.Current.Shutdown();
+
+                // Wait for the application to close before extracting
+                await Task.Delay(2000); // Optional delay to ensure the app closes
+
+                // Extract the ZIP file (should be done in a separate process if this runs synchronously)
                 string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
                 ZipFile.ExtractToDirectory(tempFilePath, appDirectory, overwriteFiles: true);
 
-                MessageBox.Show("The update has been successfully downloaded and applied. Please restart the application for the changes to take effect.", "Update Applied", MessageBoxButton.OK, MessageBoxImage.Information);
-                Application.Current.Shutdown();
+                // Optionally, you could launch the application again here, if desired.
+                // System.Diagnostics.Process.Start(Path.Combine(appDirectory, "YourApp.exe"));
             }
             catch (HttpRequestException httpEx)
             {
@@ -140,6 +149,7 @@ namespace NZTS_App.Views
                 ShowErrorMessage($"Error applying the update: {ex.Message}");
             }
         }
+
 
         private void ShowErrorMessage(string message)
         {
