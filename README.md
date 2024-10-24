@@ -17,7 +17,7 @@ NZTS APP is a powerful FPS (Frames Per Second) boosting program designed to enha
 
 ## Installation
 
-1. Download the latest version of NZTS APP from the [releases page](#).
+1. Download the latest version of NZTS APP from the [releases page](https://github.com/nezhatweaks/nztsapp/releases).
 2. Extract the downloaded files to your preferred directory.
 3. Run `NZTS_APP.exe` to start the application.
 
