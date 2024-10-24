@@ -75,7 +75,7 @@ ToolTip="Click to optimize all settings for better performance!">
 
                 <!-- Orange Restore Button styled as a card -->
                 <Button Content="Restore All" 
-            Background="Red" 
+            Background="Black" 
             Foreground="White" 
             Width="180" 
             Height="240" 
@@ -113,7 +113,7 @@ ToolTip="Click to optimize all settings for better performance!">
                                 <!-- Hover Effect -->
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter TargetName="border" Property="Background" Value="orange"/>
-                                    <Setter TargetName="border" Property="BorderBrush" Value="DarkRed"/>
+                                    <Setter TargetName="border" Property="BorderBrush" Value="orange"/>
                                     <Setter Property="RenderTransform">
                                         <Setter.Value>
                                             <ScaleTransform ScaleX="1.00" ScaleY="1.00" />

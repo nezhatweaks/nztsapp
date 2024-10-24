@@ -1,19 +1,16 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.ComponentModel;
-using Newtonsoft.Json.Linq;
-using System.Windows.Controls.Primitives;
 
 namespace NZTS_App
 {
     public partial class CPUPriorityControl : UserControl
     {
         private ObservableCollection<Game> games;
-        
         private MainWindow mainWindow;
 
         public CPUPriorityControl(MainWindow window)
@@ -24,9 +21,9 @@ namespace NZTS_App
             mainWindow = window;
             mainWindow.TitleTextBlock.Content = "Process";
 
-
-            // Initialize priority options
+            // Initialize priority and GPU scheduling options
             InitializePriorityOptions();
+            InitializeGPUSchedulingOptions();
         }
 
         private void InitializePriorityOptions()
@@ -38,10 +35,17 @@ namespace NZTS_App
             PriorityComboBox.Items.Add(new ComboBoxItem { Content = "Low" });
         }
 
+        private void InitializeGPUSchedulingOptions()
+        {
+            GPUSchedulingComboBox.Items.Add(new ComboBoxItem { Content = "Default" });
+            GPUSchedulingComboBox.Items.Add(new ComboBoxItem { Content = "High Performance" });
+        }
+
         public class Game : INotifyPropertyChanged
         {
             private string? name;
             private string? priority;
+            private string? gpuScheduling;
 
             public required string Name
             {
@@ -53,23 +57,33 @@ namespace NZTS_App
                 }
             }
 
-            
-
-
-
-
             public required string Priority
             {
                 get => priority ?? "Normal";
                 set
                 {
-                    if (priority != value) // Check for actual change
+                    if (priority != value)
                     {
                         priority = value;
                         OnPropertyChanged(nameof(Priority));
                     }
                 }
             }
+
+            public required string GPUScheduling
+            {
+                get => gpuScheduling ?? "Default";
+                set
+                {
+                    if (gpuScheduling != value)
+                    {
+                        gpuScheduling = value;
+                        OnPropertyChanged(nameof(GPUScheduling));
+                    }
+                }
+            }
+
+
 
             public void SetPriorityFromRegistry()
             {
@@ -83,16 +97,19 @@ namespace NZTS_App
                             if (perfOptionsKey != null)
                             {
                                 var value = perfOptionsKey.GetValue("CpuPriorityClass");
-
-                                if (value != null && value is int priorityValue)
+                                if (value is int priorityValue)
                                 {
                                     Priority = GetPriorityString(priorityValue);
                                 }
                                 else
                                 {
-                                    // If no priority is set in the registry, default to "Normal"
                                     Priority = "Normal";
                                 }
+
+                                var gpuValue = perfOptionsKey.GetValue("GPUScheduling");
+                                GPUScheduling = gpuValue != null && gpuValue is int gpuSchedulingValue
+                                    ? gpuSchedulingValue == 1 ? "High Performance" : "Default"
+                                    : "Default";
                             }
                         }
                     }
@@ -112,6 +129,19 @@ namespace NZTS_App
                 };
             }
 
+            public void SetGPUSchedulingInRegistry()
+            {
+                string registryPath = $@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{Name}";
+                using (var gameKey = Registry.LocalMachine.CreateSubKey(registryPath, true))
+                {
+                    if (gameKey != null)
+                    {
+                        int gpuValue = GPUScheduling == "High Performance" ? 1 : 0;
+                        gameKey.SetValue("GPUScheduling", gpuValue, RegistryValueKind.DWord);
+                    }
+                }
+            }
+
             public event PropertyChangedEventHandler? PropertyChanged;
 
             protected virtual void OnPropertyChanged(string propertyName)
@@ -122,60 +152,47 @@ namespace NZTS_App
 
         private void AddGameButton_Click(object sender, RoutedEventArgs e)
         {
-            // Prompt user to enter a single executable name
             var gameName = Microsoft.VisualBasic.Interaction.InputBox(
-                "Enter the executable name of the game (e.g., game.exe):",
-                "Add Game",
-                "");
+                "Enter the executable name of the game (e.g., game.exe):", "Add Game", "");
 
-            // Validate the input for proper format
             if (!string.IsNullOrWhiteSpace(gameName) && gameName.EndsWith(".exe"))
             {
-                // Check for duplicates
                 if (games.Any(g => g.Name.Equals(gameName, StringComparison.OrdinalIgnoreCase)))
                 {
                     MessageBox.Show("This game is already in the list.", "Duplicate Entry", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    App.changelogUserControl?.AddLog("Duplicated", $"Unable to change the CPU Priority for {gameName} setting.");
                     return;
                 }
 
-                var newGame = new Game { Name = gameName, Priority = "Normal" }; // Initialize Priority to a default value
-                newGame.SetPriorityFromRegistry(); // Optionally fetch the priority from the registry
+                var newGame = new Game { Name = gameName, Priority = "Normal", GPUScheduling = "Default" };
+                newGame.SetPriorityFromRegistry();
                 games.Add(newGame);
-                
-
-                // Automatically select the newly added game
                 GameListView.SelectedItem = newGame;
-
-                // Call the method to initialize UI elements based on the new game
                 UpdateUIForSelectedGame(newGame);
-
-                GameListView.Items.Refresh(); // Refresh the ListView to reflect the priority
+                GameListView.Items.Refresh();
             }
             else
             {
                 MessageBox.Show("Please enter a valid executable name ending with .exe.", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Warning);
-                App.changelogUserControl?.AddLog("Cancelled", "Exit the Process 'Add By Name'.");
             }
         }
-
-
 
         private void RemoveGameButton_Click(object sender, RoutedEventArgs e)
         {
             if (GameListView.SelectedItem is Game selectedGame)
             {
-                // Remove the game from the collection
                 games.Remove(selectedGame);
-                
-
-                // Clear the toggle and priority UI elements
-                UseLargePagesToggle.IsChecked = false; // Turn off the toggle
-                UseLargePagesStatusTextBlock.Text = "Disabled"; // Update the status text
-
-                // Clear the selection in the ComboBox
-                PriorityComboBox.SelectedIndex = -1; // Clear the selection in the ComboBox
+                ResetGameUI();
             }
+        }
+
+        private void ResetGameUI()
+        {
+            UseLargePagesToggle.IsChecked = false;
+            UseLargePagesStatusTextBlock.Text = "Disabled";
+            DisableHeapCoalesceToggle.IsChecked = false;
+            DisableHeapCoalesceStatusTextBlock.Text = "Disabled";
+            PriorityComboBox.SelectedIndex = -1;
+            GPUSchedulingComboBox.SelectedIndex = -1;
         }
 
 
@@ -184,156 +201,87 @@ namespace NZTS_App
         {
             if (GameListView.SelectedItem is Game selectedGame)
             {
-                // Fetch the priority and large pages setting from the registry for the selected game
                 selectedGame.SetPriorityFromRegistry();
-
-                // Update the UI elements
                 UpdateUIForSelectedGame(selectedGame);
             }
         }
 
         private void UpdateUIForSelectedGame(Game selectedGame)
         {
-            // Update ComboBox selection
             UpdateComboBoxForSelectedGame(selectedGame);
-
-            // Initialize Use Large Pages toggle
             InitializeUseLargePagesToggle(selectedGame);
+            InitializeDisableHeapCoalesceToggle(selectedGame);
+            UpdateGPUSchedulingComboBoxForSelectedGame(selectedGame); // Update GPU scheduling UI
         }
 
-
-
-
-        private bool isUpdatingComboBox = false; // Add a flag to prevent recursion
+        private bool isUpdatingComboBox = false;
 
         private void UpdateComboBoxForSelectedGame(Game selectedGame)
         {
-            if (isUpdatingComboBox) return; // Prevent recursive updates
+            if (isUpdatingComboBox) return;
+            isUpdatingComboBox = true;
 
-            isUpdatingComboBox = true; // Set the flag to indicate we're updating the ComboBox
-
-            // This should ensure the ComboBox reflects the correct priority
             var matchingItem = PriorityComboBox.Items
                 .Cast<ComboBoxItem>()
                 .FirstOrDefault(item => item.Content?.ToString() == selectedGame.Priority);
 
-            // Set the selected item in the ComboBox
-            if (matchingItem != null)
-            {
-                PriorityComboBox.SelectedItem = matchingItem;
-            }
-            else
-            {
-                // If no match is found, default to "Normal"
-                PriorityComboBox.SelectedIndex = 2; // Assuming "Normal" is at index 2
-            }
+            PriorityComboBox.SelectedItem = matchingItem ?? PriorityComboBox.Items[2]; // Default to "Normal"
 
-            isUpdatingComboBox = false; // Reset the flag after the update is done
+            isUpdatingComboBox = false;
+        }
+
+        private void UpdateGPUSchedulingComboBoxForSelectedGame(Game selectedGame)
+        {
+            var matchingItem = GPUSchedulingComboBox.Items
+                .Cast<ComboBoxItem>()
+                .FirstOrDefault(item => item.Content?.ToString() == selectedGame.GPUScheduling);
+
+            GPUSchedulingComboBox.SelectedItem = matchingItem ?? GPUSchedulingComboBox.Items[0]; // Default to "Default"
         }
 
         private void PriorityComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (isUpdatingComboBox) return; // Prevent recursion during ComboBox updates
+            if (isUpdatingComboBox) return;
 
             if (GameListView.SelectedItem is Game selectedGame && PriorityComboBox.SelectedItem is ComboBoxItem selectedItem)
             {
                 var selectedPriority = selectedItem.Content?.ToString();
                 if (!string.IsNullOrEmpty(selectedPriority))
                 {
-                    selectedGame.Priority = selectedPriority; // This should trigger PropertyChanged
-                    
-
-                    // Refresh the ListView to reflect the new priority
+                    selectedGame.Priority = selectedPriority;
                     GameListView.Items.Refresh();
-
-                    // Update the ComboBox selection to reflect the change
-                    UpdateComboBoxForSelectedGame(selectedGame); // Sync ComboBox with the new value
+                    UpdateComboBoxForSelectedGame(selectedGame);
                 }
             }
         }
 
-        private void SavePriorityButton_Click(object sender, RoutedEventArgs e)
+        private void GPUSchedulingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            foreach (var game in games)
+            if (GameListView.SelectedItem is Game selectedGame && GPUSchedulingComboBox.SelectedItem is ComboBoxItem selectedItem)
             {
-                int priorityValue = GetPriorityValue(game.Priority);
-                if (priorityValue == 0)
+                var selectedScheduling = selectedItem.Content?.ToString();
+                if (!string.IsNullOrEmpty(selectedScheduling))
                 {
-                    App.changelogUserControl?.AddLog("Invalid", $"Invalid priority for {game.Name}.");
-                    MessageBox.Show($"Invalid priority for {game.Name}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    continue;
-                }
-
-                string registryPath = $@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{game.Name}";
-
-                try
-                {
-                    using (var gameKey = Registry.LocalMachine.CreateSubKey(registryPath, true))
-                    {
-                        if (gameKey != null)
-                        {
-                            using (var perfOptionsKey = gameKey.CreateSubKey("PerfOptions", true))
-                            {
-                                if (perfOptionsKey != null)
-                                {
-                                    perfOptionsKey.SetValue("CpuPriorityClass", priorityValue, RegistryValueKind.DWord);
-
-                                    // Save Use Large Pages setting for the game
-                                    bool useLargePages = UseLargePagesToggle.IsChecked == true;
-                                    perfOptionsKey.SetValue("UseLargePages", useLargePages ? 1 : 0, RegistryValueKind.DWord);
-
-                                    // Log and show message for Use Large Pages
-                                    string largePagesMessage = useLargePages ? "enabled" : "disabled";
-                                    App.changelogUserControl?.AddLog("Applied", $"Use Large Pages for {game.Name} set to {largePagesMessage}.");
-                                    MessageBox.Show($"Use Large Pages for {game.Name} has been {largePagesMessage}.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                                    MessageBox.Show($"Priority for {game.Name} set to {game.Priority}.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                                    App.changelogUserControl?.AddLog("Applied", $"Priority for {game.Name} set to {game.Priority}.");
-
-                                    var mainWindow = Application.Current.MainWindow as MainWindow;
-                                    mainWindow?.MarkSettingsApplied();
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Failed to set priority for {game.Name}. Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    App.changelogUserControl?.AddLog("Failed", $"Failed to set priority for {game.Name}.");
+                    selectedGame.GPUScheduling = selectedScheduling;
+                    selectedGame.SetGPUSchedulingInRegistry(); // Save the setting to the registry
                 }
             }
         }
 
-
-
-        private void ResetPriorityButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (GameListView.SelectedItem is Game selectedGame)
-            {
-                selectedGame.Priority = "Normal";
-                GameListView.Items.Refresh();
-
-                // Update ComboBox selection to reflect the reset
-                UpdateComboBoxForSelectedGame(selectedGame);
-                
-            }
-        }
+        
 
         private int GetPriorityValue(string priority)
         {
             return priority switch
             {
                 "High" => 0x00000003,
-                "Above Normal" => 0x00000006,
-                "Normal" => 0x00000002,
-                "Below Normal" => 0x00000005,
-                "Low" => 0x00000001,
-                _ => 0x00000002 // Default to Normal
+                "Above Normal" => 0x00000002,
+                "Normal" => 0x00000001,
+                "Below Normal" => 0x00000000,
+                "Low" => 0x00000000,
+                _ => 0
             };
         }
-
-        
 
         private void AddActiveProcessButton_Click(object sender, RoutedEventArgs e)
         {
@@ -352,12 +300,21 @@ namespace NZTS_App
                 return;
             }
 
-            var newGame = new Game { Name = executableName, Priority = "Normal" };
+            var newGame = new Game
+            {
+                Name = executableName,
+                Priority = "Normal",
+                GPUScheduling = "Default" // Set this to a valid default value
+            };
+
             games.Add(newGame);
-            
+
+
 
             // Set default UseLargePages value
             SetUseLargePagesForNewGame(newGame, false); // Default to false, change as needed
+            SetDisableHeapCoalesceForNewGame(newGame, false); // Default to false
+
 
             // Automatically select the newly added game
             GameListView.SelectedItem = newGame;
@@ -365,7 +322,42 @@ namespace NZTS_App
 
             // Initialize Use Large Pages toggle
             InitializeUseLargePagesToggle(newGame);
+            InitializeDisableHeapCoalesceToggle(newGame);
         }
+
+
+        private void SetDisableHeapCoalesceForNewGame(Game game, bool disableHeapCoalesce)
+        {
+            string registryPath = $@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{game.Name}";
+            using (var gameKey = Registry.LocalMachine.CreateSubKey(registryPath, true))
+            {
+                if (gameKey != null)
+                {
+                    gameKey.SetValue("DisableHeapCoalesceOnFree", disableHeapCoalesce ? 1 : 0, RegistryValueKind.DWord);
+                }
+            }
+        }
+
+
+        private void SetDisableHeapCoalesce(bool disableHeapCoalesce)
+        {
+            // This method updates the DisableHeapCoalesceOnFree registry value for all games.
+            // Note: This setting should not be saved in PerfOptions.
+            string registryPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\";
+            foreach (var game in games)
+            {
+                using (var gameKey = Registry.LocalMachine.CreateSubKey(registryPath + game.Name, true))
+                {
+                    if (gameKey != null)
+                    {
+                        gameKey.SetValue("DisableHeapCoalesceOnFree", disableHeapCoalesce ? 1 : 0, RegistryValueKind.DWord);
+                    }
+                }
+            }
+        }
+
+
+
 
         private void SetUseLargePagesForNewGame(Game game, bool useLargePages)
         {
@@ -476,8 +468,168 @@ namespace NZTS_App
             }
         }
 
+        private void InitializeDisableHeapCoalesceToggle(Game selectedGame)
+        {
+            string registryPath = $@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{selectedGame.Name}\PerfOptions";
+
+            try
+            {
+                using (var gameKey = Registry.LocalMachine.OpenSubKey(registryPath))
+                {
+                    if (gameKey != null)
+                    {
+                        object? value = gameKey.GetValue("DisableHeapCoalesceOnFree");
+
+                        // Set toggle based on registry value
+                        if (value is int intValue)
+                        {
+                            DisableHeapCoalesceToggle.IsChecked = intValue == 1; // Set toggle based on registry value
+                            DisableHeapCoalesceStatusTextBlock.Text = intValue == 1 ? "Enabled" : "Disabled";
+                        }
+                        else
+                        {
+                            DisableHeapCoalesceToggle.IsChecked = false; // Default if value is not set
+                            DisableHeapCoalesceStatusTextBlock.Text = "Disabled";
+                        }
+                    }
+                    else
+                    {
+                        DisableHeapCoalesceToggle.IsChecked = false; // No key found
+                        DisableHeapCoalesceStatusTextBlock.Text = "Disabled";
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                MessageBox.Show("You do not have permission to access the registry. Please run the application as an administrator.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while reading the registry: {ex.Message}");
+            }
+        }
+
+        private void DisableHeapCoalesceToggle_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                bool disableHeapCoalesce = DisableHeapCoalesceToggle.IsChecked == true;
+                DisableHeapCoalesceStatusTextBlock.Text = disableHeapCoalesce ? "Enabled" : "Disabled";
+
+                string registryPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\";
+                foreach (var game in games)
+                {
+                    using (var gameKey = Registry.LocalMachine.CreateSubKey(registryPath + game.Name, true))
+                    {
+                        if (gameKey != null)
+                        {
+                            gameKey.SetValue("DisableHeapCoalesceOnFree", disableHeapCoalesce ? 1 : 0, RegistryValueKind.DWord);
+                            App.changelogUserControl?.AddLog("Applied", $"Disable Heap Coalesce on Free for {game.Name} set to {(disableHeapCoalesce ? "enabled" : "disabled")}");
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Failed to access the registry key for {game.Name}.");
+                            App.changelogUserControl?.AddLog("Failed", $"Registry key for {game.Name} not found.");
+                        }
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                MessageBox.Show("You do not have permission to modify the registry. Please run the application as an administrator.");
+                App.changelogUserControl?.AddLog("Failed", "Unauthorized access to modify Disable Heap Coalesce on Free.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating Disable Heap Coalesce on Free: {ex.Message}");
+                App.changelogUserControl?.AddLog("Failed", $"Error updating Disable Heap Coalesce on Free: {ex.Message}");
+            }
+        }
 
 
+
+        private void ResetPriorityButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (GameListView.SelectedItem is Game selectedGame)
+            {
+                selectedGame.Priority = "Normal";
+                GameListView.Items.Refresh();
+
+                // Update ComboBox selection to reflect the reset
+                UpdateComboBoxForSelectedGame(selectedGame);
+
+            }
+        }
+
+        private void SavePriorityButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var game in games)
+            {
+                int priorityValue = GetPriorityValue(game.Priority);
+                if (priorityValue == 0)
+                {
+                    App.changelogUserControl?.AddLog("Invalid", $"Invalid priority for {game.Name}.");
+                    MessageBox.Show($"Invalid priority for {game.Name}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    continue;
+                }
+
+                string registryPath = $@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{game.Name}";
+
+                try
+                {
+                    using (var gameKey = Registry.LocalMachine.CreateSubKey(registryPath, true))
+                    {
+                        if (gameKey != null)
+                        {
+                            using (var perfOptionsKey = gameKey.CreateSubKey("PerfOptions", true))
+                            {
+                                if (perfOptionsKey != null)
+                                {
+                                    perfOptionsKey.SetValue("CpuPriorityClass", priorityValue, RegistryValueKind.DWord);
+
+                                    // Save Use Large Pages setting for the game
+                                    bool useLargePages = UseLargePagesToggle.IsChecked == true;
+                                    perfOptionsKey.SetValue("UseLargePages", useLargePages ? 1 : 0, RegistryValueKind.DWord);
+
+                                    // Save GPU Scheduling setting
+                                    int gpuSchedulingValue = game.GPUScheduling == "High Performance" ? 1 : 0; // Use string comparison
+                                    perfOptionsKey.SetValue("GPUScheduling", gpuSchedulingValue, RegistryValueKind.DWord);
+
+                                    // Log and show message for Use Large Pages
+                                    string largePagesMessage = useLargePages ? "enabled" : "disabled";
+                                    App.changelogUserControl?.AddLog("Applied", $"Use Large Pages for {game.Name} set to {largePagesMessage}.");
+                                    MessageBox.Show($"Use Large Pages for {game.Name} has been {largePagesMessage}.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                                    // Save Disable Heap Coalesce setting
+                                    bool disableHeapCoalesce = DisableHeapCoalesceToggle.IsChecked == true;
+                                    perfOptionsKey.SetValue("DisableHeapCoalesceOnFree", disableHeapCoalesce ? 1 : 0, RegistryValueKind.DWord);
+                                    App.changelogUserControl?.AddLog("Applied", $"Disable Heap Coalesce on Free for {game.Name} set to {(disableHeapCoalesce ? "enabled" : "disabled")}");
+
+                                    // Show message for Disable Heap Coalesce
+                                    MessageBox.Show($"Disable Heap Coalesce on Free for {game.Name} has been {(disableHeapCoalesce ? "enabled" : "disabled")}.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                                    // Show message for GPU Scheduling
+                                    string gpuSchedulingMessage = gpuSchedulingValue == 1 ? "High Performance" : "Default";
+                                    MessageBox.Show($"GPU Scheduling for {game.Name} set to {gpuSchedulingMessage}.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                                    // Show message for Priority
+                                    MessageBox.Show($"Priority for {game.Name} set to {game.Priority}.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                                    App.changelogUserControl?.AddLog("Applied", $"Priority for {game.Name} set to {game.Priority}.");
+
+                                    var mainWindow = Application.Current.MainWindow as MainWindow;
+                                    mainWindow?.MarkSettingsApplied();
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to set priority for {game.Name}. Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    App.changelogUserControl?.AddLog("Failed", $"Failed to set priority for {game.Name}.");
+                }
+            }
+        }
 
 
 

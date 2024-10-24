@@ -36,12 +36,20 @@ namespace NZTS_App.Views
             try
             {
                 // Load VsyncIdleTimeout
-                using (var key = Registry.LocalMachine.OpenSubKey(VsyncKeyPath))
+                using (var key = Registry.LocalMachine.CreateSubKey(VsyncKeyPath))
                 {
                     if (key != null)
                     {
                         var vsyncValue = key.GetValue("VsyncIdleTimeout");
-                        VsyncIdleToggle.IsChecked = (vsyncValue is int vsyncInt && vsyncInt == 0);
+                        if (vsyncValue == null) // Key does not exist
+                        {
+                            key.SetValue("VsyncIdleTimeout", 1, RegistryValueKind.DWord); // Default value
+                            VsyncIdleToggle.IsChecked = false; // Default state
+                        }
+                        else
+                        {
+                            VsyncIdleToggle.IsChecked = (vsyncValue is int vsyncInt && vsyncInt == 0);
+                        }
                     }
                     else
                     {
@@ -51,12 +59,20 @@ namespace NZTS_App.Views
                 }
 
                 // Load MonitorRefreshLatencyTolerance
-                using (var key = Registry.LocalMachine.OpenSubKey(PowerKeyPath))
+                using (var key = Registry.LocalMachine.CreateSubKey(PowerKeyPath))
                 {
                     if (key != null)
                     {
                         var refreshLatencyValue = key.GetValue("MonitorRefreshLatencyTolerance");
-                        RefreshLatencyToggle.IsChecked = (refreshLatencyValue is int refreshInt && refreshInt == 1);
+                        if (refreshLatencyValue == null) // Key does not exist
+                        {
+                            key.SetValue("MonitorRefreshLatencyTolerance", 0, RegistryValueKind.DWord); // Default value
+                            RefreshLatencyToggle.IsChecked = false; // Default state
+                        }
+                        else
+                        {
+                            RefreshLatencyToggle.IsChecked = (refreshLatencyValue is int refreshInt && refreshInt == 1);
+                        }
                     }
                     else
                     {
@@ -66,12 +82,20 @@ namespace NZTS_App.Views
                 }
 
                 // Load MonitorLatencyTolerance
-                using (var key = Registry.LocalMachine.OpenSubKey(DXGKrnlKeyPath))
+                using (var key = Registry.LocalMachine.CreateSubKey(DXGKrnlKeyPath))
                 {
                     if (key != null)
                     {
                         var latencyValue = key.GetValue("MonitorLatencyTolerance");
-                        LatencyToggle.IsChecked = (latencyValue is int latencyInt && latencyInt == 1);
+                        if (latencyValue == null) // Key does not exist
+                        {
+                            key.SetValue("MonitorLatencyTolerance", 0, RegistryValueKind.DWord); // Default value
+                            LatencyToggle.IsChecked = false; // Default state
+                        }
+                        else
+                        {
+                            LatencyToggle.IsChecked = (latencyValue is int latencyInt && latencyInt == 1);
+                        }
                     }
                     else
                     {
@@ -96,7 +120,7 @@ namespace NZTS_App.Views
         {
             try
             {
-                using (var key = Registry.LocalMachine.OpenSubKey(VsyncKeyPath, writable: true))
+                using (var key = Registry.LocalMachine.CreateSubKey(VsyncKeyPath))
                 {
                     if (key != null)
                     {
@@ -127,7 +151,7 @@ namespace NZTS_App.Views
         {
             try
             {
-                using (var key = Registry.LocalMachine.OpenSubKey(PowerKeyPath, writable: true))
+                using (var key = Registry.LocalMachine.CreateSubKey(PowerKeyPath))
                 {
                     if (key != null)
                     {
@@ -158,7 +182,7 @@ namespace NZTS_App.Views
         {
             try
             {
-                using (var key = Registry.LocalMachine.OpenSubKey(DXGKrnlKeyPath, writable: true))
+                using (var key = Registry.LocalMachine.CreateSubKey(DXGKrnlKeyPath))
                 {
                     if (key != null)
                     {
@@ -184,7 +208,6 @@ namespace NZTS_App.Views
                 App.changelogUserControl?.AddLog("Failed", $"Error updating MonitorLatencyTolerance: {ex.Message}");
             }
         }
-
 
         private void ShowError(string message)
         {

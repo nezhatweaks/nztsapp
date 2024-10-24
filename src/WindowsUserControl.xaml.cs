@@ -15,7 +15,7 @@ namespace NZTS_App.Views
         {
             InitializeComponent();
             mainWindow = window;
-            mainWindow.TitleTextBlock.Content = "Windows";
+            mainWindow.TitleTextBlock.Content = "Gaming";
 
             // Temporarily detach event to avoid premature triggering during initialization
             GameModeToggle.Click -= GameModeToggle_Click;

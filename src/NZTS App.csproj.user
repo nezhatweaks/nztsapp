@@ -16,13 +16,10 @@
     <Compile Update="ChangelogUserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="ContextSwitchDeadband.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="CPUPriorityControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="LatencySensitivityHint.xaml.cs">
+    <Compile Update="Debloat.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="MemoryMan.xaml.cs">
@@ -41,6 +38,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="MMCSS.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="SecurityUserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="SettingsUserControl.xaml.cs">
@@ -72,13 +72,10 @@
     <Page Update="CPUPriorityControl.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Debloat.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="MainWindow.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="ContextSwitchDeadband.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="LatencySensitivityHint.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MemoryMan.xaml">
@@ -97,6 +94,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MMCSS.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="SecurityUserControl.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="SettingsUserControl.xaml">

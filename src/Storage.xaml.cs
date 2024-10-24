@@ -25,15 +25,10 @@ namespace NZTS_App.Views
             WindowsTempToggle.IsChecked = Properties.Settings.Default.WindowsTempToggle;
 
             
-            InitializeSmartTrimTimer();
-            SmartTrimManager.Instance.SetCpuUsageThreshold(50);
-            SmartTrimToggle.IsChecked = SmartTrimManager.Instance.IsRunning;
+            
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            SmartTrimToggle.IsChecked = SmartTrimManager.Instance.IsRunning;
-        }
+        
 
         private void InitializeSmartTrimTimer()
         {
@@ -44,21 +39,7 @@ namespace NZTS_App.Views
 
         private float cpuUsageThreshold = 50;
 
-        private void SmartTrimToggle_Click(object sender, RoutedEventArgs e)
-        {
-            if (SmartTrimToggle.IsChecked == true)
-            {
-                SmartTrimManager.Instance.Start();
-                App.changelogUserControl?.AddLog("Applied", "Smart Trim enabled.");
-                Console.WriteLine("Smart Trim started.");
-            }
-            else
-            {
-                SmartTrimManager.Instance.Stop();
-                App.changelogUserControl?.AddLog("Applied", "Smart Trim disabled.");
-                Console.WriteLine("Smart Trim stopped.");
-            }
-        }
+        
 
         
 

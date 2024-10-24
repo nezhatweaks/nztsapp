@@ -1,0 +1,118 @@
+﻿<UserControl x:Class="NZTS_App.Views.Debloat"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <Style x:Key="iOSToggleButton" TargetType="ToggleButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Grid>
+                            <Border x:Name="Border" 
+                                    Background="{TemplateBinding Background}" 
+                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                    BorderThickness="0" 
+                                    CornerRadius="10" 
+                                    Padding="5">
+                                <Ellipse x:Name="Ellipse" 
+                                         Fill="White" 
+                                         Width="10" 
+                                         Height="10" 
+                                         HorizontalAlignment="Left" 
+                                         VerticalAlignment="Center" 
+                                         Margin="20,0,0,0" />
+                            </Border>
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center" 
+                                              Margin="35,0,0,0" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#4CAF50" />
+                                <Setter TargetName="Ellipse" Property="HorizontalAlignment" Value="Right" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Background" Value="#E0E0E0"/>
+            <Setter Property="BorderBrush" Value="#BDBDBD"/>
+        </Style>
+
+        <Style TargetType="Border" x:Key="DiscordBorderStyle">
+            <Setter Property="Background" Value="#2F3136"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="BorderBrush" Value="#2F3136"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+    </UserControl.Resources>
+
+    <ContentControl x:Name="ContentDebloat" Background="#2C2F33"  HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Collects usage data for SmartScreen. Reduces feedback for improving Windows features.">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Stub wsqmcons.exe" FontWeight="Bold" Margin="0,0,10,0"/>
+                        <ToggleButton x:Name="WsqmconsToggle"
+                                      Style="{StaticResource iOSToggleButton}"
+                                      Click="WsqmconsToggle_Click" Width="50"
+                                      />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Gathers compatibility telemetry. Affects Microsoft's understanding of device compatibility.">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Stub compattelrunner.exe" FontWeight="Bold" Margin="0,0,10,0"/>
+                        <ToggleButton x:Name="CompattelToggle"
+                                      Style="{StaticResource iOSToggleButton}"
+                                      Click="CompattelToggle_Click" Width="50"
+                                      />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Manages admin privileges for error reporting.Impairs error reporting and diagnostics.">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Stub elevation_service.exe" FontWeight="Bold" Margin="0,0,10,0"/>
+                        <ToggleButton x:Name="ElevationServiceToggle"
+                                      Style="{StaticResource iOSToggleButton}"
+                                      Click="ElevationServiceToggle_Click" Width="50"
+                                      />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Gathers device configuration data.May affect future update optimizations.">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Stub devicecensus.exe" FontWeight="Bold" Margin="0,0,10,0"/>
+                        <ToggleButton x:Name="DeviceCensusToggle"
+                                      Style="{StaticResource iOSToggleButton}"
+                                      Click="DeviceCensusToggle_Click" Width="50"
+                                      />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Manages game activity status. Disables Xbox Game Bar features.">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Stub gamebarpresencewriter.exe" FontWeight="Bold" Margin="0,0,10,0"/>
+                        <ToggleButton x:Name="GameBarPresenceToggle"
+                                      Style="{StaticResource iOSToggleButton}"
+                                      Click="GameBarPresenceToggle_Click" Width="50"
+                                      />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Sends update notifications.No notifications for system updates.">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Stub MusNotification.exe" FontWeight="Bold" Margin="0,0,10,0"/>
+                        <ToggleButton x:Name="MusNotificationToggle"
+                                      Style="{StaticResource iOSToggleButton}"
+                                      Click="MusNotificationToggle_Click" Width="50"
+                                      />
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Hosts UWP apps. Prevents UWP apps from running correctly.">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Stub wwahost.exe" FontWeight="Bold" Margin="0,0,10,0"/>
+                        <ToggleButton x:Name="WwahostToggle"
+                                      Style="{StaticResource iOSToggleButton}"
+                                      Click="WwahostToggle_Click" Width="50"
+                                      />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </ContentControl>
+</UserControl>

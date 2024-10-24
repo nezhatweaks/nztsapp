@@ -101,7 +101,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         <GridViewColumn Header="Modes" DisplayMemberBinding="{Binding SupportedModes}" Width="150"/>
-                        <GridViewColumn Header="Priority" Width="120">
+                        <GridViewColumn Header="Priority" Width="80">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">

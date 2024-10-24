@@ -98,11 +98,11 @@
         </Style>
     </UserControl.Resources>
 
-    <Border BorderBrush="#36393F" BorderThickness="1" CornerRadius="20" Margin="10" Background="#36393F" ToolTip="Determines how Windows prioritizes threads and processes, affecting their responsiveness and overall performance.">
+    <Border BorderBrush="#36393F" BorderThickness="1" CornerRadius="20" Margin="10,0,0,0" Background="#36393F" ToolTip="Determines how Windows prioritizes threads and processes, affecting their responsiveness and overall performance.">
         <Grid Margin="10">
             <StackPanel Margin="10">
-                <TextBlock Text="Select a Win32 Priority Separation Value:" FontWeight="Bold" Margin="0,0,0,10"/>
-                <TextBlock Text="Choose a preset..." FontStyle="Italic" Margin="0,0,0,5" Foreground="AntiqueWhite"/>
+                <TextBlock Text="Win32PrioritySeperation" FontWeight="Bold" FontSize="20" Margin="0,0,0,25"/>
+                <TextBlock Text="Choose a preset..." FontStyle="Italic" Margin="0,0,0,0" Foreground="AntiqueWhite"/>
                 <ComboBox x:Name="Win32PrioritySeparationComboBox" Style="{StaticResource DiscordComboBox}" SelectionChanged="PresetSelectionChanged" Margin="10">
                     <ComboBoxItem Content="Preset 1 (Value: 0x00fa332a)" Tag="0x00fa332a"/>
                     <ComboBoxItem Content="Preset 2 (Value: 0x0000e82a)" Tag="0x0000e82a"/>
@@ -121,11 +121,11 @@
                     <Button x:Name="ApplyPresetButton" 
                             Content="Apply" 
                             Style="{StaticResource DiscordButton}" 
-                            Click="ApplyPreset_Click"/>
+                            Click="ApplyPreset_Click" Width="125"/>
                     <Button x:Name="Restore" 
                             Content="Default" 
                             Style="{StaticResource DiscordButton}" 
-                            Click="RestoreWin32PrioritySeparation_Click"/>
+                            Click="RestoreWin32PrioritySeparation_Click" Width="125"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

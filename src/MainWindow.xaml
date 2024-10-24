@@ -31,7 +31,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                            CornerRadius="10"
+                            CornerRadius="5"
                             BorderBrush="Transparent">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
@@ -184,7 +184,7 @@
             </Grid>
 
             <!-- Sidebar: Categories with Toggle Visibility -->
-            <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto" Margin="0,75,0,75" 
+            <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto" Margin="0,55,0,35" 
   Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
                 <ScrollViewer.Resources>
                     <Style TargetType="ScrollBar">
@@ -262,6 +262,8 @@
                         <Button Content="PowerPlan" Style="{StaticResource RoundedButtonStyle}" Click="PowerPlan_Click"/>
                         <Button Content="WinPriority" Style="{StaticResource RoundedButtonStyle}" Click="Win32PrioritySeparation_Click"/>
                         <Button Content="Gaming" Style="{StaticResource RoundedButtonStyle}" Click="Windows_Click"/>
+                        <Button Content="Telemetry" Style="{StaticResource RoundedButtonStyle}" Click="Debloat_Click"/>
+                        <Button Content="Security" Style="{StaticResource RoundedButtonStyle}" Click="Security_Click"/>
                         <Button Content="Storage" Style="{StaticResource RoundedButtonStyle}" Click="Storage_Click"/>
                         <Button Content="Memory" Style="{StaticResource RoundedButtonStyle}" Click="MemoryMan_Click"/>
                         <Button Content="MMCSS" Style="{StaticResource RoundedButtonStyle}" Click="MMCSS_Click"/>
@@ -345,67 +347,67 @@
 
 
                         <!-- Orange Restore Button styled as a card -->
-    <Button Content="Restore All" 
-            Background="Red" 
-            Foreground="White" 
-            Width="180" 
-            Height="240" 
-            FontSize="16" 
-            FontWeight="Bold" 
-            Click="RestoreAll_Click" 
-            VerticalAlignment="Center">
-        <Button.Template>
-            <ControlTemplate TargetType="Button">
-                <Border x:Name="border" Background="{TemplateBinding Background}" 
-                        BorderBrush="Black" 
-                        BorderThickness="1" 
-                        CornerRadius="15" 
-                        Padding="10">
-                    <Border.Effect>
-                        <DropShadowEffect Color="Black" 
-                                          ShadowDepth="5" 
-                                          BlurRadius="10" 
-                                          Opacity="0.5" />
-                    </Border.Effect>
-                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <!-- Top icon area -->
-                        <TextBlock Text="♻️" FontSize="48" Margin="0,0,0,10" Width="70" />
-                        <!-- Text label -->
-                        <TextBlock Text="{TemplateBinding Content}" 
-                                   FontSize="18" 
-                                   FontWeight="Bold" 
-                                   Foreground="{TemplateBinding Foreground}" 
-                                   HorizontalAlignment="Center"/>
+                        <Button Content="Restore All" 
+Background="Black" 
+Foreground="White" 
+Width="180" 
+Height="240" 
+FontSize="16" 
+FontWeight="Bold" 
+Click="RestoreAll_Click" 
+VerticalAlignment="Center">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="border" Background="{TemplateBinding Background}" 
+            BorderBrush="Black" 
+            BorderThickness="1" 
+            CornerRadius="15" 
+            Padding="10">
+                                        <Border.Effect>
+                                            <DropShadowEffect Color="Black" 
+                              ShadowDepth="5" 
+                              BlurRadius="10" 
+                              Opacity="0.5" />
+                                        </Border.Effect>
+                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <!-- Top icon area -->
+                                            <TextBlock Text="♻️" FontSize="48" Margin="0,0,0,10" Width="70" />
+                                            <!-- Text label -->
+                                            <TextBlock Text="{TemplateBinding Content}" 
+                       FontSize="18" 
+                       FontWeight="Bold" 
+                       Foreground="{TemplateBinding Foreground}" 
+                       HorizontalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <!-- Hover and hold effect Triggers -->
+                                    <ControlTemplate.Triggers>
+                                        <!-- Hover Effect -->
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="orange"/>
+                                            <Setter TargetName="border" Property="BorderBrush" Value="orange"/>
+                                            <Setter Property="RenderTransform">
+                                                <Setter.Value>
+                                                    <ScaleTransform ScaleX="1.00" ScaleY="1.00" />
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+
+                                        <!-- Press/Hold Effect -->
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="DarkRed"/>
+                                            <Setter Property="RenderTransform">
+                                                <Setter.Value>
+                                                    <ScaleTransform ScaleX="1.00" ScaleY="1.00" />
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
                     </StackPanel>
-                </Border>
-
-                <!-- Hover and hold effect Triggers -->
-                <ControlTemplate.Triggers>
-                    <!-- Hover Effect -->
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter TargetName="border" Property="Background" Value="orange"/>
-                        <Setter TargetName="border" Property="BorderBrush" Value="DarkRed"/>
-                        <Setter Property="RenderTransform">
-                            <Setter.Value>
-                                                    <ScaleTransform ScaleX="1.00" ScaleY="1.00" />
-                            </Setter.Value>
-                        </Setter>
-                    </Trigger>
-
-                    <!-- Press/Hold Effect -->
-                    <Trigger Property="IsPressed" Value="True">
-                        <Setter TargetName="border" Property="Background" Value="DarkRed"/>
-                        <Setter Property="RenderTransform">
-                            <Setter.Value>
-                                                    <ScaleTransform ScaleX="1.00" ScaleY="1.00" />
-                            </Setter.Value>
-                        </Setter>
-                    </Trigger>
-                </ControlTemplate.Triggers>
-            </ControlTemplate>
-        </Button.Template>
-    </Button>
-</StackPanel>
 
                 </StackPanel>
                 

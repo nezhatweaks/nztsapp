@@ -47,9 +47,9 @@
         
         <!-- Title -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10">
-            
-            <Button Content="Clear Logs" Style="{StaticResource RoundedButtonStyle}" Click="ClearLogs_Click" Margin="-5,0,0,0" />
-            <Button Content="Export Logs" Style="{StaticResource RoundedButtonStyle}" Click="ExportLogs_Click" Margin="5,0,0,0" />
+
+            <Button Content="Clear" Width="125" Style="{StaticResource RoundedButtonStyle}" Click="ClearLogs_Click" Margin="-5,0,0,0" />
+            <Button Content="Export" Width="125" Style="{StaticResource RoundedButtonStyle}" Click="ExportLogs_Click" Margin="5,0,0,0" />
         </StackPanel>
 
 

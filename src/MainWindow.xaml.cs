@@ -636,25 +636,23 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
             ShowContentWithAnimation(windowsControl); // Call the method to display with animation
         }
 
-        private void ContextSwitchDeadband_Click(object sender, RoutedEventArgs e)
+        private void Debloat_Click(object sender, RoutedEventArgs e)
         {
-            // Load ContextSwitchDeadband UserControl with MainWindow reference
-            var deadbandControl = new ContextSwitchDeadband(this);  // Pass 'this' as the MainWindow reference
-            ShowContentWithAnimation(deadbandControl);
+            var debloatControl = new Debloat(this);
+            ShowContentWithAnimation(debloatControl); // Call the method to display with animation
         }
 
-
-        private void LatencySensitivityHint_Click(object sender, RoutedEventArgs e)
-        {
-            // Load LatencySensitivityHint UserControl
-            var latencyControl = new LatencySensitivityHint(this);  // Updated path
-            ShowContentWithAnimation(latencyControl);
-        }
 
         private void PowerPlan_Click(object sender, RoutedEventArgs e)
         {
             var powerPlanControl = new PowerPlan(this);
             ShowContentWithAnimation(powerPlanControl); // Call the method to display with animation
+        }
+
+        private void Security_Click(object sender, RoutedEventArgs e)
+        {
+            var securityControl = new SecurityUserControl(this);
+            ShowContentWithAnimation(securityControl); // Call the method to display with animation
         }
 
         private void MemoryMan_Click(object sender, RoutedEventArgs e)

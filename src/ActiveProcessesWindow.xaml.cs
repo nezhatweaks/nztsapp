@@ -26,31 +26,77 @@ namespace NZTS_App
             // Get all processes
             var processes = Process.GetProcesses();
 
+            // Create a list to hold process info
+            var processList = new List<ProcessInfo>();
+
             foreach (var process in processes)
             {
                 try
                 {
-                    // Check if the process has a MainModule and a MainWindowHandle
-                    if (process.MainModule != null && process.MainWindowHandle != IntPtr.Zero)
+                    // Check if the process has a MainModule
+                    if (process.MainModule != null)
                     {
+                        // Log the process name for debugging
+                        Console.WriteLine($"Found process: {process.ProcessName}");
+
                         var processInfo = new ProcessInfo
                         {
-                            Name = Path.GetFileName(process.MainModule.FileName), // Get only the executable name
+                            Name = Path.GetFileName(process.MainModule.FileName),
                             FileName = process.MainModule.FileName,
-                            Icon = GetProcessIcon(process.MainModule.FileName) // Get the icon using the file name
+                            Icon = GetProcessIcon(process.MainModule.FileName)
                         };
 
-                        // Add the process info to the ListView
-                        ProcessesListView.Items.Add(processInfo);
+                        // Check for specific game names if needed
+                        if (processInfo.Name.Contains("cod", StringComparison.OrdinalIgnoreCase)) // Customize as needed
+                        {
+                            Console.WriteLine($"Found COD process: {processInfo.Name}");
+                        }
+
+                        processList.Add(processInfo);
                     }
                 }
                 catch (Exception ex)
                 {
-                    // Handle processes that can't be accessed (optional logging)
                     Console.WriteLine($"Error accessing process {process.ProcessName}: {ex.Message}");
                 }
             }
+
+            // Sort and display processes as before
+            var sortedProcesses = processList
+                .OrderBy(p => GetProcessPriority(p.FileName))
+                .ThenBy(p => p.Name)
+                .ToList();
+
+            foreach (var processInfo in sortedProcesses)
+            {
+                ProcessesListView.Items.Add(processInfo);
+            }
         }
+
+
+        // Helper method to determine process priority
+        private ProcessPriorityClass GetProcessPriority(string fileName)
+        {
+            try
+            {
+                using (var process = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(fileName)).FirstOrDefault())
+                {
+                    if (process != null)
+                    {
+                        return process.PriorityClass;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving priority for {fileName}: {ex.Message}");
+            }
+
+            // Default to Normal priority if unable to determine
+            return ProcessPriorityClass.Normal;
+        }
+
+
 
         // Method to get the icon from the executable file
         private Icon? GetProcessIcon(string filePath)
