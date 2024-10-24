@@ -1,0 +1,26 @@
+﻿<Window x:Class="NZTS_App.ActiveProcessesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Active Processes" Height="300" Width="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <!-- Takes up available space -->
+            <RowDefinition Height="Auto"/>
+            <!-- Adjusts to button size -->
+        </Grid.RowDefinitions>
+
+        <ListView x:Name="ProcessesListView" Grid.Row="0">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding IconImage}" Width="16" Height="16" />
+                        <TextBlock Text="{Binding Name}" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Button Content="Add Selected Process" Grid.Row="1" Click="AddSelectedProcessButton_Click" />
+    </Grid>
+</Window>

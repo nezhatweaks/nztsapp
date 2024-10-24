@@ -1,0 +1,438 @@
+﻿<Window x:Class="NZTS_App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="NZTS APP"  Height="450" Width="800"
+        WindowStyle="None" AllowsTransparency="True" ResizeMode="CanResize" Background="#2C2F33"
+        Foreground="White" FontFamily="Segoe UI" FontSize="14"
+        MouseMove="MainWindow_MouseMove"
+        MouseDown="MainWindow_MouseDown"
+        MouseUp="MainWindow_MouseUp"
+        xmlns:local="clr-namespace:NZTS_App.Views"
+        Closing="Window_Closing">
+
+
+    
+
+    <Window.Resources>
+        
+        
+        <!-- Rounded Button Style with Hover/Click Animations -->
+        <Style x:Key="RoundedButtonStyle"  TargetType="Button">
+            <Setter Property="Background" Value="#141414"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="180"/>
+            <Setter Property="Margin" Value="10,5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                            CornerRadius="10"
+                            BorderBrush="Transparent">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- Hover effect -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#5A6FB1"/>
+                            </Trigger>
+                            <!-- Pressed effect -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#4D5D99"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Rounded Button Style with Hover/Click Animations -->
+        <Style x:Key="RoundedButtonStyle2"  TargetType="Button">
+            <Setter Property="Background" Value="#141414"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="280"/>
+            <Setter Property="Margin" Value="10,5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                    CornerRadius="10"
+                    BorderBrush="Transparent">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- Hover effect -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#121212"/>
+                            </Trigger>
+                            <!-- Pressed effect -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#080808"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Hamburger Button Style -->
+        <Style x:Key="HamburgerButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="20">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- Hover effect for Hamburger Button -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.7"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="TransparentRepeatButtonStyle" TargetType="RepeatButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="ContentTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" FontSize="18" Foreground="#7289DA" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Thumb">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Width" Value="10"/>
+            <Setter Property="Height" Value="10"/>
+        </Style>
+
+        <!-- Rainbow Gradient Animation -->
+        <ColorAnimation x:Key="RainbowColorAnimation" AutoReverse="True" RepeatBehavior="Forever" 
+                        Duration="0:0:2" From="Red" To="Purple" />
+
+       
+    </Window.Resources>
+
+
+
+    <Grid>
+        
+        <Grid MouseDown="MainGrid_MouseDown">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid VerticalAlignment="Top" Background="#23272A" Height="40" MouseDown="TitleBar_MouseDown">
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/> <!-- Placeholder for potential future use -->
+        <ColumnDefinition Width="*"/>   <!-- Title space -->
+        <ColumnDefinition Width="Auto"/> <!-- Minimize button -->
+        <ColumnDefinition Width="Auto"/> <!-- Maximize button -->
+        <ColumnDefinition Width="Auto"/> <!-- Close button -->
+    </Grid.ColumnDefinitions>
+                
+                <Button x:Name="TitleTextBlock"  
+        VerticalAlignment="Center" 
+        FontWeight="Bold" 
+        FontSize="9"
+        Style="{StaticResource RoundedButtonStyle2}" 
+        Width="80" 
+        Height="33"
+        Grid.Column="0"
+        HorizontalAlignment="Left"
+        Click="ToggleSidebar" 
+        Margin="5,0,0,0" />
+
+
+
+
+
+                    <Button Content="_" Width="30" Height="30" Grid.Column="2" Background="Transparent" 
+                    Foreground="White" BorderThickness="0" Click="Minimize_Click"/>
+                <Button Content="🗖" Width="30" Height="30" Grid.Column="3" Background="Transparent" 
+                    Foreground="White" BorderThickness="0" Click="Maximize_Click"/>
+                <Button Content="X" Width="30" Height="30" Grid.Column="4" Background="Transparent" 
+                    Foreground="White" BorderThickness="0" Click="Exit_Click"/>
+
+                <Grid x:Name="Overlay" Background="#99000000" Visibility="Collapsed" IsHitTestVisible="False"/>
+            </Grid>
+
+            <!-- Sidebar: Categories with Toggle Visibility -->
+            <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto" Margin="0,75,0,75" 
+  Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
+                <ScrollViewer.Resources>
+                    <Style TargetType="ScrollBar">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Width" Value="10"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ScrollBar">
+                                    <Grid Background="Transparent">
+                                        <Track Name="PART_Track" IsDirectionReversed="true">
+                                            <Track.DecreaseRepeatButton>
+                                                <RepeatButton Name="PART_DecreaseButton"
+                                          Content="▲"
+                                          Command="ScrollBar.LineUpCommand"
+                                          Background="Transparent"
+                                          Width="0" Height="0"/>
+                                            </Track.DecreaseRepeatButton>
+                                            <Track.Thumb>
+                                                <Thumb Name="Thumb" 
+                                   Background="Black" 
+                                   Opacity="0.7" 
+                                   Width="3" 
+                                   MinHeight="50"/>
+                                            </Track.Thumb>
+                                            <Track.IncreaseRepeatButton>
+                                                <RepeatButton Name="PART_IncreaseButton"
+                                          Content="▼"
+                                          Command="ScrollBar.LineDownCommand"
+                                          Background="Transparent"
+                                          Width="0" Height="0"/>
+                                            </Track.IncreaseRepeatButton>
+                                        </Track>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ScrollViewer.Resources>
+
+                <!-- Main layout with two columns: Sidebar and Main Content -->
+                <Grid>
+                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <!-- Sidebar Width -->
+                        <ColumnDefinition Width="*"/>
+                        <!-- Main Content Area -->
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel x:Name="Sidebar" Orientation="Vertical" Background="#23272A" 
+            VerticalAlignment="Stretch" Visibility="Collapsed">
+
+                        <!-- Header -->
+                        <TextBlock Text="" FontWeight="Bold" FontSize="16" Foreground="White" Margin="0,0,0,10"/>
+
+                        <!-- Search Bar -->
+                        <Grid Margin="0,0,0,20" Background="Transparent">
+                            <TextBox x:Name="SearchBox" Padding="5" Width="180" Height="30"  
+                 Background="#343B40" Foreground="White" BorderBrush="Gray" 
+                 BorderThickness="1" TextChanged="SearchBox_TextChanged" 
+                 GotFocus="SearchBox_GotFocus" LostFocus="SearchBox_LostFocus"
+                 />
+                            <Button x:Name="CancelButton" Content="✖" Width="30" Height="30" 
+                Background="Transparent" Foreground="Gray" BorderThickness="0" 
+                HorizontalAlignment="Right" VerticalAlignment="Center" 
+                Visibility="Collapsed"/>
+                        </Grid>
+
+                        <!-- Buttons Section -->
+                        
+                        <Button Content="Home" Style="{StaticResource RoundedButtonStyle}" Click="Home_Click"/>
+                        <Button Content="Logs" Style="{StaticResource RoundedButtonStyle}" Click="Changelog_Click"/>
+                        <Button Content="Settings" Style="{StaticResource RoundedButtonStyle}" Click="Settings_Click"/>
+                        <Separator Margin="0,20,0,10"/>
+                        <Button Content="PowerPlan" Style="{StaticResource RoundedButtonStyle}" Click="PowerPlan_Click"/>
+                        <Button Content="WinPriority" Style="{StaticResource RoundedButtonStyle}" Click="Win32PrioritySeparation_Click"/>
+                        <Button Content="Gaming" Style="{StaticResource RoundedButtonStyle}" Click="Windows_Click"/>
+                        <Button Content="Storage" Style="{StaticResource RoundedButtonStyle}" Click="Storage_Click"/>
+                        <Button Content="Memory" Style="{StaticResource RoundedButtonStyle}" Click="MemoryMan_Click"/>
+                        <Button Content="MMCSS" Style="{StaticResource RoundedButtonStyle}" Click="MMCSS_Click"/>
+                        <Button Content="NVIDIA" Style="{StaticResource RoundedButtonStyle}" Click="Nvidia_Click"/>
+                        <Button Content="Monitor/Graphics" Style="{StaticResource RoundedButtonStyle}" Click="Monitor_Click"/>
+                        <Button Content="AMD" Style="{StaticResource RoundedButtonStyle}" Click="AMD_Click"/>
+                        <Button Content="Process" Style="{StaticResource RoundedButtonStyle}" Click="CPUPriority_Click"/>
+                        <Button Content="MSI Mode" Style="{StaticResource RoundedButtonStyle}" Click="MSI_Click"/>
+                    </StackPanel>
+
+                    <Frame x:Name="MainUIApp" NavigationUIVisibility="Hidden"/>
+                </Grid>
+            </ScrollViewer>
+
+            
+            <ContentControl x:Name="ContentArea" Background="#2C2F33" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,60,0,0" Height="354" Grid.RowSpan="2" Width="409">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="400">
+                    <TextBlock Text="Welcome to NZTS APP" FontSize="24" FontWeight="Bold" Margin="0,0,0,0"/>
+                    <TextBlock Text="Select an optimization category from the sidebar." FontSize="16" Margin="0,10,0,10" Height="27"/>
+                    
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+    <!-- Green Optimize Button styled as a card -->
+                        <Button x:Name="OptimizeAllButton" Content="Optimize All" 
+        Background="Black" 
+        Foreground="White" 
+        Width="180" 
+        Height="240" 
+        FontSize="16" 
+        FontWeight="Bold" 
+        Click="OptimizeAll_Click" 
+        Margin="0,0,20,0"
+        VerticalAlignment="Center"
+        ToolTip="Click to optimize all settings for better performance!">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="border" Background="{TemplateBinding Background}" 
+                    BorderBrush="Black" 
+                    BorderThickness="1" 
+                    CornerRadius="15" 
+                    Padding="10">
+                                        <Border.Effect>
+                                            <DropShadowEffect Color="Black" 
+                                      ShadowDepth="5" 
+                                      BlurRadius="10" 
+                                      Opacity="0.5" />
+                                        </Border.Effect>
+                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <TextBlock Text="🛠️" FontSize="48" Margin="0,0,0,10" Width="68" />
+                                            <TextBlock Text="{TemplateBinding Content}" 
+                               FontSize="18" 
+                               FontWeight="Bold" 
+                               Foreground="{TemplateBinding Foreground}" 
+                               HorizontalAlignment="Center"/>
+                                            
+                                        </StackPanel>
+                                    </Border>
+
+                                    <!-- Hover and hold effect Triggers -->
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="Green"/>
+                                            <Setter TargetName="border" Property="BorderBrush" Value="Green"/>
+                                            <Setter TargetName="border" Property="Effect">
+                                                <Setter.Value>
+                                                    <DropShadowEffect Color="Green" 
+                                              ShadowDepth="5" 
+                                              BlurRadius="20" 
+                                              Opacity="1" />
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="DarkGreen"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+
+
+                        <!-- Orange Restore Button styled as a card -->
+    <Button Content="Restore All" 
+            Background="Red" 
+            Foreground="White" 
+            Width="180" 
+            Height="240" 
+            FontSize="16" 
+            FontWeight="Bold" 
+            Click="RestoreAll_Click" 
+            VerticalAlignment="Center">
+        <Button.Template>
+            <ControlTemplate TargetType="Button">
+                <Border x:Name="border" Background="{TemplateBinding Background}" 
+                        BorderBrush="Black" 
+                        BorderThickness="1" 
+                        CornerRadius="15" 
+                        Padding="10">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black" 
+                                          ShadowDepth="5" 
+                                          BlurRadius="10" 
+                                          Opacity="0.5" />
+                    </Border.Effect>
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <!-- Top icon area -->
+                        <TextBlock Text="♻️" FontSize="48" Margin="0,0,0,10" Width="70" />
+                        <!-- Text label -->
+                        <TextBlock Text="{TemplateBinding Content}" 
+                                   FontSize="18" 
+                                   FontWeight="Bold" 
+                                   Foreground="{TemplateBinding Foreground}" 
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Hover and hold effect Triggers -->
+                <ControlTemplate.Triggers>
+                    <!-- Hover Effect -->
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter TargetName="border" Property="Background" Value="orange"/>
+                        <Setter TargetName="border" Property="BorderBrush" Value="DarkRed"/>
+                        <Setter Property="RenderTransform">
+                            <Setter.Value>
+                                                    <ScaleTransform ScaleX="1.00" ScaleY="1.00" />
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+
+                    <!-- Press/Hold Effect -->
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter TargetName="border" Property="Background" Value="DarkRed"/>
+                        <Setter Property="RenderTransform">
+                            <Setter.Value>
+                                                    <ScaleTransform ScaleX="1.00" ScaleY="1.00" />
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+        </Button.Template>
+    </Button>
+</StackPanel>
+
+                </StackPanel>
+                
+                
+
+
+
+            </ContentControl>
+
+            
+
+
+
+            <ContentControl x:Name="ContentOther" Background="#2C2F33" 
+                HorizontalAlignment="Center" VerticalAlignment="Center" 
+                Margin="10" Grid.Row="1" Visibility="Collapsed">
+                <!-- Other content here -->
+            </ContentControl>
+
+
+            <Thumb x:Name="VerticalResizeThumb" HorizontalAlignment="Right" Width="10" DragDelta="VerticalResizeThumb_DragDelta" Cursor="SizeWE" Visibility="Collapsed" Margin="0,220,0,220" Grid.RowSpan="2" />
+            <Thumb x:Name="HorizontalResizeThumb" VerticalAlignment="Top" Height="10" DragDelta="HorizontalResizeThumb_DragDelta" Cursor="SizeNS" Visibility="Collapsed" Margin="395,215,395,0" Grid.Row="1" />
+        </Grid>
+
+
+
+
+    </Grid>
+    
+</Window>

@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <ApplicationDefinition Update="App.xaml">
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="ActiveProcessesWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="AMD.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ChangelogUserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ContextSwitchDeadband.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="CPUPriorityControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="LatencySensitivityHint.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MemoryMan.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MonitorUserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MSI.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="NVIDIAUserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="PowerPlan.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MMCSS.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="SettingsUserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Storage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="WelcomeUserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Win32PrioritySeparation.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="WindowsUserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="ActiveProcessesWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="AMD.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="ChangelogUserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="CPUPriorityControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="ContextSwitchDeadband.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="LatencySensitivityHint.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MemoryMan.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MonitorUserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MSI.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="NVIDIAUserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="PowerPlan.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MMCSS.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="SettingsUserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Storage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="WelcomeUserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Win32PrioritySeparation.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="WindowsUserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>

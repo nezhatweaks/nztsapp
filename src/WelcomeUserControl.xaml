@@ -1,0 +1,146 @@
+﻿<UserControl x:Class="NZTS_App.WelcomeUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="WelcomeControl"
+             Background="#2C2F33"
+             Foreground="White"
+             FontFamily="Segoe UI"
+             FontSize="14">
+    <Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="400">
+            <TextBlock Text="Welcome to NZTS APP" FontSize="24" FontWeight="Bold" Margin="0,0,0,0"/>
+            <TextBlock Text="Select an optimization category from the sidebar." FontSize="16" Margin="0,10,0,10" Height="27"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                <!-- Green Optimize Button styled as a card -->
+                <Button x:Name="OptimizeAllButton" Content="Optimize All" 
+Background="Black" 
+Foreground="White" 
+Width="180" 
+Height="240" 
+FontSize="16" 
+FontWeight="Bold" 
+Click="OptimizeAll_Click" 
+Margin="0,0,20,0"
+VerticalAlignment="Center"
+ToolTip="Click to optimize all settings for better performance!">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" Background="{TemplateBinding Background}" 
+                    BorderBrush="Black" 
+                    BorderThickness="1" 
+                    CornerRadius="15" 
+                    Padding="10">
+                                <Border.Effect>
+                                    <DropShadowEffect Color="Black" 
+                                      ShadowDepth="5" 
+                                      BlurRadius="10" 
+                                      Opacity="0.5" />
+                                </Border.Effect>
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock Text="🛠️" FontSize="48" Margin="0,0,0,10" Width="68" />
+                                    <TextBlock Text="{TemplateBinding Content}" 
+                               FontSize="18" 
+                               FontWeight="Bold" 
+                               Foreground="{TemplateBinding Foreground}" 
+                               HorizontalAlignment="Center"/>
+
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Hover and hold effect Triggers -->
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="Green"/>
+                                    <Setter TargetName="border" Property="BorderBrush" Value="Green"/>
+                                    <Setter TargetName="border" Property="Effect">
+                                        <Setter.Value>
+                                            <DropShadowEffect Color="Green" 
+                                              ShadowDepth="5" 
+                                              BlurRadius="20" 
+                                              Opacity="1" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="DarkGreen"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+
+
+                <!-- Orange Restore Button styled as a card -->
+                <Button Content="Restore All" 
+            Background="Red" 
+            Foreground="White" 
+            Width="180" 
+            Height="240" 
+            FontSize="16" 
+            FontWeight="Bold" 
+            Click="RestoreAll_Click" 
+            VerticalAlignment="Center">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" Background="{TemplateBinding Background}" 
+                        BorderBrush="Black" 
+                        BorderThickness="1" 
+                        CornerRadius="15" 
+                        Padding="10">
+                                <Border.Effect>
+                                    <DropShadowEffect Color="Black" 
+                                          ShadowDepth="5" 
+                                          BlurRadius="10" 
+                                          Opacity="0.5" />
+                                </Border.Effect>
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <!-- Top icon area -->
+                                    <TextBlock Text="♻️" FontSize="48" Margin="0,0,0,10" Width="70" />
+                                    <!-- Text label -->
+                                    <TextBlock Text="{TemplateBinding Content}" 
+                                   FontSize="18" 
+                                   FontWeight="Bold" 
+                                   Foreground="{TemplateBinding Foreground}" 
+                                   HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Hover and hold effect Triggers -->
+                            <ControlTemplate.Triggers>
+                                <!-- Hover Effect -->
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="orange"/>
+                                    <Setter TargetName="border" Property="BorderBrush" Value="DarkRed"/>
+                                    <Setter Property="RenderTransform">
+                                        <Setter.Value>
+                                            <ScaleTransform ScaleX="1.00" ScaleY="1.00" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+
+                                <!-- Press/Hold Effect -->
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="DarkRed"/>
+                                    <Setter Property="RenderTransform">
+                                        <Setter.Value>
+                                            <ScaleTransform ScaleX="1.00" ScaleY="1.00" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </StackPanel>
+
+        </StackPanel>
+
+
+
+
+
+    </Grid>
+</UserControl>
