@@ -1,5 +1,6 @@
 # NZTS APP
 
+![NZTS APP Interface](images/nzts-app.png)
 
 NZTS APP is a powerful FPS (Frames Per Second) boosting program designed to enhance your gaming experience. By optimizing system settings and resources, NZTS APP helps you achieve higher frame rates and smoother gameplay.
 
