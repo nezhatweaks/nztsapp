@@ -120,13 +120,18 @@ namespace NZTS_App.Views
                     }
                 }
 
-                // Notify the user and prepare to close the application
                 MessageBox.Show("The application will now close to apply the update. Please restart it afterward.", "Updating...", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                // Path to UpdateExtractor.exe
+                // Path to UpdateExtractor.exe in the base directory
                 string extractorPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UpdateExtractor.exe");
 
-                // Start the extraction process
+                // Check if UpdateExtractor.exe exists
+                if (!File.Exists(extractorPath))
+                {
+                    ShowErrorMessage($"UpdateExtractor.exe not found at: {extractorPath}");
+                    return;
+                }
+
                 var extractionProcess = new System.Diagnostics.Process
                 {
                     StartInfo = new System.Diagnostics.ProcessStartInfo
@@ -136,19 +141,17 @@ namespace NZTS_App.Views
                         UseShellExecute = false,
                         CreateNoWindow = true,
                         RedirectStandardOutput = true,
-                        RedirectStandardError = true
+                        RedirectStandardError = true,
+                        WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory // Set working directory to the base directory
                     }
                 };
 
                 extractionProcess.Start();
 
-                // Capture output and errors for logging
                 string output = await Task.Run(() => extractionProcess.StandardOutput.ReadToEnd());
                 string errorOutput = await Task.Run(() => extractionProcess.StandardError.ReadToEnd());
+                await Task.Run(() => extractionProcess.WaitForExit());
 
-                await Task.Run(() => extractionProcess.WaitForExit()); // Wait for the extraction to complete
-
-                // Log outputs
                 if (!string.IsNullOrEmpty(output))
                 {
                     Console.WriteLine(output);
@@ -158,10 +161,7 @@ namespace NZTS_App.Views
                     Console.WriteLine($"Error: {errorOutput}");
                 }
 
-                // Optionally clean up the temp file
                 File.Delete(tempFilePath);
-
-                // Close the application forcefully
                 Environment.Exit(0);
             }
             catch (HttpRequestException httpEx)
@@ -177,6 +177,7 @@ namespace NZTS_App.Views
                 ShowErrorMessage($"Error applying the update: {ex.Message}");
             }
         }
+
 
 
 
