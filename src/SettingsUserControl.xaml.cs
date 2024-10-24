@@ -123,9 +123,8 @@ namespace NZTS_App.Views
                 // Notify the user and prepare to close the application
                 MessageBox.Show("The application will now close to apply the update. Please restart it afterward.", "Updating...", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                // Path to UpdateExtractor.exe in the Updates folder
-                string updatesFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Updates");
-                string extractorPath = Path.Combine(updatesFolderPath, "UpdateExtractor.exe");
+                // Path to UpdateExtractor.exe
+                string extractorPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UpdateExtractor.exe");
 
                 // Start the extraction process
                 var extractionProcess = new System.Diagnostics.Process
@@ -133,14 +132,31 @@ namespace NZTS_App.Views
                     StartInfo = new System.Diagnostics.ProcessStartInfo
                     {
                         FileName = extractorPath,
-                        Arguments = $"{tempFilePath} \"{AppDomain.CurrentDomain.BaseDirectory}\"", // Pass the target extraction directory
+                        Arguments = $"{tempFilePath} \"{AppDomain.CurrentDomain.BaseDirectory}\"",
                         UseShellExecute = false,
-                        CreateNoWindow = true
+                        CreateNoWindow = true,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true
                     }
                 };
 
                 extractionProcess.Start();
-                extractionProcess.WaitForExit(); // Wait for the extraction to complete
+
+                // Capture output and errors for logging
+                string output = await Task.Run(() => extractionProcess.StandardOutput.ReadToEnd());
+                string errorOutput = await Task.Run(() => extractionProcess.StandardError.ReadToEnd());
+
+                await Task.Run(() => extractionProcess.WaitForExit()); // Wait for the extraction to complete
+
+                // Log outputs
+                if (!string.IsNullOrEmpty(output))
+                {
+                    Console.WriteLine(output);
+                }
+                if (!string.IsNullOrEmpty(errorOutput))
+                {
+                    Console.WriteLine($"Error: {errorOutput}");
+                }
 
                 // Optionally clean up the temp file
                 File.Delete(tempFilePath);
@@ -161,6 +177,8 @@ namespace NZTS_App.Views
                 ShowErrorMessage($"Error applying the update: {ex.Message}");
             }
         }
+
+
 
 
 
