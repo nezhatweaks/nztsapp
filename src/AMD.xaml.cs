@@ -130,7 +130,18 @@ namespace NZTS_App.Views
 
         private RegistryKey? OpenRegistryKey(string path, bool writable = false)
         {
-            return Registry.LocalMachine.OpenSubKey(path, writable);
+            // Attempt to open the specified registry key
+            RegistryKey? key = Registry.LocalMachine.OpenSubKey(path, writable);
+
+            // If the key is null, create it
+            if (key == null && writable)
+            {
+                // Create the key if it doesn't exist
+                string basePath = path.Substring(0, path.LastIndexOf('\\'));
+                key = Registry.LocalMachine.CreateSubKey(path);
+            }
+
+            return key;
         }
 
         private void ToggleRegistryValue(string valueName, bool enable, string? registryPath = null)
@@ -140,13 +151,15 @@ namespace NZTS_App.Views
 
             try
             {
-                key = OpenRegistryKey(path, writable: true); // Use the writable parameter
+                // Open the registry key, creating it if it doesn't exist
+                key = OpenRegistryKey(path, writable: true);
 
                 if (key != null)
                 {
+                    // Set the value, creating it if necessary
                     SetRegistryValue(key, valueName, enable);
                     mainWindow?.MarkSettingsApplied();
-                    App.changelogUserControl?.AddLog("Applied", $"{valueName} has been set to {(enable ? "Disabled" : "Enabled")}");
+                    App.changelogUserControl?.AddLog("Applied", $"{valueName} has been set to {(enable ? "Enabled" : "Disabled")}");
                 }
                 else
                 {
@@ -166,6 +179,7 @@ namespace NZTS_App.Views
                 key?.Close();
             }
         }
+
 
         private void SetRegistryValue(RegistryKey key, string valueName, bool enable)
         {
