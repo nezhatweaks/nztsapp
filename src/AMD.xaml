@@ -41,36 +41,317 @@
         <Style TargetType="Border" x:Key="DiscordBorderStyle">
             <Setter Property="Background" Value="#2F3136"/>
             <Setter Property="CornerRadius" Value="5"/>
-            <Setter Property="BorderBrush" Value="#202225"/>
             <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style TargetType="Button" x:Key="TabButtonStyle">
+            <Setter Property="Background" Value="#2C2F33"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#2F3136"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#3D4147"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#5A5C60"/>
+                </Trigger>
+                <Trigger Property="Tag" Value="Active">
+                    <Setter Property="Background" Value="#4875e8"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </UserControl.Resources>
 
-    <ContentControl x:Name="ContentAMD" Background="#2C2F33"  HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,40,0,0">
-        <StackPanel>
-            <!-- Disable ULPS -->
-            <Border Style="{StaticResource DiscordBorderStyle}" BorderThickness="0" Padding="10" Height="50" Margin="50,10,0,0">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="Disable ULPS" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disables AMD Ultra Low Power State (ULPS), preventing idle graphics cards from entering a low-power mode."/>
-                    <ToggleButton x:Name="EnableUlpsSwitch"
-                                  Style="{StaticResource iOSToggleButton}"
-                                  Click="EnableUlpsSwitch_Click" Width="50"/>
-                    <TextBlock x:Name="UlpsStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Border>
+    <StackPanel>
+        <!-- Verified Tab Content -->
+        <StackPanel x:Name="VerifiedContent" Visibility="Visible">
+            
+            <ScrollViewer Width="420" Height="260" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <ScrollViewer.Resources>
+                    <Style TargetType="ScrollBar">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Width" Value="20"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ScrollBar" >
+                                    <Grid Background="Transparent" Margin="-110,20,0,0" >
+                                        <Track Name="PART_Track" IsDirectionReversed="true">
+                                            <Track.DecreaseRepeatButton>
+                                                <RepeatButton Name="PART_DecreaseButton"
+                            Content="▲"
+                            Command="ScrollBar.LineUpCommand"
+                            Background="Transparent"
+                            Width="0" Height="0"/>
+                                            </Track.DecreaseRepeatButton>
+                                            <Track.Thumb>
+                                                <Thumb Name="Thumb" 
+                     Background="Black" 
+                     Opacity="0.7" 
+                     Width="3" 
+                     MinHeight="200"/>
+                                            </Track.Thumb>
+                                            <Track.IncreaseRepeatButton>
+                                                <RepeatButton Name="PART_IncreaseButton"
+                            Content="▼"
+                            Command="ScrollBar.LineDownCommand"
+                            Background="Transparent"
+                            Width="0" Height="0"/>
+                                            </Track.IncreaseRepeatButton>
+                                        </Track>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ScrollViewer.Resources>
+                <StackPanel>
+                    <!-- Disable ULPS -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Disable ULPS" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disables AMD Ultra Low Power State (ULPS)."/>
+                            <ToggleButton x:Name="EnableUlpsSwitch" Style="{StaticResource iOSToggleButton}" Click="EnableUlpsSwitch_Click" Width="50"/>
+                            <TextBlock x:Name="UlpsStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
 
-            <!-- Disable Thermal Throttling -->
-            <Border Style="{StaticResource DiscordBorderStyle}" BorderThickness="0" Padding="10" Height="50" Margin="50,10,0,0">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="Disable Thermal Throttling" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disables thermal throttling, allowing the CPU or GPU to operate at maximum performance without reducing speed due to heat."/>
-                    <ToggleButton x:Name="ThermalThrottlingSwitch"
-                                  Style="{StaticResource iOSToggleButton}"
-                                  Click="ThermalThrottlingSwitch_Click" Width="50"/>
-                    <TextBlock x:Name="ThermalThrottlingStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Border>
+                    <!-- Disable Thermal Throttling -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Disable Thermal Throttling" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disables thermal throttling."/>
+                            <ToggleButton x:Name="ThermalThrottlingSwitch" Style="{StaticResource iOSToggleButton}" Click="ThermalThrottlingSwitch_Click" Width="50"/>
+                            <TextBlock x:Name="ThermalThrottlingStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
 
-            <!-- Add more options as needed -->
+                    
+                   
+
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Disable Block Write" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disables Block Write."/>
+                            <ToggleButton x:Name="DisableBlockWriteSwitch" Style="{StaticResource iOSToggleButton}" Click="DisableBlockWriteSwitch_Click" Width="50"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Disable Stutter Mode" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disables Stutter Mode."/>
+                            <ToggleButton x:Name="StutterModeSwitch" Style="{StaticResource iOSToggleButton}" Click="StutterModeSwitch_Click" Width="50"/>
+                        </StackPanel>
+                    </Border>
+
+                    
+
+                    
+
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Disable ASPM L0s" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disables ASPM L0s."/>
+                            <ToggleButton x:Name="EnableAspmL0sSwitch" Style="{StaticResource iOSToggleButton}" Click="EnableAspmL0sSwitch_Click" Width="50"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Disable ASPM L1" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disables ASPM L1."/>
+                            <ToggleButton x:Name="EnableAspmL1Switch" Style="{StaticResource iOSToggleButton}" Click="EnableAspmL1Switch_Click" Width="50"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Disable FBC for Fullscreen App" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disables FBC for fullscreen apps."/>
+                            <ToggleButton x:Name="DisableFBCForFullscreenSwitch" Style="{StaticResource iOSToggleButton}" Click="DisableFBCForFullscreenSwitch_Click" Width="50"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Disable FBC Support" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disables FBC Support."/>
+                            <ToggleButton x:Name="DisableFBCSupportSwitch" Style="{StaticResource iOSToggleButton}" Click="DisableFBCSupportSwitch_Click" Width="50"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
         </StackPanel>
-    </ContentControl>
+
+        <!-- Experimental Tab Content -->
+        <StackPanel x:Name="ExperimentalContent" Visibility="Collapsed">
+
+            <ScrollViewer Width="420" Height="260" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <ScrollViewer.Resources>
+                    <Style TargetType="ScrollBar">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Width" Value="20"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ScrollBar" >
+                                    <Grid Background="Transparent" Margin="-100,20,0,0" >
+                                        <Track Name="PART_Track" IsDirectionReversed="true">
+                                            <Track.DecreaseRepeatButton>
+                                                <RepeatButton Name="PART_DecreaseButton"
+                            Content="▲"
+                            Command="ScrollBar.LineUpCommand"
+                            Background="Transparent"
+                            Width="0" Height="0"/>
+                                            </Track.DecreaseRepeatButton>
+                                            <Track.Thumb>
+                                                <Thumb Name="Thumb" 
+                     Background="Black" 
+                     Opacity="0.7" 
+                     Width="3" 
+                     MinHeight="200"/>
+                                            </Track.Thumb>
+                                            <Track.IncreaseRepeatButton>
+                                                <RepeatButton Name="PART_IncreaseButton"
+                            Content="▼"
+                            Command="ScrollBar.LineDownCommand"
+                            Background="Transparent"
+                            Width="0" Height="0"/>
+                                            </Track.IncreaseRepeatButton>
+                                        </Track>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ScrollViewer.Resources>
+                <StackPanel>
+                    <!-- Main 3D -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Tweak Main 3D" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Main 3D setting."/>
+                            <ToggleButton x:Name="Main3DSwitch" Style="{StaticResource iOSToggleButton}" Click="Main3DSwitch_Click" Width="50"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Main 3D Default -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Tweak Main 3D Default" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Default for Main 3D."/>
+                            <ToggleButton x:Name="Main3DDefSwitch" Style="{StaticResource iOSToggleButton}" Click="Main3DDefSwitch_Click" Width="50"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Flip Queue Size -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Tweaked Flip Queue Size" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Sets the Flip Queue Size."/>
+                            <ToggleButton x:Name="FlipQueueSizeSwitch" Style="{StaticResource iOSToggleButton}" Click="FlipQueueSizeSwitch_Click" Width="50"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Force Triple Buffering -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Tweak Force Triple Buffering" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disables force triple buffering."/>
+                            <ToggleButton x:Name="ForceTripleBufferingSwitch" Style="{StaticResource iOSToggleButton}" Click="ForceTripleBufferingSwitch_Click" Width="50"/>
+                        </StackPanel>
+                    </Border>
+
+                    
+
+                    <!-- Power State -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Tweak Power State" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Sets the Power State."/>
+                            <ToggleButton x:Name="PowerStateSwitch" Style="{StaticResource iOSToggleButton}" Click="PowerStateSwitch_Click" Width="50"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Shader Cache -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Tweak Shader Cache" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Manages Shader Cache."/>
+                            <ToggleButton x:Name="ShaderCacheSwitch" Style="{StaticResource iOSToggleButton}" Click="ShaderCacheSwitch_Click" Width="50"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Tessellation -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Tweak Tessellation" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Controls Tessellation settings."/>
+                            <ToggleButton x:Name="TessellationSwitch" Style="{StaticResource iOSToggleButton}" Click="TessellationSwitch_Click" Width="50"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- VSync Control -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Tweak VSync Control" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Controls VSync settings."/>
+                            <ToggleButton x:Name="VSyncControlSwitch" Style="{StaticResource iOSToggleButton}" Click="VSyncControlSwitch_Click" Width="50"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Catalyst AI -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Tweak Catalyst AI" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disables Catalyst AI."/>
+                            <ToggleButton x:Name="CatalystAISwitch" Style="{StaticResource iOSToggleButton}" Click="CatalystAISwitch_Click" Width="50"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Catalyst AI Default -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Tweak Catalyst AI Default" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Default for Catalyst AI."/>
+                            <ToggleButton x:Name="CatalystAIDefSwitch" Style="{StaticResource iOSToggleButton}" Click="CatalystAIDefSwitch_Click" Width="50"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Texture Optimization -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Tweak Texture Optimization" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disables Texture Optimization."/>
+                            <ToggleButton x:Name="TextureOptSwitch" Style="{StaticResource iOSToggleButton}" Click="TextureOptSwitch_Click" Width="50"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- GLPB Mode Default -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Tweak GLPB Mode Default" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Default for GLPB Mode."/>
+                            <ToggleButton x:Name="GLPBModeDefSwitch" Style="{StaticResource iOSToggleButton}" Click="GLPBModeDefSwitch_Click" Width="50"/>
+                        </StackPanel>
+                    </Border>
+
+
+                </StackPanel>
+            </ScrollViewer>
+        </StackPanel>
+
+        <!-- Tab Buttons Positioned Below Content -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,40,0,0">
+            <Button x:Name="VerifiedButton" 
+                    Content="Core" 
+                    Click="SwitchToVerifiedTab" 
+                    Style="{StaticResource TabButtonStyle}" 
+                    Tag="Active" 
+                    Width="100" Height="25"/>
+            <Button x:Name="ExperimentalButton" 
+                    Content="Extended" 
+                    Click="SwitchToExperimentalTab" 
+                    Style="{StaticResource TabButtonStyle}" 
+                    Tag="Inactive" 
+                    Width="100" Height="25"/>
+        </StackPanel>
+    </StackPanel>
 </UserControl>

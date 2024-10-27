@@ -59,7 +59,7 @@
             </Border>
 
             <!-- Enable Game Bar -->
-            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+            <Border BorderBrush="Yellow" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="Enable Game Bar" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Enabling the Game Bar allows quick access to gaming features."/>
                     <ToggleButton x:Name="GameBarToggle"

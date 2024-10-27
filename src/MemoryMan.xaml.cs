@@ -2,14 +2,33 @@
 using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Controls;
+using System.Globalization;
+using System.Windows.Data;
+using System.Windows.Media;
 
 namespace NZTS_App.Views
 {
+    public class BoolToColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is bool booleanValue)
+            {
+                return booleanValue ? Brushes.Green : Brushes.Red; // Adjust colors as needed
+            }
+            return Brushes.Transparent; // Default color
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public partial class MemoryMan : UserControl
     {
         private const string MemoryKeyPath = @"SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management";
         private MainWindow mainWindow;
-
 
         public MemoryMan(MainWindow window)
         {
@@ -19,10 +38,10 @@ namespace NZTS_App.Views
             mainWindow.TitleTextBlock.Content = "Memory";
 
             DisablePagingExecutiveToggle.Click += DisablePagingExecutiveToggle_Click;
-            
             ContextSwitchDeadbandToggle.Click += ContextSwitchDeadbandToggle_Click;
             LatencySensitivityHintToggle.Click += LatencySensitivityHintToggle_Click;
             DisableHeapCoalesceOnFreeToggle.Click += DisableHeapCoalesceOnFreeToggle_Click; // New toggle click event
+            LargePageMinimumToggle.Click += LargePageMinimumToggle_Click; // New toggle click event for LargePageMinimum
         }
 
         private void LoadCurrentSettings()
@@ -37,9 +56,6 @@ namespace NZTS_App.Views
                         var disablePagingValue = key.GetValue("DisablePagingExecutive");
                         DisablePagingExecutiveToggle.IsChecked = (disablePagingValue is int disablePagingInt && disablePagingInt == 1);
 
-                        // SecondLevelDataCache
-                        
-
                         // ContextSwitchDeadband
                         var contextSwitchValue = key.GetValue("ContextSwitchDeadband");
                         ContextSwitchDeadbandToggle.IsChecked = (contextSwitchValue is int && (int)contextSwitchValue == 1);
@@ -51,6 +67,10 @@ namespace NZTS_App.Views
                         // DisableHeapCoalesceOnFree
                         var heapCoalesceValue = key.GetValue("DisableHeapCoalesceOnFree");
                         DisableHeapCoalesceOnFreeToggle.IsChecked = (heapCoalesceValue is int disableHeapInt && disableHeapInt == 1);
+
+                        // LargePageMinimum
+                        var largePageMinimumValue = key.GetValue("LargePageMinimum");
+                        LargePageMinimumToggle.IsChecked = (largePageMinimumValue is int largePageMinInt && largePageMinInt == unchecked((int)0xFFFFFFFF));
                     }
                     else
                     {
@@ -68,12 +88,30 @@ namespace NZTS_App.Views
             }
         }
 
+        private void SwitchToVerifiedTab(object sender, RoutedEventArgs e)
+        {
+            VerifiedContent.Visibility = Visibility.Visible;
+            ExperimentalContent.Visibility = Visibility.Collapsed;
+
+            // Update the active tag
+            VerifiedButton.Tag = "Active";
+            ExperimentalButton.Tag = "Inactive";
+        }
+
+        private void SwitchToExperimentalTab(object sender, RoutedEventArgs e)
+        {
+            VerifiedContent.Visibility = Visibility.Collapsed;
+            ExperimentalContent.Visibility = Visibility.Visible;
+
+            // Update the active tag
+            ExperimentalButton.Tag = "Active";
+            VerifiedButton.Tag = "Inactive";
+        }
+
         private void DisablePagingExecutiveToggle_Click(object sender, RoutedEventArgs e)
         {
             UpdateRegistryValue("DisablePagingExecutive", DisablePagingExecutiveToggle.IsChecked == true ? 1 : 0);
         }
-
-        
 
         private void ContextSwitchDeadbandToggle_Click(object sender, RoutedEventArgs e)
         {
@@ -102,6 +140,18 @@ namespace NZTS_App.Views
         private void DisableHeapCoalesceOnFreeToggle_Click(object sender, RoutedEventArgs e)
         {
             UpdateRegistryValue("DisableHeapCoalesceOnFree", DisableHeapCoalesceOnFreeToggle.IsChecked == true ? 1 : 0);
+        }
+
+        private void LargePageMinimumToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (LargePageMinimumToggle.IsChecked == true)
+            {
+                UpdateRegistryValue("LargePageMinimum", unchecked((int)0xFFFFFFFF)); // Set to 0xFFFFFFFF
+            }
+            else
+            {
+                DeleteRegistryValue("LargePageMinimum");
+            }
         }
 
         private void UpdateRegistryValue(string valueName, int value)

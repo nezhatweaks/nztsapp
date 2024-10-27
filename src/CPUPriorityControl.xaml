@@ -9,22 +9,22 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ToggleButton">
                         <Grid>
-                            <Border x:Name="Border" 
-                                    Background="{TemplateBinding Background}" 
-                                    BorderBrush="{TemplateBinding BorderBrush}" 
-                                    BorderThickness="0" 
-                                    CornerRadius="10" 
+                            <Border x:Name="Border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="0"
+                                    CornerRadius="10"
                                     Padding="5">
-                                <Ellipse x:Name="Ellipse" 
-                                         Fill="White" 
-                                         Width="10" 
-                                         Height="10" 
-                                         HorizontalAlignment="Left" 
-                                         VerticalAlignment="Center" 
+                                <Ellipse x:Name="Ellipse"
+                                         Fill="White"
+                                         Width="10"
+                                         Height="10"
+                                         HorizontalAlignment="Left"
+                                         VerticalAlignment="Center"
                                          Margin="20,0,0,0" />
                             </Border>
-                            <ContentPresenter HorizontalAlignment="Center" 
-                                              VerticalAlignment="Center" 
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
                                               Margin="35,0,0,0" />
                         </Grid>
                         <ControlTemplate.Triggers>
@@ -46,79 +46,260 @@
             <Setter Property="BorderBrush" Value="#2F3136"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
+
+        <Style TargetType="Button" x:Key="TabButtonStyle">
+            <Setter Property="Background" Value="#2C2F33"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#2F3136"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#3D4147"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#5A5C60"/>
+                </Trigger>
+                <Trigger Property="Tag" Value="Active">
+                    <Setter Property="Background" Value="#4875e8"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="MinimalButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="15">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#444"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#333"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
 
-    <ScrollViewer>
-        <StackPanel Orientation="Vertical">
-            <TextBlock Text="Apps" Foreground="White" FontSize="20" FontWeight="Bold" />
-            <!-- Game List -->
-            <Border Background="#2F3136" Padding="10" CornerRadius="10" BorderThickness="1" BorderBrush="Transparent">
-                <StackPanel>
-                    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-                    <!-- ListView to display game executables -->
-                    <ListView x:Name="GameListView" Margin="0,5,0,5" Background="#202225" Foreground="White" Height="100" BorderThickness="0" Padding="0">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" Margin="0,4">
-                                    <TextBlock Text="{Binding Name}" Width="150" Foreground="White" />
-                                    <TextBlock Text="{Binding Priority}" Width="250" Foreground="White" HorizontalAlignment="Right"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+        <StackPanel Grid.Row="0">
+            <StackPanel x:Name="VerifiedContent" Visibility="Visible" Orientation="Vertical" Margin="0,70,0,0">
+                <TextBlock x:Name="CardTitleTextBlock" FontSize="24" HorizontalAlignment="Center" Visibility="Collapsed" />
+                <TextBlock x:Name="CardDescriptionTextBlock" FontSize="18" HorizontalAlignment="Center" Visibility="Collapsed" />
 
-                    <!-- Add and Remove Game Buttons -->
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                        <Button Content="Add Active Process" Width="130" Margin="2" Click="AddActiveProcessButton_Click" Background="#7289DA" Foreground="White" />
-                        <Button Content="Add By Name" Width="110" Margin="2" Click="AddGameButton_Click" Background="#7289DA" Foreground="White" />
-                        <Button Content="Remove" Width="120" Margin="2" Click="RemoveGameButton_Click" Background="#7289DA" Foreground="White" />
-                    </StackPanel>
-                </StackPanel>
-            </Border>
 
-            <TextBlock Text="Settings" Foreground="White" FontSize="20" FontWeight="Bold" />
+                <Button x:Name="CardButton" Click="CardButton_Click" Width="180" Height="240"
+                        Background="Black" Foreground="White" FontSize="16" FontWeight="Bold" VerticalAlignment="Center">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" Background="{TemplateBinding Background}" 
+                                    BorderBrush="Black" BorderThickness="1" CornerRadius="0" Padding="3">
+                                <Border.Effect>
+                                    <DropShadowEffect Color="Black" ShadowDepth="5" BlurRadius="10" Opacity="0.5" />
+                                </Border.Effect>
+                                <Grid>
+                                    
+                                    <Image x:Name="CardImage" Stretch="UniformToFill" 
+                                           Source="{Binding ImageSource}" Margin="0,0,0,0" />
+                                    <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center" 
+                                                Background="Transparent" >
+                                        
+                                        <TextBlock Text="{Binding ElementName=CardTitleTextBlock, Path=Text}" 
+                                                   FontSize="16" Margin="0,0,0,5" Background="Black"
+                                                   HorizontalAlignment="Center" Foreground="White" />
+                                        <TextBlock Text="{TemplateBinding Content}" FontSize="18" 
+                                                   FontWeight="Bold" Foreground="{TemplateBinding Foreground}" 
+                                                   HorizontalAlignment="Center" />
+                                        
 
-            <!-- Combined Settings Box -->
-            <Border Background="#2F3136" Padding="10" CornerRadius="10" BorderThickness="1" BorderBrush="Transparent" Margin="0,10,0,0">
-                <StackPanel>
-                    
 
-                    <!-- Priority Level Dropdown -->
-                    <TextBlock Text="Priority" Foreground="White" FontWeight="SemiBold"/>
-                    <ComboBox x:Name="PriorityComboBox" Width="200" Margin="0,5,0,10" SelectionChanged="PriorityComboBox_SelectionChanged"
-                              Background="#202225" Foreground="Black" BorderBrush="Transparent"/>
 
-                    <!-- GPU Scheduling Dropdown -->
-                    <TextBlock Text="GPU Scheduling" Foreground="White" FontWeight="SemiBold"/>
-                    <ComboBox x:Name="GPUSchedulingComboBox" Width="200" Margin="0,5,0,10" SelectionChanged="GPUSchedulingComboBox_SelectionChanged"
-                              Background="#202225" Foreground="Black" BorderBrush="Transparent"/>
+                                    </StackPanel>
+                                    
+                                </Grid>
+                            </Border>
+                            
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="Red"/>
+                                    <Setter TargetName="border" Property="BorderBrush" Value="Red"/>
+                                    <Setter TargetName="border" Property="Effect">
+                                        <Setter.Value>
+                                            <DropShadowEffect Color="Red" ShadowDepth="5" BlurRadius="20" Opacity="1" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="Red"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                
+            </StackPanel>
 
-                    <!-- UseLargePages Toggle -->
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,20,0,0">
-                        <TextBlock Text="Use Large Pages" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Enable large page support for the application."/>
-                        <ToggleButton x:Name="UseLargePagesToggle"
-                                      Style="{StaticResource iOSToggleButton}"
-                                      Click="UseLargePagesToggle_Click" Width="50"/>
-                        <TextBlock x:Name="UseLargePagesStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                    </StackPanel>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-                    <!-- DisableHeapCoalesceToggle Toggle -->
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,20,0,0">
-                        <TextBlock Text="Disable HeapCoalesce On Free" FontWeight="Bold" Margin="0,0,20,0" ToolTip="Disable HeapCoalesce On Free for the application."/>
-                        <ToggleButton x:Name="DisableHeapCoalesceToggle"
-                  Style="{StaticResource iOSToggleButton}"
-                  Click="DisableHeapCoalesceToggle_Click" Width="50"/>
-                        <TextBlock x:Name="DisableHeapCoalesceStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                    </StackPanel>
+                <Button x:Name="LeftButton" 
+                        Click="LeftButton_Click" 
+                        Width="50" 
+                        Height="30" 
+                        HorizontalAlignment="Center" 
+                        VerticalAlignment="Center" 
+                        Grid.Column="1" 
+                        Margin="0,-250,210,0" 
+                        Background="Transparent" 
+                        BorderBrush="Gray" 
+                        BorderThickness="0" 
+                        FontWeight="Bold" 
+                        Content="◀" 
+                        Style="{StaticResource MinimalButtonStyle}" />
 
-                    <!-- Save and Reset Buttons -->
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-                        <Button Content="Save" Width="100" Margin="5" Click="SavePriorityButton_Click" Background="#7289DA" Foreground="White"/>
-                        <Button Content="Reset" Width="100" Margin="5" Click="ResetPriorityButton_Click" Background="#7289DA" Foreground="White"/>
-                    </StackPanel>
-                </StackPanel>
-            </Border>
+                <Button x:Name="RightButton" 
+                        Click="RightButton_Click" 
+                        Width="50" 
+                        Height="30" 
+                        HorizontalAlignment="Center" 
+                        VerticalAlignment="Center" 
+                        Grid.Column="2" 
+                        Margin="0,-250,0,0" 
+                        Background="Transparent" 
+                        BorderBrush="Gray" 
+                        BorderThickness="0" 
+                        Foreground="White" 
+                        FontWeight="Bold" 
+                        Content="▶" 
+                        Style="{StaticResource MinimalButtonStyle}" />
+            </Grid>
+            <Button x:Name="RevertButton" Click="RevertButton_Click" Width="30" Height="30" 
+Background="Black" 
+Style="{StaticResource MinimalButtonStyle}" 
+Content="X" 
+HorizontalAlignment="Right" 
+VerticalAlignment="Top" 
+Margin="0,-250,100,0"  />
         </StackPanel>
-    </ScrollViewer>
+
+        <StackPanel x:Name="ExperimentalContent" Visibility="Collapsed" Orientation="Vertical" Margin="0,20,0,0">
+            <ScrollViewer Width="420" Height="300" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel>
+                    <TextBlock Text="Apps" Foreground="White" FontSize="20" FontWeight="Bold" />
+                    <Border Background="#2F3136" Padding="10" CornerRadius="10" BorderThickness="1" BorderBrush="Transparent">
+                        <StackPanel>
+                            <ListView x:Name="GameListView" Margin="0,5,0,5" Background="#202225" Foreground="White" Height="120" BorderThickness="0" Padding="0">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Margin="0,4">
+                                            <TextBlock Text="{Binding Name}" Width="150" Foreground="White" />
+                                            <TextBlock Text="{Binding Priority}" Width="250" Foreground="White" HorizontalAlignment="Right"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                <Button Content="Add Active Process" Width="130" Margin="2" Click="AddActiveProcessButton_Click" Background="#7289DA" Foreground="White" />
+                                <Button Content="Add By Name" Width="110" Margin="2" Click="AddGameButton_Click" Background="#7289DA" Foreground="White" />
+                                <Button Content="Remove" Width="120" Margin="2" Click="RemoveGameButton_Click" Background="#7289DA" Foreground="White" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock Text="Settings" Foreground="White" FontSize="20" FontWeight="Bold" />
+                    <Border Background="#2F3136" Padding="10" CornerRadius="10" BorderThickness="1" BorderBrush="Transparent" Margin="0,10,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Priority" Foreground="White" FontWeight="SemiBold"/>
+                            <ComboBox x:Name="PriorityComboBox" Width="200" Margin="0,5,0,10" SelectionChanged="PriorityComboBox_SelectionChanged"
+                                      Background="#202225" Foreground="Black" BorderBrush="Transparent"/>
+
+                            <TextBlock Text="GPU Scheduling" Foreground="White" FontWeight="SemiBold"/>
+                            <ComboBox x:Name="GPUSchedulingComboBox" Width="200" Margin="0,5,0,10" SelectionChanged="GPUSchedulingComboBox_SelectionChanged"
+                                      Background="#202225" Foreground="Black" BorderBrush="Transparent"/>
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,20,0,0">
+                                <TextBlock Text="Use Large Pages" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Enable large page support for the application."/>
+                                <ToggleButton x:Name="UseLargePagesToggle"
+                                              Style="{StaticResource iOSToggleButton}"
+                                              Click="UseLargePagesToggle_Click" Width="50"/>
+                                <TextBlock x:Name="UseLargePagesStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,20,0,0">
+                                <TextBlock Text="Disable HeapCoalesce On Free" FontWeight="Bold" Margin="0,0,20,0" ToolTip="Disable HeapCoalesce On Free for the application."/>
+                                <ToggleButton x:Name="DisableHeapCoalesceToggle"
+                                              Style="{StaticResource iOSToggleButton}"
+                                              Click="DisableHeapCoalesceToggle_Click" Width="50"/>
+                                <TextBlock x:Name="DisableHeapCoalesceStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                                <Button Content="Save" Width="100" Margin="5" Click="SavePriorityButton_Click" Background="#7289DA" Foreground="White"/>
+                                <Button Content="Reset" Width="100" Margin="5" Click="ResetPriorityButton_Click" Background="#7289DA" Foreground="White"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Margin="0,10,0,-50">
+            <Button x:Name="VerifiedButton" 
+                    Content="Presets" 
+                    Click="SwitchToVerifiedTab" 
+                    Style="{StaticResource TabButtonStyle}" 
+                    Tag="Active" 
+                    Width="100" Height="25"/>
+            <Button x:Name="ExperimentalButton" 
+                    Content="Manual" 
+                    Click="SwitchToExperimentalTab" 
+                    Style="{StaticResource TabButtonStyle}" 
+                    Tag="Inactive" 
+                    Width="100" Height="25"/>
+        </StackPanel>
+    </Grid>
 </UserControl>

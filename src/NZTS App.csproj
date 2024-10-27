@@ -8,11 +8,41 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <AssemblyVersion>0.3.2.0</AssemblyVersion>
-    <FileVersion>0.3.2.0</FileVersion>
+    <AssemblyVersion>0.4.0.0</AssemblyVersion>
+    <FileVersion>0.4.0.0</FileVersion>
     <PackageIcon>nezhalogo12.2.jpg</PackageIcon>
     <ApplicationIcon>nezhalogo12.2.3.ico</ApplicationIcon>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+	<TrimUnusedDependencies>false</TrimUnusedDependencies>
+	<EnableTrimmed>false</EnableTrimmed>
+	<_SuppressWpfTrimError>true</_SuppressWpfTrimError>
+	<EnableComInterop>true</EnableComInterop>
+	<EnableComObjectFactory>false</EnableComObjectFactory>
+	<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+	  
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\cs2.png" />
+    <None Remove="Images\fivem.png" />
+    <None Remove="Images\minecraft.png" />
+    <None Remove="Images\mw3.png" />
+    <None Remove="Images\pubg.png" />
+    <None Remove="Images\r6s.png" />
+    <None Remove="Images\roblox.png" />
+    <None Remove="Images\valorant.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\minecraft.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\pubg.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
 
   <ItemGroup>
     <Content Include="nezhalogo12.2.3.ico" />
@@ -86,6 +116,27 @@
     <None Update="Updates\UpdateExtractor.runtimeconfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\cs2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\fivem.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\mw3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\r6s.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\roblox.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\valorant.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

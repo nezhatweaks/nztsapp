@@ -53,7 +53,7 @@
             
 
             <!-- Disable P-state -->
-            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+            <Border  Background="Green" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="Disable P-state" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disabling dynamic P-state may enhance system stability but can lead to increased power consumption and reduced energy efficiency."/>
                     <ToggleButton x:Name="DynamicPstateSwitch"
@@ -86,7 +86,7 @@
             </Border>
 
             <!-- Disable Preemption -->
-            <Border Background="red" BorderBrush="Red" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+            <Border Background="Red"  BorderBrush="Red" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="Disable Preemption" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disabling preemption may reduce input lag in certain applications."/>
                     <ToggleButton x:Name="DisablePreemptionSwitch"
@@ -98,7 +98,7 @@
 
 
             <!-- Disable CUDA Context Preemption -->
-            <Border Background="red" BorderBrush="Red" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+            <Border Background="Red"  BorderBrush="Red" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="Disable CUDA Context Preemption" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disabling CUDA context preemption may help reduce latency in specific applications."/>
                     <ToggleButton x:Name="DisableCudaContextPreemptionSwitch"

@@ -38,26 +38,117 @@ namespace NZTS_App
             String
         }
 
-        Dictionary<string, Tuple<string, string, ValueType, bool, string>> registryTweaks = new Dictionary<string, Tuple<string, string, ValueType, bool, string>>()
+        Dictionary<string, List<Tuple<string, string, ValueType, bool, string>>> registryTweaks = new Dictionary<string, List<Tuple<string, string, ValueType, bool, string>>>()
 {
-    {"Win32PrioritySeparation", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "00fa332a", ValueType.DWord, false, "00000002")}, // default is 2
-    {"ContextSwitchDeadband", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "00000001", ValueType.DWord, true, "00000000")}, // default is none
-    {"LatencySensitivityHint", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "00000001", ValueType.DWord, true, "00000000")}, // default is none
-    {"SystemResponsiveness", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "00000000", ValueType.DWord, false, "00000002")},
-    {"NoLazyMode", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "00000001", ValueType.DWord, false, "00000000")},
-    {"LazyModeTimeout", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "0098967f", ValueType.DWord, false, "00005000")},
-    {"DisableDynamicPstate", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "00000001", ValueType.DWord, false, "00000000")}, // default is 0
-    {"EnableUlps", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "00000000", ValueType.DWord, false, "00000001")}, // default is 1
-    {"PP_ThermalAutoThrottlingEnable", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "00000000", ValueType.DWord, false, "00000001")}, // default is 1
-    {"Start", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\MMCSS", "00000002", ValueType.DWord, false, "00000002")},
-    {"VsyncIdleTimeout", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler", "00000000", ValueType.DWord, false, "00000001")},
-    {"MonitorLatencyTolerance", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power", "00000001", ValueType.DWord, false, "00000000")},
-    {"MonitorRefreshLatencyTolerance", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power", "00000001", ValueType.DWord, false, "00000000")},
-    {"DisablePagingExecutive", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "00000001", ValueType.DWord, false, "00000000")},
-    {"DisableHeapCoalesceOnFree", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "00000001", ValueType.DWord, false, "00000000")},
-    {"AllowMaxPerf", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\nvlddmkm", "00000001", ValueType.DWord, false, "00000000")},
-    {"DisableMshybridNvsrSwitch", new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\nvlddmkm", "00000001", ValueType.DWord, false, "00000000")}
-    
+    {"Win32PrioritySeparation", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "00fa332a", ValueType.DWord, false, "00000002") // default is 2
+    }},
+    {"ContextSwitchDeadband", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "00000001", ValueType.DWord, true, "00000000") // default is none
+    }},
+    {"LatencySensitivityHint", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "00000001", ValueType.DWord, true, "00000000") // default is none
+    }},
+    {"SystemResponsiveness", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "00000000", ValueType.DWord, false, "00000002")
+    }},
+    {"NoLazyMode", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "00000001", ValueType.DWord, false, "00000000")
+    }},
+    {"LazyModeTimeout", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile", "0098967f", ValueType.DWord, false, "00005000")
+    }},
+    {"DisableDynamicPstate", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "00000001", ValueType.DWord, false, "00000000") // default is 0
+    }},
+    {"EnableUlps", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "00000000", ValueType.DWord, false, "00000001") // default is 1
+    }},
+    {"PP_ThermalAutoThrottlingEnable", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "00000000", ValueType.DWord, false, "00000001") // default is 1
+    }},
+    {"Start", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\MMCSS", "00000002", ValueType.DWord, false, "00000002")
+    }},
+    {"VsyncIdleTimeout", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler", "00000000", ValueType.DWord, false, "00000001")
+    }},
+    {"MonitorLatencyTolerance", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power", "00000001", ValueType.DWord, false, "00000000")
+    }},
+    {"MonitorRefreshLatencyTolerance", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power", "00000001", ValueType.DWord, false, "00000000")
+    }},
+    {"DisablePagingExecutive", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "00000001", ValueType.DWord, false, "00000000")
+    }},
+    {"DisableHeapCoalesceOnFree", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "00000001", ValueType.DWord, false, "00000000")
+    }},
+    {"AllowMaxPerf", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\nvlddmkm", "00000001", ValueType.DWord, false, "00000000")
+    }},
+    {"Enabled", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity", "00000000", ValueType.DWord, false, "00000000")
+        
+    }},
+    {"DisableMshybridNvsrSwitch", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\nvlddmkm", "00000001", ValueType.DWord, false, "00000000")
+    }},
+    {"DisableDMACopy", new List<Tuple<string, string, ValueType, bool, string>>
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "00000001", ValueType.DWord, false, "00000000")
+    }},
+    {"DisableBlockWrite", new List<Tuple<string, string, ValueType, bool, string>>
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "00000000", ValueType.DWord, false, "00000001")
+    }},
+    {"StutterMode", new List<Tuple<string, string, ValueType, bool, string>>
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "00000000", ValueType.DWord, false, "00000001")
+    }},
+    {"PP_SclkDeepSleepDisable", new List<Tuple<string, string, ValueType, bool, string>>
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "00000001", ValueType.DWord, false, "00000000")
+    }},
+    {"DisableDrmdmaPowerGating", new List<Tuple<string, string, ValueType, bool, string>>
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "00000001", ValueType.DWord, false, "00000000")
+    }},
+    {"DisableFBCForFullScreenApp", new List<Tuple<string, string, ValueType, bool, string>>
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "0", ValueType.String, false, "1")
+    }},
+    {"DisableFBCSupport", new List<Tuple<string, string, ValueType, bool, string>>
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "00000000", ValueType.DWord, false, "00000001")
+    }},
+    {"EnableAspmL0s", new List<Tuple<string, string, ValueType, bool, string>>
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "00000000", ValueType.DWord, false, "00000001")
+    }},
+    {"EnableAspmL1", new List<Tuple<string, string, ValueType, bool, string>>
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "00000000", ValueType.DWord, false, "00000001")
+    }}
 };
 
 
@@ -75,6 +166,7 @@ namespace NZTS_App
             LoadGames();
             // Set default title if needed
             TitleTextBlock.Content = "Home";
+            
         }
 
 
@@ -86,6 +178,7 @@ namespace NZTS_App
 
             this.SizeChanged += MainWindow_SizeChanged; // Subscribe to size changed event
             this.Closing += Window_Closing;
+
             
             var welcomeControl = new WelcomeUserControl(this);
             welcomeControl.OptimizeAllClicked += WelcomeControl_OptimizeAllClicked;
@@ -232,36 +325,39 @@ namespace NZTS_App
         {
             if (registryTweaks.ContainsKey(key))
             {
-                var tweakData = registryTweaks[key];
-                string path = tweakData.Item1;
-                string value = tweakData.Item2;
-                ValueType valueType = tweakData.Item3;
+                var tweakDataList = registryTweaks[key];
 
-                try
+                foreach (var tweakData in tweakDataList)
                 {
-                    if (valueType == ValueType.DWord)
-                    {
-                        // Parse the value as a DWORD (integer)
-                        int intValue = int.Parse(value, System.Globalization.NumberStyles.HexNumber);
-                        
-                        Registry.SetValue(path, key, intValue, RegistryValueKind.DWord);
-                        App.changelogUserControl?.AddLog("Applied", $"Changed the {key} setting to {value}.");
-                    }
-                    else if (valueType == ValueType.String)
-                    {
-                        Registry.SetValue(path, key, value);
-                        
-                    }
-                    
+                    string path = tweakData.Item1;
+                    string value = tweakData.Item2;
+                    ValueType valueType = tweakData.Item3;
 
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error applying {key}: {ex.Message}");
-                    App.changelogUserControl?.AddLog("Failed", $"Unable to change the {key} setting.");
+                    try
+                    {
+                        if (valueType == ValueType.DWord)
+                        {
+                            // Parse the value as a DWORD (integer)
+                            int intValue = int.Parse(value, System.Globalization.NumberStyles.HexNumber);
+
+                            Registry.SetValue(path, key, intValue, RegistryValueKind.DWord);
+                            App.changelogUserControl?.AddLog("Applied", $"Changed the {key} setting to {value} at path {path}.");
+                        }
+                        else if (valueType == ValueType.String)
+                        {
+                            Registry.SetValue(path, key, value);
+                            App.changelogUserControl?.AddLog("Applied", $"Changed the {key} setting to '{value}' at path {path}.");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error applying {key} at path {path}: {ex.Message}");
+                        App.changelogUserControl?.AddLog("Failed", $"Unable to change the {key} setting at path {path}.");
+                    }
                 }
             }
         }
+
 
 
         // Reset all tweaks
@@ -275,76 +371,81 @@ namespace NZTS_App
 
 
 
-        
+
 
 
         public void RestoreDefault(string key)
         {
             if (registryTweaks.ContainsKey(key))
             {
-                var tweakData = registryTweaks[key];
-                string fullPath = tweakData.Item1;
-                string defaultValue = tweakData.Item5; // Default value
-                bool shouldDelete = tweakData.Item4; // Deletion flag
-                ValueType valueType = tweakData.Item3; // Value type
+                var tweakDataList = registryTweaks[key];
 
-                try
+                foreach (var tweakData in tweakDataList)
                 {
-                    if (shouldDelete)
-                    {
-                        // Use only the subkey part for deletion (without HKEY_LOCAL_MACHINE)
-                        string subKeyPath = fullPath.Replace(@"HKEY_LOCAL_MACHINE\", "");
+                    string fullPath = tweakData.Item1;
+                    string defaultValue = tweakData.Item5; // Default value
+                    bool shouldDelete = tweakData.Item4; // Deletion flag
+                    ValueType valueType = tweakData.Item3; // Value type
 
-                        using (var regKey = Registry.LocalMachine.OpenSubKey(subKeyPath, true))
+                    try
+                    {
+                        if (shouldDelete)
                         {
-                            if (regKey != null && regKey.GetValue(key) != null)
+                            // Use only the subkey part for deletion (without HKEY_LOCAL_MACHINE)
+                            string subKeyPath = fullPath.Replace(@"HKEY_LOCAL_MACHINE\", "");
+
+                            using (var regKey = Registry.LocalMachine.OpenSubKey(subKeyPath, true))
                             {
-                                regKey.DeleteValue(key, false); // Use false to suppress exception if it doesn't exist
-                                Console.WriteLine($"Successfully deleted {key} from {subKeyPath}.");
-                                App.changelogUserControl?.AddLog("Applied", $"Changed the {key} setting.");
+                                if (regKey != null && regKey.GetValue(key) != null)
+                                {
+                                    regKey.DeleteValue(key, false); // Use false to suppress exception if it doesn't exist
+                                    Console.WriteLine($"Successfully deleted {key} from {subKeyPath}.");
+                                    App.changelogUserControl?.AddLog("Applied", $"Deleted the {key} setting.");
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"Key {key} does not exist; nothing to delete.");
+                                    App.changelogUserControl?.AddLog("Failed", $"Key {key} does not exist; nothing to delete.");
+                                }
                             }
-                            else
+                        }
+                        else
+                        {
+                            // Restore default value (uses full path)
+                            if (valueType == ValueType.DWord)
                             {
-                                Console.WriteLine($"Key {key} does not exist; nothing to delete.");
-                                App.changelogUserControl?.AddLog("Failed", $"Unable to change the {key} setting.");
+                                uint uintDefaultValue = Convert.ToUInt32(defaultValue, 16); // Convert hex string to uint
+                                Registry.SetValue(fullPath, key, uintDefaultValue, RegistryValueKind.DWord);
+                                Console.WriteLine($"Successfully restored {key} to {defaultValue} at {fullPath}.");
+                                App.changelogUserControl?.AddLog("Restored", $"Changed the {key} setting back to {defaultValue}.");
+                            }
+                            else if (valueType == ValueType.String)
+                            {
+                                Registry.SetValue(fullPath, key, defaultValue, RegistryValueKind.String);
+                                Console.WriteLine($"Successfully restored {key} to {defaultValue} at {fullPath}.");
+                                App.changelogUserControl?.AddLog("Restored", $"Changed the {key} setting back to {defaultValue}.");
                             }
                         }
                     }
-                    else
+                    catch (UnauthorizedAccessException)
                     {
-                        // Restore default value (uses full path)
-                        if (valueType == ValueType.DWord)
-                        {
-                            uint uintDefaultValue = Convert.ToUInt32(defaultValue, 16); // Convert hex string to uint
-                            Registry.SetValue(fullPath, key, uintDefaultValue, RegistryValueKind.DWord);
-                            Console.WriteLine($"Successfully restored {key} to {defaultValue} at {fullPath}.");
-                            App.changelogUserControl?.AddLog("Restored", $"Changed the {key} setting back to {defaultValue} .");
-                        }
-                        else if (valueType == ValueType.String)
-                        {
-                            Registry.SetValue(fullPath, key, defaultValue, RegistryValueKind.String);
-                            Console.WriteLine($"Successfully restored {key} to {defaultValue} at {fullPath}.");
-                            App.changelogUserControl?.AddLog("Restored", $"Changed the {key} setting back to {defaultValue} .");
-                        }
+                        Console.WriteLine($"Access denied for {key} at {fullPath}. Check permissions.");
+                        App.changelogUserControl?.AddLog("Failed", $"Access denied for {key}.");
                     }
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    Console.WriteLine($"Access denied for {key} at {fullPath}. Check permissions.");
-                    App.changelogUserControl?.AddLog("Failed", $"Unable to change the {key} setting.");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error resetting {key}: {ex.Message}");
-                    App.changelogUserControl?.AddLog("Failed", $"Unable to change the {key} setting.");
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error resetting {key}: {ex.Message}");
+                        App.changelogUserControl?.AddLog("Failed", $"Error resetting {key}: {ex.Message}");
+                    }
                 }
             }
             else
             {
                 Console.WriteLine($"Error: {key} not found in registryTweaks.");
-                App.changelogUserControl?.AddLog("Failed", $"Unable to change the {key} setting.");
+                App.changelogUserControl?.AddLog("Failed", $"Unable to change the {key} setting; not found.");
             }
         }
+
 
 
 

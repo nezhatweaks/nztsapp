@@ -13,22 +13,22 @@
                     <ControlTemplate TargetType="ToggleButton">
                         <Grid>
                             <Border x:Name="Border" 
-                            Background="{TemplateBinding Background}" 
-                            BorderBrush="{TemplateBinding BorderBrush}" 
-                            BorderThickness="1" 
-                            CornerRadius="10" 
-                            Padding="5">
+                                    Background="{TemplateBinding Background}" 
+                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                    BorderThickness="0" 
+                                    CornerRadius="10" 
+                                    Padding="5">
                                 <Ellipse x:Name="Ellipse" 
-                                 Fill="White" 
-                                 Width="10" 
-                                 Height="10" 
-                                 HorizontalAlignment="Left" 
-                                 VerticalAlignment="Center" 
-                                 Margin="20,0,0,0" />
+                                         Fill="White" 
+                                         Width="10" 
+                                         Height="10" 
+                                         HorizontalAlignment="Left" 
+                                         VerticalAlignment="Center" 
+                                         Margin="20,0,0,0" />
                             </Border>
                             <ContentPresenter HorizontalAlignment="Center" 
-                                      VerticalAlignment="Center" 
-                                      Margin="35,0,0,0" />
+                                              VerticalAlignment="Center" 
+                                              Margin="35,0,0,0" />
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
@@ -42,29 +42,32 @@
             <Setter Property="Background" Value="#E0E0E0"/>
             <Setter Property="BorderBrush" Value="#BDBDBD"/>
         </Style>
+
+        <Style TargetType="Border" x:Key="DiscordBorderStyle">
+            <Setter Property="Background" Value="#36393F"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="BorderBrush" Value="#2F3136"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
     </UserControl.Resources>
 
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,0">
-        <!-- Border for Text -->
+        <!-- Header Border -->
         <Border Background="#36393F" Padding="10" CornerRadius="10" BorderBrush="Transparent" BorderThickness="2">
             <TextBlock Text="MMCSS Settings" FontSize="20" FontWeight="Bold" Foreground="White"/>
         </Border>
 
-        <!-- Border for Inputs and Buttons -->
-        <Border Background="#36393F" Padding="10" CornerRadius="10" BorderBrush="Transparent" BorderThickness="2" Margin="0,10,0,20" ToolTip="Optimizes the performance of multimedia applications by prioritizing their execution to ensure smooth playback and responsiveness.">
+        <!-- Main Settings Border -->
+        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="0,10,0,20">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Height="353">
 
                 <!-- MMCSS Enable/Disable -->
-                <Border Background="#36393F" Padding="10" CornerRadius="10" BorderBrush="Transparent" BorderThickness="1" Margin="0,10,0,0">
+                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="0,10,0,0">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <!-- Text beside the toggle switch -->
                         <TextBlock Text="MMCSS:" Foreground="White" VerticalAlignment="Center" Margin="0,0,10,0"/>
-
-                        <!-- MMCSS Toggle Switch -->
                         <ToggleButton x:Name="MMCSSToggle" Style="{StaticResource iOSToggleButton}" Click="MMCSSToggle_Click" />
                     </StackPanel>
                 </Border>
-
 
                 <!-- System Responsiveness -->
                 <StackPanel Orientation="Vertical" Margin="0,0,0,10">
@@ -75,11 +78,10 @@
                 </StackPanel>
 
                 <!-- Lazy Mode Switch -->
-                <Border Background="#36393F" Padding="10" CornerRadius="10" BorderBrush="Transparent" BorderThickness="2">
+                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="0,10,0,0">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Lazy Mode:" Foreground="White" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                        <ToggleButton x:Name="LazyModeToggle" Style="{StaticResource iOSToggleButton}" 
-                              Click="LazyModeToggle_Click" />
+                        <ToggleButton x:Name="LazyModeToggle" Style="{StaticResource iOSToggleButton}" Click="LazyModeToggle_Click" />
                     </StackPanel>
                 </Border>
 

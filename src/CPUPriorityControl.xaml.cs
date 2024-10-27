@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using static NZTS_App.CPUPriorityControl.Game;
 
 namespace NZTS_App
 {
@@ -12,18 +14,22 @@ namespace NZTS_App
     {
         private ObservableCollection<Game> games;
         private MainWindow mainWindow;
+        private List<Card> cards = new List<Card>(); // Initialize directly
+        private int currentIndex; // No need for initialization here
 
         public CPUPriorityControl(MainWindow window)
         {
             InitializeComponent();
+            InitializeCards();
             games = new ObservableCollection<Game>();
             GameListView.ItemsSource = games;
             mainWindow = window;
             mainWindow.TitleTextBlock.Content = "Process";
-
+            
             // Initialize priority and GPU scheduling options
             InitializePriorityOptions();
             InitializeGPUSchedulingOptions();
+            
         }
 
         private void InitializePriorityOptions()
@@ -40,6 +46,7 @@ namespace NZTS_App
             GPUSchedulingComboBox.Items.Add(new ComboBoxItem { Content = "Default" });
             GPUSchedulingComboBox.Items.Add(new ComboBoxItem { Content = "High Performance" });
         }
+
 
         public class Game : INotifyPropertyChanged
         {
@@ -82,6 +89,8 @@ namespace NZTS_App
                     }
                 }
             }
+            
+
 
 
 
@@ -115,6 +124,8 @@ namespace NZTS_App
                     }
                 }
             }
+
+
 
             private string GetPriorityString(int priorityValue)
             {
@@ -194,6 +205,25 @@ namespace NZTS_App
             PriorityComboBox.SelectedIndex = -1;
             GPUSchedulingComboBox.SelectedIndex = -1;
         }
+
+        private void SwitchToVerifiedTab(object sender, RoutedEventArgs e)
+        {
+            VerifiedContent.Visibility = Visibility.Visible;
+            ExperimentalContent.Visibility = Visibility.Collapsed;
+
+            VerifiedButton.Tag = "Active";
+            ExperimentalButton.Tag = "Inactive";
+        }
+
+        private void SwitchToExperimentalTab(object sender, RoutedEventArgs e)
+        {
+            VerifiedContent.Visibility = Visibility.Collapsed;
+            ExperimentalContent.Visibility = Visibility.Visible;
+
+            VerifiedButton.Tag = "Inactive";
+            ExperimentalButton.Tag = "Active";
+        }
+
 
 
 
@@ -282,6 +312,192 @@ namespace NZTS_App
                 _ => 0
             };
         }
+
+
+
+        public class Card
+        {
+            public string? Title { get; set; }
+            public string? ExecutableName { get; set; }
+            public string? Description { get; set; }
+            public string? ImageSource { get; set; } // Add this property
+        }
+
+
+        private void InitializeCards()
+        {
+            cards = new List<Card>
+    {
+        new Card { Title = "CS2", ExecutableName = "cs2.exe", Description = "Optimize settings for CS2", ImageSource = "pack://application:,,,/Images/cs2.png" },
+        new Card { Title = "Valorant", ExecutableName = "VALORANT-Win64-Shipping.exe", Description = "Optimize settings for Valorant", ImageSource = "pack://application:,,,/Images/valorant.png" },
+        new Card { Title = "R6S (Vulkan)", ExecutableName = "RainbowSix_BE.exe", Description = "Optimize settings for R6S", ImageSource = "pack://application:,,,/Images/r6s.png" },
+        new Card { Title = "FiveM", ExecutableName = "fivem.exe", Description = "Optimize settings for FiveM", ImageSource = "pack://application:,,,/Images/fivem.png" },
+        new Card { Title = "MW3", ExecutableName = "cod23-cod.exe", Description = "Optimize settings for MW3", ImageSource = "pack://application:,,,/Images/mw3.png" },
+        new Card { Title = "PUBG", ExecutableName = "TslGame.exe", Description = "Optimize settings for PUBG", ImageSource = "pack://application:,,,/Images/pubg.png" },
+        new Card { Title = "Minecraft (Java)", ExecutableName = "javaw.exe", Description = "Optimize settings for Minecraft", ImageSource = "pack://application:,,,/Images/minecraft.png" },
+        new Card { Title = "Roblox", ExecutableName = "RobloxPlayerBeta.exe", Description = "Optimize settings for Roblox", ImageSource = "pack://application:,,,/Images/roblox.png" },
+
+    };
+            currentIndex = 0;
+            UpdateCardDisplay();
+        }
+
+        private void UpdateCardDisplay()
+        {
+            if (cards.Count > 0)
+            {
+                var currentCard = cards[currentIndex];
+                CardTitleTextBlock.Text = currentCard.Title;
+                CardDescriptionTextBlock.Text = currentCard.Description;
+
+                // Set DataContext for binding
+                CardButton.DataContext = currentCard; // Bind CardButton to currentCard
+
+                // You no longer need to load the image directly here
+                if (string.IsNullOrEmpty(currentCard.ImageSource))
+                {
+                    
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+        private void CardButton_Click(object sender, RoutedEventArgs e)
+        {
+            var gameExecutable = cards[currentIndex].ExecutableName;
+
+            // Check if the executable name is null or empty before calling ApplySettings
+            if (!string.IsNullOrEmpty(gameExecutable))
+            {
+                ApplySettings(gameExecutable);
+                MessageBox.Show($"You have applied settings for {gameExecutable}.");
+            }
+            else
+            {
+                MessageBox.Show("Game executable is not available.");
+            }
+        }
+
+        private void ApplySettings(string gameExecutable)
+        {
+            try
+            {
+                // Path for PerfOptions
+                var perfKeyPath = $@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{gameExecutable}\PerfOptions";
+                using (var perfKey = Registry.LocalMachine.CreateSubKey(perfKeyPath))
+                {
+                    if (perfKey != null)
+                    {
+                        perfKey.SetValue("CpuPriorityClass", 3);
+                        perfKey.SetValue("DisableHeapCoalesceOnFree", 1);
+                        perfKey.SetValue("GPUScheduling", 1);
+                        perfKey.SetValue("UseLargePages", 1);
+                    }
+                }
+
+                // Path for Image File Execution Options
+                var mainKeyPath = $@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{gameExecutable}";
+                using (var mainKey = Registry.LocalMachine.CreateSubKey(mainKeyPath))
+                {
+                    if (mainKey != null)
+                    {
+                        mainKey.SetValue("DisableHeapCoalesceOnFree", 1);
+                        mainKey.SetValue("GPUScheduling", 1);
+                        mainKey.SetValue("UseLargePages", 1);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error applying settings: {ex.Message}");
+            }
+        }
+
+
+        private void RevertButton_Click(object sender, RoutedEventArgs e)
+        {
+            var gameExecutable = cards[currentIndex].ExecutableName;
+
+            if (!string.IsNullOrEmpty(gameExecutable))
+            {
+                RevertSettings(gameExecutable);
+                MessageBox.Show($"Settings for {gameExecutable} have been reverted.");
+                
+            }
+            else
+            {
+                MessageBox.Show("Game executable is not available.");
+            }
+        }
+
+        private void RevertSettings(string gameExecutable)
+        {
+            try
+            {
+                // Remove PerfOptions settings
+                using (var perfKey = Registry.LocalMachine.OpenSubKey($@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{gameExecutable}\PerfOptions", true))
+                {
+                    if (perfKey != null)
+                    {
+                        perfKey.DeleteValue("CpuPriorityClass", false);
+                        perfKey.DeleteValue("DisableHeapCoalesceOnFree", false);
+                        perfKey.DeleteValue("GPUScheduling", false);
+                        perfKey.DeleteValue("UseLargePages", false);
+                        
+                    }
+                }
+
+                // Remove main settings
+                using (var mainKey = Registry.LocalMachine.OpenSubKey($@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{gameExecutable}", true))
+                {
+                    if (mainKey != null)
+                    {
+                        mainKey.DeleteValue("DisableHeapCoalesceOnFree", false);
+                        mainKey.DeleteValue("GPUScheduling", false);
+                        mainKey.DeleteValue("UseLargePages", false);
+                        
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error reverting settings: {ex.Message}");
+            }
+        }
+
+
+
+
+
+
+
+
+        private void LeftButton_Click(object sender, RoutedEventArgs e)
+        {
+            currentIndex = (currentIndex - 1 + cards.Count) % cards.Count; // Move left
+            UpdateCardDisplay();
+
+        }
+
+        private void RightButton_Click(object sender, RoutedEventArgs e)
+        {
+            currentIndex = (currentIndex + 1) % cards.Count; // Move right
+            UpdateCardDisplay();
+        }
+
+        
+
+
+
+
+
+        
 
         private void AddActiveProcessButton_Click(object sender, RoutedEventArgs e)
         {

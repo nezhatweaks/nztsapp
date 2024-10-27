@@ -46,11 +46,7 @@ namespace NZTS_App
                             Icon = GetProcessIcon(process.MainModule.FileName)
                         };
 
-                        // Check for specific game names if needed
-                        if (processInfo.Name.Contains("cod", StringComparison.OrdinalIgnoreCase)) // Customize as needed
-                        {
-                            Console.WriteLine($"Found COD process: {processInfo.Name}");
-                        }
+                        
 
                         processList.Add(processInfo);
                     }
