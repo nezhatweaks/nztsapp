@@ -63,7 +63,16 @@ namespace NZTS_App.Views
                 if (key != null)
                 {
                     object? value = key.GetValue(valueName);
-                    toggleButton.IsChecked = GetToggleState(value);
+                    if (value == null)
+                    {
+                        // Create the registry value if it doesn't exist
+                        SetRegistryValue(key, valueName, false); // Default to false if not set
+                        toggleButton.IsChecked = false;
+                    }
+                    else
+                    {
+                        toggleButton.IsChecked = GetToggleState(value);
+                    }
                 }
                 else
                 {
@@ -174,7 +183,6 @@ namespace NZTS_App.Views
                 case "DisableDMACopy":
                 case "DisableDrmdmaPowerGating":
                 case "DisableFBCSupport":
-                
                     key.SetValue(valueName, enable ? 1 : 0, RegistryValueKind.DWord);
                     break;
 
