@@ -49,6 +49,9 @@
     <Compile Update="Storage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="SuperCacheUserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="WelcomeUserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -103,6 +106,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Storage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="SuperCacheUserControl.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="WelcomeUserControl.xaml">

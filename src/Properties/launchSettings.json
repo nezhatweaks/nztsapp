@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "NZTS App": {
+      "commandName": "Project",
+      "hotReloadEnabled": true
+    }
+  }
+}

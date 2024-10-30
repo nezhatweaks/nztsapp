@@ -89,78 +89,139 @@
     </UserControl.Resources>
 
     <StackPanel>
-        <ContentControl x:Name="ContentMemory" Background="#2C2F33" Width="400" Height="400" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0">
-            <StackPanel>
-                <StackPanel x:Name="VerifiedContent" Visibility="Visible">
-                <!-- DisablePagingExecutive -->
-                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,50,0">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="Disable Paging Executive" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disabling paging can improve performance."/>
-                        <ToggleButton x:Name="DisablePagingExecutiveToggle" Style="{StaticResource iOSToggleButton}" Click="DisablePagingExecutiveToggle_Click" Width="50"/>
-                        <TextBlock x:Name="PagingStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Border>
+        <ContentControl x:Name="ContentMemory" Background="#2C2F33" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <!-- Content area -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Button area -->
+                </Grid.RowDefinitions>
 
-                <!-- ContextSwitchDeadband -->
-                <Border Background="Green" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,50,0">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="Context Switch Deadband" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Set to 1 for better responsiveness or delete to reset."/>
-                        <ToggleButton x:Name="ContextSwitchDeadbandToggle" Style="{StaticResource iOSToggleButton}" Click="ContextSwitchDeadbandToggle_Click" Width="50"/>
-                        <TextBlock x:Name="ContextSwitchStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Border>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0" Height="300">
+                    <ScrollViewer.Resources>
+                        <Style TargetType="ScrollBar">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Width" Value="23"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ScrollBar" >
+                                        <Grid Background="Transparent" Margin="-78,20,23,0" >
+                                            <Track Name="PART_Track" IsDirectionReversed="true">
+                                                <Track.DecreaseRepeatButton>
+                                                    <RepeatButton Name="PART_DecreaseButton"
+       Content="▲"
+       Command="ScrollBar.LineUpCommand"
+       Background="Transparent"
+       Width="0" Height="0"/>
+                                                </Track.DecreaseRepeatButton>
+                                                <Track.Thumb>
+                                                    <Thumb Name="Thumb" 
+Background="Black" 
+Opacity="0.7" 
+Width="3" 
+MinHeight="200"/>
+                                                </Track.Thumb>
+                                                <Track.IncreaseRepeatButton>
+                                                    <RepeatButton Name="PART_IncreaseButton"
+       Content="▼"
+       Command="ScrollBar.LineDownCommand"
+       Background="Transparent"
+       Width="0" Height="0"/>
+                                                </Track.IncreaseRepeatButton>
+                                            </Track>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ScrollViewer.Resources>
+                    <StackPanel x:Name="VerifiedContent" Visibility="Visible">
+                        <!-- DisablePagingExecutive -->
+                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,50,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="Disable Paging Executive" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disabling paging can improve performance."/>
+                                <ToggleButton x:Name="DisablePagingExecutiveToggle" Style="{StaticResource iOSToggleButton}" Click="DisablePagingExecutiveToggle_Click" Width="50"/>
+                                <TextBlock x:Name="PagingStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
 
-                <!-- LatencySensitivityHint -->
-                <Border Background="Green" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,50,0">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="Latency Sensitivity Hint" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Set to 1 for improved latency or delete to reset."/>
-                        <ToggleButton x:Name="LatencySensitivityHintToggle" Style="{StaticResource iOSToggleButton}" Click="LatencySensitivityHintToggle_Click" Width="50"/>
-                        <TextBlock x:Name="LatencyStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Border>
+                        <!-- ContextSwitchDeadband -->
+                        <Border Background="Green" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,50,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="Context Switch Deadband" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Set to 1 for better responsiveness or delete to reset."/>
+                                <ToggleButton x:Name="ContextSwitchDeadbandToggle" Style="{StaticResource iOSToggleButton}" Click="ContextSwitchDeadbandToggle_Click" Width="50"/>
+                                <TextBlock x:Name="ContextSwitchStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
 
-                <!-- DisableHeapCoalesceOnFree -->
-                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,50,0">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="Disable Heap Coalesce on Free" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disabling heap coalesce can improve performance."/>
-                        <ToggleButton x:Name="DisableHeapCoalesceOnFreeToggle" Style="{StaticResource iOSToggleButton}" Click="DisableHeapCoalesceOnFreeToggle_Click" Width="50"/>
-                        <TextBlock x:Name="HeapCoalesceStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Border>
-                </StackPanel>
+                        <!-- LatencySensitivityHint -->
+                        <Border Background="Green" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,50,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="Latency Sensitivity Hint" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Set to 1 for improved latency or delete to reset."/>
+                                <ToggleButton x:Name="LatencySensitivityHintToggle" Style="{StaticResource iOSToggleButton}" Click="LatencySensitivityHintToggle_Click" Width="50"/>
+                                <TextBlock x:Name="LatencyStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
 
-                <StackPanel x:Name="ExperimentalContent" Visibility="Collapsed">
+                        <!-- DisableHeapCoalesceOnFree -->
+                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,50,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="Disable Heap Coalesce on Free" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disabling heap coalesce can improve performance."/>
+                                <ToggleButton x:Name="DisableHeapCoalesceOnFreeToggle" Style="{StaticResource iOSToggleButton}" Click="DisableHeapCoalesceOnFreeToggle_Click" Width="50"/>
+                                <TextBlock x:Name="HeapCoalesceStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- SecondLevelDataCache -->
+                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,50,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="Second Level Data Cache" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Adjusts the second level data cache settings."/>
+                                <ToggleButton x:Name="SecondLevelDataCacheToggle" Style="{StaticResource iOSToggleButton}" Click="SecondLevelDataCacheToggle_Click" Width="50"/>
+                                <TextBlock x:Name="SecondLevelDataCacheStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- ThirdLevelDataCache -->
+                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,50,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="Third Level Data Cache" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Adjusts the third level data cache settings."/>
+                                <ToggleButton x:Name="ThirdLevelDataCacheToggle" Style="{StaticResource iOSToggleButton}" Click="ThirdLevelDataCacheToggle_Click" Width="50"/>
+                                <TextBlock x:Name="ThirdLevelDataCacheStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <StackPanel x:Name="ExperimentalContent" Visibility="Collapsed" Grid.Row="0">
                     <!-- Experimental settings -->
                     <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="Large Page Minimum" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Set to 0xFFFFFFFF for maximum performance."/>
-                            <ToggleButton x:Name="LargePageMinimumToggle"
-                          Style="{StaticResource iOSToggleButton}" Width="50"/>
+                            <ToggleButton x:Name="LargePageMinimumToggle" Style="{StaticResource iOSToggleButton}" Width="50"/>
                         </StackPanel>
                     </Border>
-                   
                 </StackPanel>
-            </StackPanel>
+
+                <!-- Tab Buttons Positioned Below Content -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Margin="0,30,0,0">
+                    <Button x:Name="VerifiedButton" 
+                        Content="Verified" 
+                        Click="SwitchToVerifiedTab" 
+                        Style="{StaticResource TabButtonStyle}" 
+                        Tag="Active" 
+                        Width="100" Height="25"/>
+                    <Button x:Name="ExperimentalButton" 
+                        Content="Experimental" 
+                        Click="SwitchToExperimentalTab" 
+                        Style="{StaticResource TabButtonStyle}" 
+                        Tag="Inactive" 
+                        Width="100" Height="25"/>
+                </StackPanel>
+            </Grid>
         </ContentControl>
-
-        <!-- Tab Buttons Positioned Below Content -->
-        
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="-20,-80,0,100"  Visibility="Visible">
-            <Button x:Name="VerifiedButton" 
-            Content="Verified" 
-            Click="SwitchToVerifiedTab" 
-            Style="{StaticResource TabButtonStyle}" 
-            Tag="Active" 
-            Width="100" Height="25"/>
-            <Button x:Name="ExperimentalButton" 
-            Content="Experimental" 
-            Click="SwitchToExperimentalTab" 
-            Style="{StaticResource TabButtonStyle}" 
-            Tag="Inactive" 
-            Width="100" Height="25"/>
-        </StackPanel>
-
     </StackPanel>
+
 
 
 

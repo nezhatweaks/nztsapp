@@ -8,23 +8,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <AssemblyVersion>0.4.0.0</AssemblyVersion>
-    <FileVersion>0.4.0.0</FileVersion>
+    <AssemblyVersion>0.5.0.0</AssemblyVersion>
+    <FileVersion>0.5.0.0</FileVersion>
     <PackageIcon>nezhalogo12.2.jpg</PackageIcon>
     <ApplicationIcon>nezhalogo12.2.3.ico</ApplicationIcon>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <PublishSingleFile>true</PublishSingleFile>
-    <SelfContained>true</SelfContained>
-	<TrimUnusedDependencies>false</TrimUnusedDependencies>
-	<EnableTrimmed>false</EnableTrimmed>
-	<_SuppressWpfTrimError>true</_SuppressWpfTrimError>
-	<EnableComInterop>true</EnableComInterop>
-	<EnableComObjectFactory>false</EnableComObjectFactory>
-	<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    
 	  
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\apex.png" />
+    <None Remove="Images\bo6.png" />
     <None Remove="Images\cs2.png" />
     <None Remove="Images\fivem.png" />
     <None Remove="Images\minecraft.png" />
@@ -33,6 +28,17 @@
     <None Remove="Images\r6s.png" />
     <None Remove="Images\roblox.png" />
     <None Remove="Images\valorant.png" />
+    <None Remove="Images\welcome_img.jpg" />
+    <None Remove="Images\welcome_img.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\apex.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\bo6.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
@@ -135,6 +141,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\valorant.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\welcome_img.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

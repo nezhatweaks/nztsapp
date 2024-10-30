@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="NZTS_App.WelcomeUserControl"
+﻿<UserControl x:Class="NZTS_App.Views.WelcomeUserControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Name="WelcomeControl"
@@ -8,8 +8,8 @@
              FontSize="14">
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="400">
-            <TextBlock Text="Welcome to NZTS APP" FontSize="24" FontWeight="Bold" Margin="0,0,0,0"/>
-            <TextBlock Text="Select an optimization category from the sidebar." FontSize="16" Margin="0,10,0,10" Height="27"/>
+            <TextBlock Text="1-Click Optimization" FontSize="24" FontWeight="Bold" Margin="0,0,0,0"/>
+            <TextBlock Text="Click 'Optimize All' to apply the optimal settings." FontSize="16" Margin="0,10,0,10" Height="27"/>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
                 <!-- Green Optimize Button styled as a card -->
@@ -38,7 +38,7 @@ ToolTip="Click to optimize all settings for better performance!">
                                       Opacity="0.5" />
                                 </Border.Effect>
                                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <TextBlock Text="🛠️" FontSize="48" Margin="0,0,0,10" Width="68" />
+                                    <TextBlock Text="⚡️" FontSize="48" Margin="0,0,0,10" Width="68" />
                                     <TextBlock Text="{TemplateBinding Content}" 
                                FontSize="18" 
                                FontWeight="Bold" 
@@ -51,11 +51,11 @@ ToolTip="Click to optimize all settings for better performance!">
                             <!-- Hover and hold effect Triggers -->
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="Green"/>
-                                    <Setter TargetName="border" Property="BorderBrush" Value="Green"/>
+                                    <Setter TargetName="border" Property="Background" Value="LightBlue"/>
+                                    <Setter TargetName="border" Property="BorderBrush" Value="LightBlue"/>
                                     <Setter TargetName="border" Property="Effect">
                                         <Setter.Value>
-                                            <DropShadowEffect Color="Green" 
+                                            <DropShadowEffect Color="LightBlue" 
                                               ShadowDepth="5" 
                                               BlurRadius="20" 
                                               Opacity="1" />
@@ -64,7 +64,7 @@ ToolTip="Click to optimize all settings for better performance!">
                                 </Trigger>
 
                                 <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="DarkGreen"/>
+                                    <Setter TargetName="border" Property="Background" Value="Blue"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -98,7 +98,7 @@ ToolTip="Click to optimize all settings for better performance!">
                                 </Border.Effect>
                                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <!-- Top icon area -->
-                                    <TextBlock Text="♻️" FontSize="48" Margin="0,0,0,10" Width="70" />
+                                    <TextBlock Text="🔄" FontSize="48" Margin="0,0,0,10" Width="70" />
                                     <!-- Text label -->
                                     <TextBlock Text="{TemplateBinding Content}" 
                                    FontSize="18" 
@@ -112,8 +112,8 @@ ToolTip="Click to optimize all settings for better performance!">
                             <ControlTemplate.Triggers>
                                 <!-- Hover Effect -->
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="orange"/>
-                                    <Setter TargetName="border" Property="BorderBrush" Value="orange"/>
+                                    <Setter TargetName="border" Property="Background" Value="Red"/>
+                                    <Setter TargetName="border" Property="BorderBrush" Value="Red"/>
                                     <Setter Property="RenderTransform">
                                         <Setter.Value>
                                             <ScaleTransform ScaleX="1.00" ScaleY="1.00" />

@@ -11,11 +11,11 @@
         Closing="Window_Closing">
 
 
-    
+
 
     <Window.Resources>
-        
-        
+
+
         <!-- Rounded Button Style with Hover/Click Animations -->
         <Style x:Key="RoundedButtonStyle"  TargetType="Button">
             <Setter Property="Background" Value="#141414"/>
@@ -132,31 +132,114 @@
             <Setter Property="Height" Value="10"/>
         </Style>
 
-        <!-- Rainbow Gradient Animation -->
-        <ColorAnimation x:Key="RainbowColorAnimation" AutoReverse="True" RepeatBehavior="Forever" 
-                        Duration="0:0:2" From="Red" To="Purple" />
+        
 
-       
+        <local:BoolToColorConverter x:Key="BoolToColorConverter"/>
+        <Style x:Key="iOSToggleButton" TargetType="ToggleButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Grid>
+                            <Border x:Name="Border" 
+                        Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="0" 
+                        CornerRadius="10" 
+                        Padding="5">
+                                <Ellipse x:Name="Ellipse" 
+                             Fill="White" 
+                             Width="10" 
+                             Height="10" 
+                             HorizontalAlignment="Left" 
+                             VerticalAlignment="Center" 
+                             Margin="20,0,0,0" />
+                            </Border>
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                  VerticalAlignment="Center" 
+                                  Margin="35,0,0,0" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#4CAF50" />
+                                <Setter TargetName="Ellipse" Property="HorizontalAlignment" Value="Right" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Background" Value="#E0E0E0"/>
+            <Setter Property="BorderBrush" Value="#BDBDBD"/>
+        </Style>
+
+        <Style TargetType="Border" x:Key="DiscordBorderStyle">
+            <Setter Property="Background" Value="#2F3136"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="BorderBrush" Value="#2F3136"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style TargetType="Button" x:Key="TabButtonStyle">
+            <Setter Property="Background" Value="#2C2F33"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#2F3136"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                    BorderBrush="{TemplateBinding BorderBrush}" 
+                    BorderThickness="{TemplateBinding BorderThickness}" 
+                    CornerRadius="15">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                  VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#3D4147"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#5A5C60"/>
+                </Trigger>
+                <Trigger Property="Tag" Value="Active">
+                    <Setter Property="Background" Value="Red"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+
     </Window.Resources>
 
 
 
+
     <Grid>
-        
+
         <Grid MouseDown="MainGrid_MouseDown">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid VerticalAlignment="Top" Background="#23272A" Height="40" MouseDown="TitleBar_MouseDown">
-    <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto"/> <!-- Placeholder for potential future use -->
-        <ColumnDefinition Width="*"/>   <!-- Title space -->
-        <ColumnDefinition Width="Auto"/> <!-- Minimize button -->
-        <ColumnDefinition Width="Auto"/> <!-- Maximize button -->
-        <ColumnDefinition Width="Auto"/> <!-- Close button -->
-    </Grid.ColumnDefinitions>
-                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- Placeholder for potential future use -->
+                    <ColumnDefinition Width="*"/>
+                    <!-- Title space -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- Minimize button -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- Maximize button -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- Close button -->
+                </Grid.ColumnDefinitions>
+
                 <Button x:Name="TitleTextBlock"  
         VerticalAlignment="Center" 
         FontWeight="Bold" 
@@ -173,7 +256,10 @@
 
 
 
-                    <Button Content="_" Width="30" Height="30" Grid.Column="2" Background="Transparent" 
+
+                
+
+                <Button Content="_" Width="30" Height="30" Grid.Column="2" Background="Transparent" 
                     Foreground="White" BorderThickness="0" Click="Minimize_Click"/>
                 <Button Content="🗖" Width="30" Height="30" Grid.Column="3" Background="Transparent" 
                     Foreground="White" BorderThickness="0" Click="Maximize_Click"/>
@@ -226,7 +312,7 @@
 
                 <!-- Main layout with two columns: Sidebar and Main Content -->
                 <Grid>
-                    
+
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="200"/>
                         <!-- Sidebar Width -->
@@ -254,39 +340,43 @@
                         </Grid>
 
                         <!-- Buttons Section -->
-                        
-                        <Button Content="Home" Style="{StaticResource RoundedButtonStyle}" Click="Home_Click"/>
-                        <Button Content="Logs" Style="{StaticResource RoundedButtonStyle}" Click="Changelog_Click"/>
-                        <Button Content="Settings" Style="{StaticResource RoundedButtonStyle}" Click="Settings_Click"/>
+
+                        <Button Content="Home" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="GoToHomePageButton_Click"/>
+                        <Button Content="1-Click" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Home_Click"/>
+                        <Button Content="Logs" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Changelog_Click"/>
+                        <Button Content="Settings" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Settings_Click"/>
                         <Separator Margin="0,20,0,10"/>
-                        <Button Content="PowerPlan" Style="{StaticResource RoundedButtonStyle}" Click="PowerPlan_Click"/>
-                        <Button Content="WinPriority" Style="{StaticResource RoundedButtonStyle}" Click="Win32PrioritySeparation_Click"/>
-                        <Button Content="Gaming" Style="{StaticResource RoundedButtonStyle}" Click="Windows_Click"/>
-                        <Button Content="Telemetry" Style="{StaticResource RoundedButtonStyle}" Click="Debloat_Click"/>
-                        <Button Content="Security" Style="{StaticResource RoundedButtonStyle}" Click="Security_Click"/>
-                        <Button Content="Storage" Style="{StaticResource RoundedButtonStyle}" Click="Storage_Click"/>
-                        <Button Content="Memory" Style="{StaticResource RoundedButtonStyle}" Click="MemoryMan_Click"/>
-                        <Button Content="MMCSS" Style="{StaticResource RoundedButtonStyle}" Click="MMCSS_Click"/>
-                        <Button Content="NVIDIA" Style="{StaticResource RoundedButtonStyle}" Click="Nvidia_Click"/>
-                        <Button Content="Monitor/Graphics" Style="{StaticResource RoundedButtonStyle}" Click="Monitor_Click"/>
-                        <Button Content="Radeon" Style="{StaticResource RoundedButtonStyle}" Click="AMD_Click"/>
-                        <Button Content="Process" Style="{StaticResource RoundedButtonStyle}" Click="CPUPriority_Click"/>
-                        <Button Content="MSI Mode" Style="{StaticResource RoundedButtonStyle}" Click="MSI_Click"/>
+                        <Button Content="PowerPlan" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="PowerPlan_Click"/>
+                        <Button Content="WinPriority" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Win32PrioritySeparation_Click"/>
+                        <Button Content="Gaming" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Windows_Click"/>
+                        <Button Content="Telemetry" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Debloat_Click"/>
+                        <Button Content="Security" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Security_Click"/>
+                        <Button Content="Storage" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Storage_Click"/>
+                        <Button Content="File System" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Supercache_Click"/>
+                        <Button Content="Memory" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="MemoryMan_Click"/>
+                        <Button Content="MMCSS" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="MMCSS_Click"/>
+                        <Button Content="NVIDIA" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Nvidia_Click"/>
+                        <Button Content="Misc" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Monitor_Click"/>
+                        <Button Content="Radeon" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="AMD_Click"/>
+                        <Button Content="Process" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="CPUPriority_Click"/>
+                        <Button Content="MSI Mode" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="MSI_Click"/>
                     </StackPanel>
 
                     <Frame x:Name="MainUIApp" NavigationUIVisibility="Hidden"/>
                 </Grid>
             </ScrollViewer>
 
-            
-            <ContentControl x:Name="ContentArea" Background="#2C2F33" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,60,0,0" Height="354" Grid.RowSpan="2" Width="409">
+
+
+            <ContentControl x:Name="ContentArea" Background="#2C2F33" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,60,0,0" Height="354" Grid.RowSpan="2" Width="409" Visibility="Collapsed">
+
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="400">
                     <TextBlock Text="Welcome to NZTS APP" FontSize="24" FontWeight="Bold" Margin="0,0,0,0"/>
                     <TextBlock Text="Select an optimization category from the sidebar." FontSize="16" Margin="0,10,0,10" Height="27"/>
-                    
+
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
-                        
-    <!-- Green Optimize Button styled as a card -->
+
+                        <!-- Green Optimize Button styled as a card -->
                         <Button x:Name="OptimizeAllButton" Content="Optimize All" 
         Background="Black" 
         Foreground="White" 
@@ -312,13 +402,13 @@
                                       Opacity="0.5" />
                                         </Border.Effect>
                                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                            <TextBlock Text="🛠️" FontSize="48" Margin="0,0,0,10" Width="68" />
+                                            <TextBlock Text="⚙️" FontSize="48" Margin="0,0,0,10" Width="68" />
                                             <TextBlock Text="{TemplateBinding Content}" 
                                FontSize="18" 
                                FontWeight="Bold" 
                                Foreground="{TemplateBinding Foreground}" 
                                HorizontalAlignment="Center"/>
-                                            
+
                                         </StackPanel>
                                     </Border>
 
@@ -372,7 +462,7 @@ VerticalAlignment="Center">
                                         </Border.Effect>
                                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                                             <!-- Top icon area -->
-                                            <TextBlock Text="♻️" FontSize="48" Margin="0,0,0,10" Width="70" />
+                                            <TextBlock Text="🔄" FontSize="48" Margin="0,0,0,10" Width="70" />
                                             <!-- Text label -->
                                             <TextBlock Text="{TemplateBinding Content}" 
                        FontSize="18" 
@@ -411,14 +501,200 @@ VerticalAlignment="Center">
                     </StackPanel>
 
                 </StackPanel>
-                
-                
+
+
 
 
 
             </ContentControl>
 
-            
+            <StackPanel Margin="0,50,0,7" Grid.RowSpan="2">
+                <ContentControl x:Name="Main" Background="#2C2F33" Width="500" Height="390" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                    <ContentControl.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform AngleX="0.163"/>
+                            <RotateTransform/>
+                            <TranslateTransform X="0.997"/>
+                        </TransformGroup>
+                    </ContentControl.RenderTransform>
+                    <StackPanel>
+                        <StackPanel x:Name="VerifiedContent" Visibility="Visible" 
+                        MouseDown="VerifiedContent_MouseDown" 
+                        MouseMove="VerifiedContent_MouseMove" 
+                        MouseUp="VerifiedContent_MouseUp">
+                            <TextBlock Text="Welcome To NZTS APP" 
+                           FontWeight="Bold" 
+                           FontSize="30" 
+                           Foreground="Gray" 
+                           HorizontalAlignment="Center" 
+                           Margin="0,20,0,0"/>
+                            <TextBlock Text="Select an optimization category from the sidebar." 
+                           FontSize="12" 
+                           Foreground="LightGray" 
+                           HorizontalAlignment="Center" 
+                           Margin="0,5,0,0"/>
+                            <Image Source="Images/welcome_img.png" 
+                       Width="280" 
+                       Height="200" 
+                       HorizontalAlignment="Center" 
+                       Margin="0,10,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel x:Name="ExperimentalContent" Visibility="Collapsed" Margin="20"
+            MouseDown="ExperimentalContent_MouseDown" 
+            MouseMove="ExperimentalContent_MouseMove" 
+            MouseUp="ExperimentalContent_MouseUp">
+                            <TextBlock Text="What’s New in V0.5.0?" 
+               FontWeight="Bold" 
+               FontSize="24" 
+               Foreground="Gray" 
+               HorizontalAlignment="Center" 
+               Margin="0,20,0,0"/>
+
+                            <TextBlock Text="✨ Introducing File System!" 
+               FontSize="14" 
+               Foreground="LightGray" 
+               HorizontalAlignment="Center" 
+               Margin="0,5,0,0"/>
+
+                           
+
+                            <TextBlock Text="🔧 Fixed Radeon Registry Errors for smoother performance." 
+               FontSize="14" 
+               Foreground="LightGray" 
+               HorizontalAlignment="Center" 
+               Margin="0,5,0,0"/>
+
+                            <TextBlock Text="📄 1-Click Optimization has a brand new dedicated page!" 
+               FontSize="14" 
+               Foreground="LightGray" 
+               HorizontalAlignment="Center" 
+               Margin="0,5,0,0"/>
+
+                            <TextBlock Text="🎮 Remade game selection presets in the Process tab." 
+               FontSize="14" 
+               Foreground="LightGray" 
+               HorizontalAlignment="Center" 
+               Margin="0,5,0,0"/>
+
+                            <TextBlock Text="💻 Added Second and Third Level Data Cache" 
+FontSize="14" 
+Foreground="LightGray" 
+HorizontalAlignment="Center" 
+Margin="0,5,0,0"/>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
+                                <Button Content="#filesystem" 
+FontSize="14" 
+Foreground="LightGray" 
+Background="Transparent" 
+BorderBrush="LightGray" 
+Margin="5"
+Padding="5"
+Cursor="Hand"
+Click="Supercache_Click"/>
+
+                                <Button Content="#radeon" 
+FontSize="14" 
+Foreground="LightGray" 
+Background="Transparent" 
+BorderBrush="LightGray" 
+Margin="5"
+Padding="5"
+Cursor="Hand"
+Click="AMD_Click"/>
+
+                                <Button Content="#1clickoptimization" 
+FontSize="14" 
+Foreground="LightGray" 
+Background="Transparent" 
+BorderBrush="LightGray" 
+Margin="5"
+Padding="5"
+Cursor="Hand"
+Click="Home_Click"/>
+
+                                <Button Content="#process" 
+FontSize="14" 
+Foreground="LightGray" 
+Background="Transparent" 
+BorderBrush="LightGray" 
+Margin="5"
+Padding="5"
+Cursor="Hand"
+Click="CPUPriority_Click"/>
+                                <Button Content="#memory" 
+FontSize="14" 
+Foreground="LightGray" 
+Background="Transparent" 
+BorderBrush="LightGray" 
+Margin="5"
+Padding="5"
+Cursor="Hand"
+Click="MemoryMan_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                        
+                        
+
+
+
+                        <StackPanel x:Name="ResourcesContent" Visibility="Collapsed" Margin="20"
+                        MouseDown="ResourcesContent_MouseDown" 
+                        MouseMove="ResourcesContent_MouseMove" 
+                        MouseUp="ResourcesContent_MouseUp">
+                            <TextBlock Text="No resources available at this time." 
+                           FontWeight="Bold" 
+                           FontSize="14" 
+                           Foreground="Gray" 
+                           HorizontalAlignment="Center" 
+                           Margin="0,20,0,0"/>
+                            <TextBlock Text="Please check back later for updates." 
+                           FontSize="12" 
+                           Foreground="LightGray" 
+                           HorizontalAlignment="Center" 
+                           Margin="0,5,0,0"/>
+                            <Image Source="Images/welcome_img.png"   
+                       Width="200" 
+                       Height="100" 
+                       HorizontalAlignment="Center" 
+                       Margin="0,10,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </ContentControl>
+
+                <!-- Tab Buttons Positioned Below Content -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,-90,0,100" Visibility="Visible">
+                    <Button x:Name="VerifiedButton" 
+                Content="Welcome" 
+                Click="SwitchToVerifiedTab" 
+                Style="{StaticResource TabButtonStyle}" 
+                Tag="Active" 
+                Width="100" Height="25" 
+                IsEnabled="False"/>
+
+                    <Button x:Name="ExperimentalButton" 
+                Content="New" 
+                Click="SwitchToExperimentalTab" 
+                Style="{StaticResource TabButtonStyle}" 
+                Tag="Inactive" 
+                Width="100" Height="25" 
+                IsEnabled="False"/>
+
+                    <Button x:Name="ResourcesButton" 
+                Content="Resources" 
+                Click="SwitchToResourcesTab" 
+                Style="{StaticResource TabButtonStyle}" 
+                Tag="Inactive" 
+                Width="100" Height="25" 
+                IsEnabled="False"/>
+                </StackPanel>
+            </StackPanel>
+
+
+
+
 
 
 
@@ -437,5 +713,5 @@ VerticalAlignment="Center">
 
 
     </Grid>
-    
+
 </Window>

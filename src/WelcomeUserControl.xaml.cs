@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace NZTS_App
+namespace NZTS_App.Views
 {
     /// <summary>
     /// Interaction logic for WelcomeUserControl.xaml
@@ -19,7 +19,7 @@ namespace NZTS_App
         {
             InitializeComponent();
             mainWindow = window;
-            mainWindow.TitleTextBlock.Content = "Home";
+            mainWindow.TitleTextBlock.Content = "1-Click";
         }
 
         private void OptimizeAllButtonRight_Click(object sender, RoutedEventArgs args)

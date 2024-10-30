@@ -22,6 +22,7 @@ using System.Diagnostics;
 
 
 
+
 namespace NZTS_App
 {
 
@@ -157,13 +158,17 @@ namespace NZTS_App
 
 
 
-
+        private TranslateTransform translateTransform;
 
 
         public MainWindow()
         {
             InitializeComponent();
-            LoadGames();
+            translateTransform = new TranslateTransform();
+            VerifiedContent.RenderTransform = translateTransform;
+            ExperimentalContent.RenderTransform = translateTransform;
+            ResourcesContent.RenderTransform = translateTransform;
+
             // Set default title if needed
             TitleTextBlock.Content = "Home";
             
@@ -173,7 +178,11 @@ namespace NZTS_App
         public MainWindow(MainWindow window)
         {
             InitializeComponent();
-            LoadGames();
+            translateTransform = new TranslateTransform();
+            VerifiedContent.RenderTransform = translateTransform;
+            ExperimentalContent.RenderTransform = translateTransform;
+            ResourcesContent.RenderTransform = translateTransform;
+
             TitleTextBlock.Content = window.TitleTextBlock.Content; // Example usage
 
             this.SizeChanged += MainWindow_SizeChanged; // Subscribe to size changed event
@@ -707,7 +716,420 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
             }
         }
 
+        private bool isDragging = false;
+        private System.Windows.Point startPoint;
+        private double initialOffsetX;
+        private const double swipeThreshold = 50; // Threshold for switching content
         
+
+
+        private void VerifiedContent_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is FrameworkElement element)
+            {
+                isDragging = true;
+                startPoint = e.GetPosition(null);
+
+                // Get the initial offset
+                var transform = element.RenderTransform as TranslateTransform;
+                initialOffsetX = transform?.X ?? 0;
+
+                Mouse.Capture(element);
+                Cursor = Cursors.Hand; // Change cursor to hand
+            }
+        }
+
+        private void VerifiedContent_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isDragging)
+            {
+                System.Windows.Point currentPosition = e.GetPosition(null);
+                Vector offset = currentPosition - startPoint;
+
+                // Calculate the new offset
+                double newOffsetX = initialOffsetX + offset.X;
+
+                // Implement gradual resistance
+                double resistance = 0.5; // Adjust this value for more or less resistance
+                double maxDrag = VerifiedContent.ActualWidth * 0.5; // Allow some drag
+                double effectiveOffsetX;
+
+                if (newOffsetX < -maxDrag) // If dragging left beyond max
+                {
+                    effectiveOffsetX = -maxDrag + (newOffsetX + maxDrag) * resistance;
+                }
+                else if (newOffsetX > maxDrag) // If dragging right beyond max
+                {
+                    effectiveOffsetX = maxDrag + (newOffsetX - maxDrag) * resistance;
+                }
+                else
+                {
+                    effectiveOffsetX = newOffsetX; // Within bounds
+                }
+
+                // Apply the transform to move the content smoothly
+                var transform = new TranslateTransform(effectiveOffsetX, 0);
+                VerifiedContent.RenderTransform = transform;
+            }
+        }
+
+
+        private void VerifiedContent_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            isDragging = false;
+            Mouse.Capture(null); // Release mouse capture
+            Cursor = Cursors.Arrow; // Reset cursor to default
+
+            double offsetX = ((TranslateTransform)VerifiedContent.RenderTransform).X;
+
+            if (offsetX < -swipeThreshold) // Swipe left
+            {
+                AnimateTransition(VerifiedContent, ExperimentalContent, ExperimentalButton);
+            }
+            else
+            {
+                AnimateBackToOriginalPosition(VerifiedContent);
+            }
+        }
+
+        private void AnimateTransition(StackPanel currentContent, StackPanel nextContent, Button activeButton)
+        {
+            // Set the next content's initial state to collapsed
+            nextContent.Visibility = Visibility.Collapsed; // Hide it initially
+            nextContent.Opacity = 0; // Ensure it's transparent
+            nextContent.RenderTransform = new TranslateTransform(0, 0); // Start at original position
+
+            var storyboard = new Storyboard();
+
+            // Fade out the current content
+            var fadeOutAnimation = new DoubleAnimation
+            {
+                From = 1,
+                To = 0,
+                Duration = TimeSpan.FromMilliseconds(300),
+                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut }
+            };
+            Storyboard.SetTarget(fadeOutAnimation, currentContent);
+            Storyboard.SetTargetProperty(fadeOutAnimation, new PropertyPath("Opacity"));
+
+            // Translate the current content out to the left
+            var translateOutAnimation = new DoubleAnimation
+            {
+                From = 0,
+                To = -currentContent.ActualWidth,
+                Duration = TimeSpan.FromMilliseconds(300),
+                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut }
+            };
+            Storyboard.SetTarget(translateOutAnimation, currentContent.RenderTransform);
+            Storyboard.SetTargetProperty(translateOutAnimation, new PropertyPath("(TranslateTransform.X)"));
+
+            // Fade in the next content
+            var fadeInAnimation = new DoubleAnimation
+            {
+                From = 0,
+                To = 1,
+                Duration = TimeSpan.FromMilliseconds(300),
+                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut }
+            };
+            Storyboard.SetTarget(fadeInAnimation, nextContent);
+            Storyboard.SetTargetProperty(fadeInAnimation, new PropertyPath("Opacity"));
+
+            // Translate the next content in from the right
+            var translateInAnimation = new DoubleAnimation
+            {
+                From = nextContent.ActualWidth, // Start from off-screen to the right
+                To = 0,
+                Duration = TimeSpan.FromMilliseconds(300),
+                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut }
+            };
+            Storyboard.SetTarget(translateInAnimation, nextContent.RenderTransform);
+            Storyboard.SetTargetProperty(translateInAnimation, new PropertyPath("(TranslateTransform.X)"));
+
+            storyboard.Children.Add(fadeOutAnimation);
+            storyboard.Children.Add(translateOutAnimation);
+            storyboard.Children.Add(fadeInAnimation);
+            storyboard.Children.Add(translateInAnimation);
+
+            storyboard.Completed += (s, e) =>
+            {
+                // Collapse the current content after fading out
+                currentContent.Visibility = Visibility.Collapsed;
+                currentContent.RenderTransform = new TranslateTransform(0, 0); // Reset transform
+                ResetContentVisibility(currentContent); // Reset visibility of child elements
+
+                // Set next content to visible after animation completes
+                nextContent.Visibility = Visibility.Visible;
+                nextContent.Opacity = 1; // Ensure it's fully visible after animation
+
+                // Update the active button based on the next content
+                if (nextContent == VerifiedContent)
+                    SetActiveButton(VerifiedButton);
+                else if (nextContent == ExperimentalContent)
+                    SetActiveButton(ExperimentalButton);
+                else if (nextContent == ResourcesContent)
+                    SetActiveButton(ResourcesButton);
+            };
+
+            storyboard.Begin(); // Start the storyboard to run all animations
+        }
+
+
+
+
+
+
+
+        private void ExperimentalContent_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is FrameworkElement element)
+            {
+                isDragging = true;
+                startPoint = e.GetPosition(null);
+                var transform = element.RenderTransform as TranslateTransform;
+                initialOffsetX = transform?.X ?? 0;
+                Mouse.Capture(element);
+                Cursor = Cursors.Hand; // Change cursor to hand
+            }
+        }
+
+        private void ExperimentalContent_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isDragging)
+            {
+                System.Windows.Point currentPosition = e.GetPosition(null);
+                Vector offset = currentPosition - startPoint;
+
+                double newOffsetX = initialOffsetX + offset.X;
+
+                double resistance = 0.5; // Adjust for more or less resistance
+                double maxDrag = ExperimentalContent.ActualWidth * 0.5;
+                double effectiveOffsetX;
+
+                if (newOffsetX < -maxDrag)
+                {
+                    effectiveOffsetX = -maxDrag + (newOffsetX + maxDrag) * resistance;
+                }
+                else if (newOffsetX > maxDrag)
+                {
+                    effectiveOffsetX = maxDrag + (newOffsetX - maxDrag) * resistance;
+                }
+                else
+                {
+                    effectiveOffsetX = newOffsetX;
+                }
+
+                var transform = new TranslateTransform(effectiveOffsetX, 0);
+                ExperimentalContent.RenderTransform = transform;
+            }
+        }
+
+        private void ExperimentalContent_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            isDragging = false;
+            Mouse.Capture(null); // Release mouse capture
+            Cursor = Cursors.Arrow; // Reset cursor to default
+            double offsetX = ((TranslateTransform)ExperimentalContent.RenderTransform).X;
+
+            if (offsetX > swipeThreshold) // Swipe right to Verified
+            {
+                AnimateTransition(ExperimentalContent, VerifiedContent, VerifiedButton);
+            }
+            else if (offsetX < -swipeThreshold) // Swipe left to Resources
+            {
+                AnimateTransition(ExperimentalContent, ResourcesContent, ResourcesButton);
+            }
+            else
+            {
+                AnimateBackToOriginalPosition(ExperimentalContent);
+            }
+        }
+
+        private void ResourcesContent_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is FrameworkElement element)
+            {
+                isDragging = true;
+                startPoint = e.GetPosition(null);
+                var transform = element.RenderTransform as TranslateTransform;
+                initialOffsetX = transform?.X ?? 0;
+                Mouse.Capture(element);
+                Cursor = Cursors.Hand; // Change cursor to hand
+            }
+        }
+
+        private void ResourcesContent_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isDragging)
+            {
+                System.Windows.Point currentPosition = e.GetPosition(null);
+                Vector offset = currentPosition - startPoint;
+
+                double newOffsetX = initialOffsetX + offset.X;
+
+                double resistance = 0.5; // Adjust for more or less resistance
+                double maxDrag = ResourcesContent.ActualWidth * 0.5;
+                double effectiveOffsetX;
+
+                if (newOffsetX < -maxDrag)
+                {
+                    effectiveOffsetX = -maxDrag + (newOffsetX + maxDrag) * resistance;
+                }
+                else if (newOffsetX > maxDrag)
+                {
+                    effectiveOffsetX = maxDrag + (newOffsetX - maxDrag) * resistance;
+                }
+                else
+                {
+                    effectiveOffsetX = newOffsetX;
+                }
+
+                var transform = new TranslateTransform(effectiveOffsetX, 0);
+                ResourcesContent.RenderTransform = transform;
+            }
+        }
+
+        private void ResourcesContent_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            isDragging = false;
+            Mouse.Capture(null); // Release mouse capture
+            Cursor = Cursors.Arrow; // Reset cursor to default
+            double offsetX = ((TranslateTransform)ResourcesContent.RenderTransform).X;
+
+            if (offsetX > swipeThreshold) // Swipe right to Experimental
+            {
+                AnimateTransition(ResourcesContent, ExperimentalContent, ExperimentalButton); // Pass the active button
+            }
+            else
+            {
+                AnimateBackToOriginalPosition(ResourcesContent);
+            }
+        }
+
+        private void AnimateBackToOriginalPosition(StackPanel content)
+        {
+            var storyboard = new Storyboard();
+
+            // Create a translate animation back to the original position
+            DoubleAnimation translateAnimation = new DoubleAnimation
+            {
+                From = ((TranslateTransform)content.RenderTransform).X,
+                To = 0,
+                Duration = new Duration(TimeSpan.FromMilliseconds(300)),
+                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut }
+            };
+            Storyboard.SetTarget(translateAnimation, content);
+            Storyboard.SetTargetProperty(translateAnimation, new PropertyPath("RenderTransform.(TranslateTransform.X)"));
+
+            // Reset opacity to ensure it's visible during the animation
+            content.Opacity = 1;
+
+            storyboard.Children.Add(translateAnimation);
+            storyboard.Completed += (s, e) =>
+            {
+                // Ensure final state after the animation completes
+                content.RenderTransform = new TranslateTransform(0, 0); // Reset transform
+            };
+
+            storyboard.Begin();
+        }
+
+        private void ResetContentPosition(StackPanel content)
+        {
+            // Reset transform and ensure visibility
+            content.RenderTransform = new TranslateTransform(0, 0); // Reset position
+            content.Opacity = 1; // Ensure it's fully visible
+            content.Visibility = Visibility.Visible; // Ensure it's visible
+
+            ResetContentVisibility(content); // Reset child element visibility
+        }
+
+        private void ResetContentVisibility(StackPanel content)
+        {
+            // Reset Opacity and Visibility for all TextBlocks in the specified content
+            foreach (var child in content.Children)
+            {
+                if (child is TextBlock textBlock)
+                {
+                    textBlock.Opacity = 1; // Ensure text block is visible
+                    textBlock.Visibility = Visibility.Visible; // Ensure text block is visible
+                }
+            }
+        }
+
+        // Helper method to set the active button
+        private void SetActiveButton(Button activeButton)
+        {
+            VerifiedButton.Tag = activeButton == VerifiedButton ? "Active" : "Inactive";
+            ExperimentalButton.Tag = activeButton == ExperimentalButton ? "Active" : "Inactive";
+            ResourcesButton.Tag = activeButton == ResourcesButton ? "Active" : "Inactive";
+        }
+
+
+
+
+
+        private void ShowContent(StackPanel content, bool show)
+        {
+            content.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void SwitchContent(StackPanel newContent, Button activeButton)
+        {
+            if (VerifiedContent.Visibility == Visibility.Visible)
+                AnimateTransition(VerifiedContent, newContent, activeButton);
+            else if (ExperimentalContent.Visibility == Visibility.Visible)
+                AnimateTransition(ExperimentalContent, newContent, activeButton);
+            else if (ResourcesContent.Visibility == Visibility.Visible)
+                AnimateTransition(ResourcesContent, newContent, activeButton);
+        }
+
+        private void SwitchContentImmediately(StackPanel newContent)
+        {
+            // Reset all contents to be invisible
+            VerifiedContent.Visibility = Visibility.Collapsed;
+            ExperimentalContent.Visibility = Visibility.Collapsed;
+            ResourcesContent.Visibility = Visibility.Collapsed;
+
+            // Set the new content to visible
+            newContent.Visibility = Visibility.Visible;
+
+            // Reset transformations
+            ResetContentTransforms();
+        }
+
+        private void SwitchToVerifiedTab(object sender, RoutedEventArgs e)
+        {
+            SwitchContentImmediately(VerifiedContent);
+            SetActiveButton(VerifiedButton);
+        }
+
+        private void SwitchToExperimentalTab(object sender, RoutedEventArgs e)
+        {
+            SwitchContentImmediately(ExperimentalContent);
+            SetActiveButton(ExperimentalButton);
+        }
+
+        private void SwitchToResourcesTab(object sender, RoutedEventArgs e)
+        {
+            SwitchContentImmediately(ResourcesContent);
+            SetActiveButton(ResourcesButton);
+        }
+
+
+        private void ResetContentTransforms()
+        {
+            foreach (var content in new[] { VerifiedContent, ExperimentalContent, ResourcesContent })
+            {
+                content.RenderTransform = new TranslateTransform(0, 0); // Reset position
+                content.Opacity = 1; // Ensure it’s fully visible
+            }
+        }
+
+
+
+
+
+
 
 
 
@@ -741,6 +1163,12 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
         {
             var debloatControl = new Debloat(this);
             ShowContentWithAnimation(debloatControl); // Call the method to display with animation
+        }
+
+        private void Supercache_Click(object sender, RoutedEventArgs e)
+        {
+            var superCacheControl = new SuperCacheUserControl(this);
+            ShowContentWithAnimation(superCacheControl); // Call the method to display with animation
         }
 
 
@@ -1012,25 +1440,66 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
 
 
 
+        private Stack<UserControl> navigationStack = new Stack<UserControl>();
 
 
         private void ShowContentWithAnimation(UserControl newContent)
         {
-            // Directly switch the content without animation for testing
+            // Hide the main window content
+            Main.Visibility = Visibility.Collapsed;
+
+            // Optionally hide other content areas if needed
+            ContentOther.Visibility = Visibility.Collapsed;
+            ContentArea.Visibility = Visibility.Visible;
+
+            // Set the new content
             ContentArea.Content = newContent;
 
-            // Set opacity for the new content
-            newContent.Opacity = 1; // Ensure it's fully visible
+            // Make the new content fully visible immediately
+            newContent.Opacity = 1; // Set to fully visible
         }
 
-        private void LoadGames()
+
+
+        private void GoBack()
         {
-            var games = GetInstalledGames() ?? new List<string>(); // Ensure it's not null
-            foreach (var game in games)
+            if (navigationStack.Count > 0)
             {
-                AddGameIcon(game, "path/to/your/icon.png"); // Adjust this path or method as necessary
+                UserControl previousContent = navigationStack.Pop(); // Get the last user control
+                ShowContentWithAnimation(previousContent); // Show it with animation
             }
         }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            GoBack();
+        }
+
+
+        private void ShowHomePage()
+        {
+            // Hide any user controls
+            ContentArea.Content = null; // Clear previous content
+
+            // Show the main window content
+            Main.Visibility = Visibility.Visible;
+
+            TitleTextBlock.Content = "Home"; // Set the title when showing the home page
+        }
+
+
+        private void GoToHomePageButton_Click(object sender, RoutedEventArgs e)
+        {
+            ShowHomePage();
+        }
+
+
+
+
+
+
+
+
 
         private void AddGameIcon(string name, string iconPath)
         {
@@ -1068,6 +1537,59 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
             border.Child = stackPanel;
             
         }
+
+        private bool isResizing = false;
+        private System.Windows.Point lastMousePosition; // Specify the namespace
+        private const int ResizeBorderThickness = 5; // Define thickness for resizing
+
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed) // Use LeftButton instead of ButtonState
+            {
+                lastMousePosition = e.GetPosition(this);
+                isResizing = true;
+                Mouse.Capture((UIElement)sender); // Capture mouse to the border
+            }
+        }
+
+        private void Border_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isResizing)
+            {
+                System.Windows.Point currentMousePosition = e.GetPosition(this); // Specify the namespace
+                double widthChange = currentMousePosition.X - lastMousePosition.X;
+                double heightChange = currentMousePosition.Y - lastMousePosition.Y;
+
+                this.Width = Math.Max(300, this.Width + widthChange);  // Minimum width
+                this.Height = Math.Max(200, this.Height + heightChange); // Minimum height
+
+                lastMousePosition = currentMousePosition; // Update last mouse position
+            }
+            else
+            {
+                // Change cursor style based on position
+                System.Windows.Point mousePos = e.GetPosition(this); // Specify the namespace
+                if (mousePos.X < ResizeBorderThickness || mousePos.X > this.ActualWidth - ResizeBorderThickness ||
+                    mousePos.Y < ResizeBorderThickness || mousePos.Y > this.ActualHeight - ResizeBorderThickness)
+                {
+                    this.Cursor = Cursors.SizeAll; // Change cursor for resizing
+                }
+                else
+                {
+                    this.Cursor = Cursors.Arrow; // Default cursor
+                }
+            }
+        }
+
+        private void Border_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (isResizing)
+            {
+                isResizing = false;
+                Mouse.Capture(null); // Release mouse capture
+            }
+        }
+
 
         private BitmapSource GetIconBitmapSource(string path)
         {
@@ -1120,62 +1642,7 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
                 BitmapSizeOptions.FromEmptyOptions());
         }
 
-        private List<string> GetInstalledGames()
-        {
-            List<string> games = new List<string>();
-
-            // Check for 64-bit installed programs
-            string registryPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
-
-            using (var key = Registry.LocalMachine.OpenSubKey(registryPath))
-            {
-                if (key != null)
-                {
-                    foreach (var subKeyName in key.GetSubKeyNames())
-                    {
-                        using (var subKey = key.OpenSubKey(subKeyName))
-                        {
-                            if (subKey != null)
-                            {
-                                // Get the display name safely
-                                var displayName = subKey.GetValue("DisplayName") as string;
-                                if (!string.IsNullOrEmpty(displayName))
-                                {
-                                    games.Add(displayName);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            // Check for 32-bit installed programs on a 64-bit OS
-            registryPath = @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall";
-
-            using (var key = Registry.LocalMachine.OpenSubKey(registryPath))
-            {
-                if (key != null)
-                {
-                    foreach (var subKeyName in key.GetSubKeyNames())
-                    {
-                        using (var subKey = key.OpenSubKey(subKeyName))
-                        {
-                            if (subKey != null)
-                            {
-                                // Get the display name safely
-                                var displayName = subKey.GetValue("DisplayName") as string;
-                                if (!string.IsNullOrEmpty(displayName))
-                                {
-                                    games.Add(displayName);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            return games;
-        }
+        
 
 
 

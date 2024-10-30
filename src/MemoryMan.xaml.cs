@@ -40,8 +40,10 @@ namespace NZTS_App.Views
             DisablePagingExecutiveToggle.Click += DisablePagingExecutiveToggle_Click;
             ContextSwitchDeadbandToggle.Click += ContextSwitchDeadbandToggle_Click;
             LatencySensitivityHintToggle.Click += LatencySensitivityHintToggle_Click;
-            DisableHeapCoalesceOnFreeToggle.Click += DisableHeapCoalesceOnFreeToggle_Click; // New toggle click event
-            LargePageMinimumToggle.Click += LargePageMinimumToggle_Click; // New toggle click event for LargePageMinimum
+            DisableHeapCoalesceOnFreeToggle.Click += DisableHeapCoalesceOnFreeToggle_Click; 
+            LargePageMinimumToggle.Click += LargePageMinimumToggle_Click; 
+            SecondLevelDataCacheToggle.Click += SecondLevelDataCacheToggle_Click;
+            ThirdLevelDataCacheToggle.Click += ThirdLevelDataCacheToggle_Click;
         }
 
         private void LoadCurrentSettings()
@@ -71,6 +73,13 @@ namespace NZTS_App.Views
                         // LargePageMinimum
                         var largePageMinimumValue = key.GetValue("LargePageMinimum");
                         LargePageMinimumToggle.IsChecked = (largePageMinimumValue is int largePageMinInt && largePageMinInt == unchecked((int)0xFFFFFFFF));
+
+                        var secondLevelCacheValue = key.GetValue("SecondLevelDataCache");
+                        SecondLevelDataCacheToggle.IsChecked = secondLevelCacheValue != null;
+
+                        // ThirdLevelDataCache
+                        var thirdLevelCacheValue = key.GetValue("ThirdLevelDataCache");
+                        ThirdLevelDataCacheToggle.IsChecked = thirdLevelCacheValue != null;
                     }
                     else
                     {
@@ -106,6 +115,30 @@ namespace NZTS_App.Views
             // Update the active tag
             ExperimentalButton.Tag = "Active";
             VerifiedButton.Tag = "Inactive";
+        }
+
+        private void SecondLevelDataCacheToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (SecondLevelDataCacheToggle.IsChecked == true)
+            {
+                UpdateRegistryValue("SecondLevelDataCache", 0x00FA332A); // Set to default value
+            }
+            else
+            {
+                DeleteRegistryValue("SecondLevelDataCache");
+            }
+        }
+
+        private void ThirdLevelDataCacheToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (ThirdLevelDataCacheToggle.IsChecked == true)
+            {
+                UpdateRegistryValue("ThirdLevelDataCache", 0x00FA332A); // Set to default value
+            }
+            else
+            {
+                DeleteRegistryValue("ThirdLevelDataCache");
+            }
         }
 
         private void DisablePagingExecutiveToggle_Click(object sender, RoutedEventArgs e)

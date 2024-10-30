@@ -74,10 +74,6 @@ namespace NZTS_App.Views
                         toggleButton.IsChecked = GetToggleState(value);
                     }
                 }
-                else
-                {
-                    ShowError($"Failed to access {valueName} registry key.");
-                }
             }
             catch (UnauthorizedAccessException)
             {
@@ -127,7 +123,6 @@ namespace NZTS_App.Views
             };
         }
 
-
         private RegistryKey? OpenRegistryKey(string path, bool writable = false)
         {
             // Attempt to open the specified registry key
@@ -137,7 +132,6 @@ namespace NZTS_App.Views
             if (key == null && writable)
             {
                 // Create the key if it doesn't exist
-                string basePath = path.Substring(0, path.LastIndexOf('\\'));
                 key = Registry.LocalMachine.CreateSubKey(path);
             }
 
@@ -154,16 +148,18 @@ namespace NZTS_App.Views
                 // Open the registry key, creating it if it doesn't exist
                 key = OpenRegistryKey(path, writable: true);
 
+                // Ensure UMD key is created if this is a UMD setting
+                if (path == UMDRegistryKeyPath)
+                {
+                    OpenRegistryKey(UMDRegistryKeyPath, writable: true);
+                }
+
                 if (key != null)
                 {
                     // Set the value, creating it if necessary
                     SetRegistryValue(key, valueName, enable);
                     mainWindow?.MarkSettingsApplied();
                     App.changelogUserControl?.AddLog("Applied", $"{valueName} has been set to {(enable ? "Enabled" : "Disabled")}");
-                }
-                else
-                {
-                    ShowError($"Failed to access the registry key for '{valueName}'.");
                 }
             }
             catch (UnauthorizedAccessException)

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using static NZTS_App.CPUPriorityControl;
 using static NZTS_App.CPUPriorityControl.Game;
 
 namespace NZTS_App
@@ -14,22 +15,22 @@ namespace NZTS_App
     {
         private ObservableCollection<Game> games;
         private MainWindow mainWindow;
-        private List<Card> cards = new List<Card>(); // Initialize directly
-        private int currentIndex; // No need for initialization here
+        private ObservableCollection<Card> cards; // Define the collection
+        
 
         public CPUPriorityControl(MainWindow window)
         {
             InitializeComponent();
-            InitializeCards();
+            cards = new ObservableCollection<Card>(); // Initialize the collection here
+            InitializeCards(); // Populate the cards collection
+            DataContext = this; // Set DataContext to the current instance
             games = new ObservableCollection<Game>();
             GameListView.ItemsSource = games;
             mainWindow = window;
             mainWindow.TitleTextBlock.Content = "Process";
-            
-            // Initialize priority and GPU scheduling options
-            InitializePriorityOptions();
-            InitializeGPUSchedulingOptions();
-            
+            InitializePriorityOptions(); // Add this line to initialize priority options
+            InitializeGPUSchedulingOptions(); // Add this line to initialize GPU scheduling options
+
         }
 
         private void InitializePriorityOptions()
@@ -147,11 +148,12 @@ namespace NZTS_App
                 {
                     if (gameKey != null)
                     {
-                        int gpuValue = GPUScheduling == "High Performance" ? 1 : 0;
+                        int gpuValue = GPUScheduling == "High Performance" ? 1 : 0; // Update based on the property value
                         gameKey.SetValue("GPUScheduling", gpuValue, RegistryValueKind.DWord);
                     }
                 }
             }
+
 
             public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -248,7 +250,8 @@ namespace NZTS_App
 
         private void UpdateComboBoxForSelectedGame(Game selectedGame)
         {
-            if (isUpdatingComboBox) return;
+            if (isUpdatingComboBox || PriorityComboBox.Items.Count == 0) return;
+
             isUpdatingComboBox = true;
 
             var matchingItem = PriorityComboBox.Items
@@ -262,12 +265,15 @@ namespace NZTS_App
 
         private void UpdateGPUSchedulingComboBoxForSelectedGame(Game selectedGame)
         {
+            if (GPUSchedulingComboBox.Items.Count == 0) return;
+
             var matchingItem = GPUSchedulingComboBox.Items
                 .Cast<ComboBoxItem>()
                 .FirstOrDefault(item => item.Content?.ToString() == selectedGame.GPUScheduling);
 
             GPUSchedulingComboBox.SelectedItem = matchingItem ?? GPUSchedulingComboBox.Items[0]; // Default to "Default"
         }
+
 
         private void PriorityComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -326,40 +332,29 @@ namespace NZTS_App
 
         private void InitializeCards()
         {
-            cards = new List<Card>
+            cards = new ObservableCollection<Card>
     {
-        new Card { Title = "CS2", ExecutableName = "cs2.exe", Description = "Optimize settings for CS2", ImageSource = "pack://application:,,,/Images/cs2.png" },
-        new Card { Title = "Valorant", ExecutableName = "VALORANT-Win64-Shipping.exe", Description = "Optimize settings for Valorant", ImageSource = "pack://application:,,,/Images/valorant.png" },
-        new Card { Title = "R6S (Vulkan)", ExecutableName = "RainbowSix_BE.exe", Description = "Optimize settings for R6S", ImageSource = "pack://application:,,,/Images/r6s.png" },
-        new Card { Title = "FiveM", ExecutableName = "fivem.exe", Description = "Optimize settings for FiveM", ImageSource = "pack://application:,,,/Images/fivem.png" },
-        new Card { Title = "MW3", ExecutableName = "cod23-cod.exe", Description = "Optimize settings for MW3", ImageSource = "pack://application:,,,/Images/mw3.png" },
-        new Card { Title = "PUBG", ExecutableName = "TslGame.exe", Description = "Optimize settings for PUBG", ImageSource = "pack://application:,,,/Images/pubg.png" },
-        new Card { Title = "Minecraft (Java)", ExecutableName = "javaw.exe", Description = "Optimize settings for Minecraft", ImageSource = "pack://application:,,,/Images/minecraft.png" },
-        new Card { Title = "Roblox", ExecutableName = "RobloxPlayerBeta.exe", Description = "Optimize settings for Roblox", ImageSource = "pack://application:,,,/Images/roblox.png" },
+        new Card { Title = "CS2", ExecutableName = "cs2.exe", Description = "", ImageSource = "pack://application:,,,/Images/cs2.png" },
+        new Card { Title = "Valorant", ExecutableName = "VALORANT-Win64-Shipping.exe", Description = "", ImageSource = "pack://application:,,,/Images/valorant.png" },
+        new Card { Title = "R6S (Vulkan)", ExecutableName = "RainbowSix_BE.exe", Description = "", ImageSource = "pack://application:,,,/Images/r6s.png" },
+        new Card { Title = "FiveM", ExecutableName = "fivem.exe", Description = "", ImageSource = "pack://application:,,,/Images/fivem.png" },
+        new Card { Title = "MW3", ExecutableName = "cod23-cod.exe", Description = "", ImageSource = "pack://application:,,,/Images/mw3.png" },
+        new Card { Title = "BO6", ExecutableName = "mp24-cod.exe", Description = "", ImageSource = "pack://application:,,,/Images/bo6.png" },
+        new Card { Title = "Apex Legends", ExecutableName = "r5apex.exe", Description = "", ImageSource = "pack://application:,,,/Images/apex.png" },
+        new Card { Title = "PUBG", ExecutableName = "TslGame.exe", Description = "", ImageSource = "pack://application:,,,/Images/pubg.png" },
+        new Card { Title = "Minecraft (Java)", ExecutableName = "javaw.exe", Description = "", ImageSource = "pack://application:,,,/Images/minecraft.png" },
+        new Card { Title = "Roblox", ExecutableName = "RobloxPlayerBeta.exe", Description = "", ImageSource = "pack://application:,,,/Images/roblox.png" },
+        
+        
 
-    };
-            currentIndex = 0;
-            UpdateCardDisplay();
+            };
+
+            
         }
+        public ObservableCollection<Card> Cards => cards; // Property to access the cards collection
 
-        private void UpdateCardDisplay()
-        {
-            if (cards.Count > 0)
-            {
-                var currentCard = cards[currentIndex];
-                CardTitleTextBlock.Text = currentCard.Title;
-                CardDescriptionTextBlock.Text = currentCard.Description;
 
-                // Set DataContext for binding
-                CardButton.DataContext = currentCard; // Bind CardButton to currentCard
 
-                // You no longer need to load the image directly here
-                if (string.IsNullOrEmpty(currentCard.ImageSource))
-                {
-                    
-                }
-            }
-        }
 
 
 
@@ -370,17 +365,19 @@ namespace NZTS_App
 
         private void CardButton_Click(object sender, RoutedEventArgs e)
         {
-            var gameExecutable = cards[currentIndex].ExecutableName;
+            if (sender is Button clickedButton && clickedButton.DataContext is Card currentCard)
+            {
+                var gameExecutable = currentCard.ExecutableName;
 
-            // Check if the executable name is null or empty before calling ApplySettings
-            if (!string.IsNullOrEmpty(gameExecutable))
-            {
-                ApplySettings(gameExecutable);
-                MessageBox.Show($"You have applied settings for {gameExecutable}.");
-            }
-            else
-            {
-                MessageBox.Show("Game executable is not available.");
+                if (!string.IsNullOrEmpty(gameExecutable))
+                {
+                    ApplySettings(gameExecutable);
+                    MessageBox.Show($"You have applied settings for {gameExecutable}.");
+                }
+                else
+                {
+                    MessageBox.Show("Game executable is not available.");
+                }
             }
         }
 
@@ -422,17 +419,19 @@ namespace NZTS_App
 
         private void RevertButton_Click(object sender, RoutedEventArgs e)
         {
-            var gameExecutable = cards[currentIndex].ExecutableName;
+            if (sender is Button clickedButton && clickedButton.DataContext is Card currentCard)
+            {
+                var gameExecutable = currentCard.ExecutableName;
 
-            if (!string.IsNullOrEmpty(gameExecutable))
-            {
-                RevertSettings(gameExecutable);
-                MessageBox.Show($"Settings for {gameExecutable} have been reverted.");
-                
-            }
-            else
-            {
-                MessageBox.Show("Game executable is not available.");
+                if (!string.IsNullOrEmpty(gameExecutable))
+                {
+                    RevertSettings(gameExecutable);
+                    MessageBox.Show($"Settings for {gameExecutable} have been reverted.");
+                }
+                else
+                {
+                    MessageBox.Show("Game executable is not available.");
+                }
             }
         }
 
@@ -478,18 +477,7 @@ namespace NZTS_App
 
 
 
-        private void LeftButton_Click(object sender, RoutedEventArgs e)
-        {
-            currentIndex = (currentIndex - 1 + cards.Count) % cards.Count; // Move left
-            UpdateCardDisplay();
-
-        }
-
-        private void RightButton_Click(object sender, RoutedEventArgs e)
-        {
-            currentIndex = (currentIndex + 1) % cards.Count; // Move right
-            UpdateCardDisplay();
-        }
+        
 
         
 
@@ -764,15 +752,27 @@ namespace NZTS_App
 
 
 
+
+
+
         private void ResetPriorityButton_Click(object sender, RoutedEventArgs e)
         {
             if (GameListView.SelectedItem is Game selectedGame)
             {
                 selectedGame.Priority = "Normal";
+                selectedGame.GPUScheduling = "Default";
+                UseLargePagesToggle.IsChecked = false;
+                DisableHeapCoalesceToggle.IsChecked = false;
                 GameListView.Items.Refresh();
 
+                selectedGame.GPUScheduling = "Default"; // Set to "Default"
+
+                // Explicitly set ComboBox selection to match the new GPUScheduling
+                GPUSchedulingComboBox.SelectedItem = "Default";
                 // Update ComboBox selection to reflect the reset
                 UpdateComboBoxForSelectedGame(selectedGame);
+
+                
 
             }
         }
