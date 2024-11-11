@@ -19,7 +19,7 @@
                                          Height="10" 
                                          HorizontalAlignment="Left" 
                                          VerticalAlignment="Center" 
-                                         Margin="20,0,0,0" />
+                                         Margin="0,0,0,0" />
                             </Border>
                             <ContentPresenter HorizontalAlignment="Center" 
                                               VerticalAlignment="Center" 
@@ -89,7 +89,7 @@ Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
             <StackPanel>
                 <!-- Existing Toggles -->
                 <TextBlock Text="System Telemetry" Foreground="White" FontSize="20" FontWeight="Bold" Margin="50,10,0,0" />
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Collects usage data for SmartScreen. Reduces feedback for improving Windows features.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Collects usage data for SmartScreen. Reduces feedback for improving Windows features.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub wsqmcons.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="WsqmconsToggle"
@@ -97,7 +97,7 @@ Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
                                       Click="WsqmconsToggle_Click" Width="50"/>
                     </StackPanel>
                 </Border>
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Gathers compatibility telemetry. Affects Microsoft's understanding of device compatibility.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Gathers compatibility telemetry. Affects Microsoft's understanding of device compatibility.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub compattelrunner.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="CompattelToggle"
@@ -105,7 +105,7 @@ Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
                                       Click="CompattelToggle_Click" Width="50"/>
                     </StackPanel>
                 </Border>
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Manages admin privileges for error reporting. Impairs error reporting and diagnostics.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Manages admin privileges for error reporting. Impairs error reporting and diagnostics.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub elevation_service.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="ElevationServiceToggle"
@@ -113,7 +113,7 @@ Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
                                       Click="ElevationServiceToggle_Click" Width="50"/>
                     </StackPanel>
                 </Border>
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Gathers device configuration data. May affect future update optimizations.">
+                <Border Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Gathers device configuration data. May affect future update optimizations.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub devicecensus.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="DeviceCensusToggle"
@@ -122,7 +122,7 @@ Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
                     </StackPanel>
                 </Border>
 
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Sends update notifications. No notifications for system updates.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Sends update notifications. No notifications for system updates.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub MusNotification.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="MusNotificationToggle"
@@ -130,7 +130,7 @@ Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
                       Click="MusNotificationToggle_Click" Width="50"/>
                     </StackPanel>
                 </Border>
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Hosts UWP apps. Prevents UWP apps from running correctly.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Hosts UWP apps. Prevents UWP apps from running correctly.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub wwahost.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="WwahostToggle"
@@ -140,7 +140,7 @@ Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
                 </Border>
                 
                 <TextBlock Text="XBOX Service(s)" Foreground="White" FontSize="20" FontWeight="Bold" Margin="50,10,0,0" />
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Manages game activity status. Disables Xbox Game Bar features.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Manages game activity status. Disables Xbox Game Bar features.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub gamebarpresencewriter.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="GameBarPresenceToggle"
@@ -152,7 +152,7 @@ Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
 
                 <!-- New Toggles -->
                 <TextBlock Text="Security" Foreground="White" FontSize="20" FontWeight="Bold" Margin="50,10,0,0" />
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Monitors system health and provides security notifications.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Monitors system health and provides security notifications.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub SecurityHealth.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="SecurityHealthToggle"
@@ -160,7 +160,7 @@ Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
                                       Click="SecurityHealthToggle_Click" Width="50"/>
                     </StackPanel>
                 </Border>
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Network inspection service for real-time protection.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Network inspection service for real-time protection.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub NisSrv.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="NisSrvToggle"
@@ -169,7 +169,7 @@ Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
                     </StackPanel>
                 </Border>
 
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Windows Security Center service. Manages system security notifications.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Windows Security Center service. Manages system security notifications.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub WscSvc.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="WscSvcToggle"
@@ -177,7 +177,7 @@ Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
                                       Click="WscSvcToggle_Click" Width="50"/>
                     </StackPanel>
                 </Border>
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Windows Defender service that provides real-time protection.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Windows Defender service that provides real-time protection.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub MsAntiMalwareService.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="MsAntiMalwareServiceToggle"
@@ -186,7 +186,7 @@ Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
                     </StackPanel>
                 </Border>
 
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Cloud storage service for file synchronization.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Cloud storage service for file synchronization.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub CscService.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="CscServiceToggle"
@@ -195,7 +195,7 @@ Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
                     </StackPanel>
                 </Border>
 
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Security health system tray.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Security health system tray.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub SecurityHealthSystray.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="SecurityHealthSystrayToggle"
@@ -206,7 +206,7 @@ Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
 
                 <TextBlock Text="UWP/Updates" Foreground="White" FontSize="20" FontWeight="Bold" Margin="50,10,0,0" />
 
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Task Host. Manages system tasks.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Task Host. Manages system tasks.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub taskhostw.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="TaskHostwToggle"
@@ -215,7 +215,7 @@ Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
                     </StackPanel>
                 </Border>
 
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Windows Update Orchestrator. Manages update processes.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Windows Update Orchestrator. Manages update processes.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub MoUsoCoreWorker.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="MoUsoCoreWorkerToggle"
@@ -224,7 +224,7 @@ Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
                     </StackPanel>
                 </Border>
 
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Widgets service. Provides widget support.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Widgets service. Provides widget support.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub Widgets.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="WidgetsToggle"
@@ -233,7 +233,7 @@ Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
                     </StackPanel>
                 </Border>
 
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Widget service. Manages widgets.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Widget service. Manages widgets.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub WidgetService.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="WidgetServiceToggle"
@@ -242,7 +242,7 @@ Click="WidgetServiceToggle_Click" Width="50"/>
                     </StackPanel>
                 </Border>
 
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Standard collector service for diagnostics.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Standard collector service for diagnostics.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub StandardCollector.Service.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="StandardCollectorServiceToggle"
@@ -251,7 +251,7 @@ Click="WidgetServiceToggle_Click" Width="50"/>
                     </StackPanel>
                 </Border>
 
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Aggregator host for telemetry.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Aggregator host for telemetry.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub AggregatorHost.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="AggregatorHostToggle"
@@ -263,7 +263,7 @@ Click="WidgetServiceToggle_Click" Width="50"/>
                 
 
                 <TextBlock Text="Background Services" Foreground="White" FontSize="20" FontWeight="Bold" Margin="50,10,0,0" />
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Phone experience host.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Phone experience host.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub PhoneExperienceHost.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="PhoneExperienceHostToggle"
@@ -272,7 +272,7 @@ Click="WidgetServiceToggle_Click" Width="50"/>
                     </StackPanel>
                 </Border>
 
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Cross device service.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Cross device service.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub CrossDeviceService.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="CrossDeviceServiceToggle"
@@ -281,7 +281,7 @@ Click="WidgetServiceToggle_Click" Width="50"/>
                     </StackPanel>
                 </Border>
 
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Background task host.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Background task host.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub backgroundTaskHost.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="BackgroundTaskHostToggle"
@@ -290,7 +290,7 @@ Click="WidgetServiceToggle_Click" Width="50"/>
                     </StackPanel>
                 </Border>
 
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Speech runtime service.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Speech runtime service.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub SpeechRuntime.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="SpeechRuntimeToggle"
@@ -299,7 +299,7 @@ Click="WidgetServiceToggle_Click" Width="50"/>
                     </StackPanel>
                 </Border>
 
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Handles media streaming services. May affect streaming quality.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Handles media streaming services. May affect streaming quality.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub mspmsnsv.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="MspmsnsvToggle"
@@ -309,7 +309,7 @@ Click="WidgetServiceToggle_Click" Width="50"/>
                 </Border>
 
 
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="WMI Performance Adapter. Provides performance information.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="WMI Performance Adapter. Provides performance information.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub WMIADAP.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="WMIADAPToggle"
@@ -320,7 +320,7 @@ Click="WidgetServiceToggle_Click" Width="50"/>
 
 
 
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Performance monitoring tool.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Performance monitoring tool.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub PerfWatson2.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="PerfWatson2Toggle"
@@ -330,7 +330,7 @@ Click="WidgetServiceToggle_Click" Width="50"/>
                 </Border>
 
                 <TextBlock Text="Intel Services" Foreground="White" FontSize="20" FontWeight="Bold" Margin="50,10,0,0" />
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="WMI Registration Service.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="WMI Registration Service.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub WMIRegistrationService.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="WMIRegistrationServiceToggle"
@@ -339,7 +339,7 @@ Click="WidgetServiceToggle_Click" Width="50"/>
                     </StackPanel>
                 </Border>
 
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="JHI Service.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="JHI Service.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub jhi_service.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="JhiServiceToggle"
@@ -348,7 +348,7 @@ Click="WidgetServiceToggle_Click" Width="50"/>
                     </StackPanel>
                 </Border>
 
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="IPFSVC Service.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="IPFSVC Service.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub ipfsvc.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="IpfsvcToggle"
@@ -357,7 +357,7 @@ Click="WidgetServiceToggle_Click" Width="50"/>
                     </StackPanel>
                 </Border>
 
-                <Border  Background="#99971d" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="IPF Helper.">
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="IPF Helper.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub ipf_helper.exe" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="IpfHelperToggle"

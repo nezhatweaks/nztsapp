@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Windows.Input;
+using System.Management;
 
 namespace NZTS_App.Views
 {
@@ -31,15 +32,71 @@ namespace NZTS_App.Views
         private const string PciRegistryKeyPath = @"SYSTEM\CurrentControlSet\Enum\PCI";
         private ObservableCollection<PciDevice> devices = new ObservableCollection<PciDevice>();
         private MainWindow mainWindow;
+        private CpuBenchmark _cpuBenchmark;
 
         public MSI(MainWindow window)
         {
             InitializeComponent();
-            DataContext = this; // Ensure DataContext is set
+            DataContext = this;  // Ensure DataContext is set
             LoadPciDevicesAsync();
             mainWindow = window;
-            mainWindow.TitleTextBlock.Content = "MSI";
+            mainWindow.TitleTextBlock.Content = "Affinity";
+
+            // Initialize the benchmark and pass the metrics and status window
+            _cpuBenchmark = new CpuBenchmark(new BenchmarkMetrics(), new CpuStatusWindow());
+
+            // Subscribe to progress updates and completion events
+            _cpuBenchmark.ProgressChanged += OnBenchmarkProgressChanged;
+            _cpuBenchmark.BenchmarkCompleted += OnBenchmarkCompleted;
         }
+
+        // Event handler for the Benchmark button click
+        private async void StartBenchmarkButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Disable the button to prevent clicking while benchmarking
+            StartBenchmarkButton.IsEnabled = false;
+
+
+            // Call the method to start the benchmark
+            await _cpuBenchmark.RunBenchmarkAsync();
+
+            // Re-enable the button once benchmarking is complete
+            StartBenchmarkButton.IsEnabled = true;
+        }
+
+        // Progress update handler
+        private void OnBenchmarkProgressChanged(string progress)
+        {
+            // Check if we're on the UI thread, and if not, invoke the update on the UI thread
+            if (CpuStatusTextBlock.Dispatcher.CheckAccess())
+            {
+                // Update the UI directly if we're on the UI thread
+                CpuStatusTextBlock.Text = progress;
+            }
+            else
+            {
+                // Use the Dispatcher to marshal the update to the UI thread
+                CpuStatusTextBlock.Dispatcher.Invoke(() =>
+                {
+                    CpuStatusTextBlock.Text = progress;
+                });
+            }
+        }
+        public void SubscribeToBenchmarkEvents(CpuBenchmark benchmark)
+        {
+            benchmark.ProgressChanged += OnBenchmarkProgressChanged;
+            benchmark.BenchmarkCompleted += OnBenchmarkCompleted;
+        }
+
+
+        // Benchmark completion handler
+        private void OnBenchmarkCompleted()
+        {
+            // Re-enable the button after the benchmark is complete
+            StartBenchmarkButton.IsEnabled = true;
+        }
+
+
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
@@ -57,10 +114,12 @@ namespace NZTS_App.Views
             }
         }
 
+
         
 
 
-private async void LoadPciDevicesAsync()
+
+        private async void LoadPciDevicesAsync()
         {
             try
             {
@@ -126,6 +185,353 @@ private async void LoadPciDevicesAsync()
             }
         }
 
+
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public class CpuTopology
+        {
+            public List<string> GetCpuCoreThreadInfo()
+            {
+                var coreThreadInfo = new List<string>();
+
+                try
+                {
+                    // Query to get processor information
+                    ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_Processor");
+
+                    // List to track which cores and threads belong to which CPU
+                    Dictionary<int, string> cpuToCoreThreadMap = new Dictionary<int, string>();
+
+                    foreach (ManagementObject obj in searcher.Get())
+                    {
+                        // Null-safe way of getting the ProcessorId
+                        string processorId = obj["ProcessorId"]?.ToString() ?? "Unknown Processor ID";  // Use default if null
+                        int numberOfCores = Convert.ToInt32(obj["NumberOfCores"]);
+                        int numberOfLogicalProcessors = Convert.ToInt32(obj["NumberOfLogicalProcessors"]);
+
+                        int logicalProcessorIndex = 0;  // Tracks logical processor index (CPU index)
+
+                        // Iterate through the cores
+                        for (int coreIndex = 0; coreIndex < numberOfCores; coreIndex++)
+                        {
+                            // Assign threads to this core (assuming 1 thread per core for simplicity)
+                            for (int threadIndex = 0; threadIndex < (numberOfLogicalProcessors / numberOfCores); threadIndex++)
+                            {
+                                // Map logical processor to core and thread
+                                string coreThread = $"Core {coreIndex + 1}, Thread {threadIndex + 1}";
+                                cpuToCoreThreadMap[logicalProcessorIndex] = coreThread;
+
+                                // Display information in a readable format like "CPU 0 = Core 1, Thread 1"
+                                coreThreadInfo.Add($"CPU {logicalProcessorIndex} = {coreThread}");
+
+                                logicalProcessorIndex++;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
+
+                return coreThreadInfo;
+            }
+        }
+
+        public class PerformanceMetrics
+        {
+            public double AverageFPS { get; set; }
+            public double MinFPS { get; set; }
+            public double MaxFPS { get; set; }
+            public double StdDeviation { get; set; }
+            public double Percentile1Lows { get; set; }
+            public double Percentile01Lows { get; set; }
+            public List<int> FPSValues { get; set; }  // List to store all FPS values for charting or further analysis
+
+            public PerformanceMetrics()
+            {
+                FPSValues = new List<int>();
+            }
+        }
+
+
+        
+
+
+
+
+        private void DeviceListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (DeviceListView.SelectedItem is PciDevice selectedDevice)
+            {
+                // Show the dialog where user selects CPU affinity (CPU0, CPU1, etc.)
+                SetCpuAffinityForDevice(selectedDevice);
+            }
+        }
+
+        // Assume we have a PciDevice object that contains the instanceId
+        // and a method to get the current selected cores from the registry.
+
+        private void SetCpuAffinityForDevice(PciDevice device)
+        {
+            var dialog = new CpuAffinityDialog();
+            dialog.CpuCores = GetAvailableCpuCores(); // List of CPU cores to choose from
+            dialog.InitializeDialog();  // Populate the dialog with CPU cores
+
+            // Retrieve the currently selected cores from the registry (if any)
+            List<int> currentSelectedCores = GetCpuAffinityFromRegistry(device);
+
+            // Pre-select the cores in the dialog based on the current affinity
+            dialog.PreSelectCores(currentSelectedCores);
+
+            if (dialog.ShowDialog() == true)
+            {
+                // After user clicks OK, update the device with the selected CPU affinity
+                UpdateCpuAffinityInRegistry(device, dialog.SelectedCores);
+            }
+        }
+
+        private List<int> GetCpuAffinityFromRegistry(PciDevice device)
+        {
+            List<int> selectedCores = new List<int>();
+
+            try
+            {
+                // Check if InstanceId is null or empty
+                if (string.IsNullOrEmpty(device.InstanceId))
+                {
+                    MessageBox.Show("Device InstanceId is null or empty. Cannot retrieve CPU affinity.");
+                    return selectedCores; // Return an empty list if no valid InstanceId
+                }
+
+                // Find the registry path for the given device (without HKEY_LOCAL_MACHINE)
+                string registryPath = FindDeviceRegistryPath(device.InstanceId);
+
+                using (var key = Registry.LocalMachine.OpenSubKey(registryPath, writable: false))
+                {
+                    if (key != null)
+                    {
+                        var affinityPolicyKey = key.OpenSubKey(@"Device Parameters\Interrupt Management\Affinity Policy");
+
+                        if (affinityPolicyKey != null)
+                        {
+                            // Read the AssignmentSetOverride value (REG_BINARY)
+                            byte[]? affinityMaskBytes = affinityPolicyKey.GetValue("AssignmentSetOverride") as byte[];
+
+                            if (affinityMaskBytes != null && affinityMaskBytes.Length == 8)
+                            {
+                                // Convert the byte array to a ulong (since it's 64-bit)
+                                ulong affinityMask = BitConverter.ToUInt64(affinityMaskBytes, 0);
+
+                                // Extract the selected CPU cores based on the bitmask
+                                for (int i = 0; i < 64; i++)  // Max 64 cores
+                                {
+                                    if ((affinityMask & (1UL << i)) != 0)
+                                    {
+                                        selectedCores.Add(i);  // Add core to the list if its bit is set
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error reading CPU Affinity: {ex.Message}");
+            }
+
+            return selectedCores;
+        }
+
+
+
+        private List<string> GetAvailableCpuCores()
+        {
+            var cpuCores = new List<string>();
+            for (int i = 0; i < Environment.ProcessorCount; i++)
+            {
+                cpuCores.Add($"CPU{i}");
+            }
+            return cpuCores;
+        }
+
+        private string FindDeviceRegistryPath(string partialInstanceId)
+        {
+            string baseRegistryPath = @"SYSTEM\CurrentControlSet\Enum\PCI"; // This part is relative
+
+            // Open the base registry key safely
+            using (var baseKey = Registry.LocalMachine.OpenSubKey(baseRegistryPath))
+            {
+                if (baseKey == null)
+                {
+                    throw new InvalidOperationException($"Registry path '{baseRegistryPath}' not found.");
+                }
+
+                // Iterate over the subkeys of the base registry path
+                foreach (var subKeyName in baseKey.GetSubKeyNames())
+                {
+                    using (var subKey = baseKey.OpenSubKey(subKeyName))
+                    {
+                        if (subKey != null)
+                        {
+                            // Full path of the current device's registry key
+                            string fullPath = subKey.Name;
+
+                            // Recursively look for the InstanceId in deeper subkeys (like device instance directories)
+                            foreach (var deviceSubKeyName in subKey.GetSubKeyNames())
+                            {
+                                using (var deviceSubKey = subKey.OpenSubKey(deviceSubKeyName))
+                                {
+                                    if (deviceSubKey != null)
+                                    {
+                                        // Full path of the current device instance registry key
+                                        string deviceFullPath = deviceSubKey.Name;
+
+                                        // Check if the instance ID is part of the full path
+                                        if (deviceFullPath.Contains(partialInstanceId))
+                                        {
+                                            // Once found, return the full registry path, excluding HKEY_LOCAL_MACHINE
+                                            return deviceFullPath.Substring(deviceFullPath.IndexOf("SYSTEM"));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // If no matching path is found, throw an exception
+            throw new InvalidOperationException($"Device registry path for '{partialInstanceId}' not found.");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        private void UpdateCpuAffinityInRegistry(PciDevice device, List<int> selectedCores)
+        {
+            if (string.IsNullOrEmpty(device.InstanceId))
+            {
+                MessageBox.Show("Device InstanceId is null or empty. Cannot update CPU affinity.");
+                return;  // Exit early if InstanceId is not valid
+            }
+
+            // Find the registry path for the given device (without HKEY_LOCAL_MACHINE)
+            string registryPath = FindDeviceRegistryPath(device.InstanceId);
+
+            try
+            {
+                // Open the registry key under Registry.LocalMachine, passing the path without HKEY_LOCAL_MACHINE
+                using (var key = Registry.LocalMachine.OpenSubKey(registryPath, writable: true))
+                {
+                    if (key == null)
+                    {
+                        MessageBox.Show($"Registry path not found: {registryPath}");
+                        return;
+                    }
+
+                    // Access or create the "Affinity Policy" registry key under Device Parameters
+                    var affinityPolicyKey = key.OpenSubKey(@"Device Parameters\Interrupt Management\Affinity Policy", writable: true);
+                    if (affinityPolicyKey == null)
+                    {
+                        // Create the key if it doesn't exist
+                        affinityPolicyKey = key.CreateSubKey(@"Device Parameters\Interrupt Management\Affinity Policy");
+                    }
+
+                    if (affinityPolicyKey != null)
+                    {
+                        // If no CPU cores are selected, remove the registry values
+                        if (selectedCores.Count == 0)
+                        {
+                            // Remove both the "AssignmentSetOverride" and "DevicePolicy" values
+                            affinityPolicyKey.DeleteValue("AssignmentSetOverride", false); // false means don't throw an error if it doesn't exist
+                            affinityPolicyKey.DeleteValue("DevicePolicy", false);
+
+                            MessageBox.Show("CPU Affinity removed. Both 'AssignmentSetOverride' and 'DevicePolicy' have been deleted.");
+                            return;
+                        }
+
+                        // Prepare the bitmask for the selected cores
+                        ulong affinityMask = 0;
+
+                        // Create the bitmask by setting the corresponding bit for each selected core
+                        foreach (var core in selectedCores)
+                        {
+                            affinityMask |= (1UL << core);  // Set the bit for each selected core (1UL for 64-bit)
+                        }
+
+                        // Convert the affinity mask to a byte array (REG_BINARY)
+                        byte[] affinityMaskBytes = BitConverter.GetBytes(affinityMask);
+
+                        // Set the "AssignmentSetOverride" registry value as REG_BINARY
+                        affinityPolicyKey.SetValue("AssignmentSetOverride", affinityMaskBytes, RegistryValueKind.Binary);
+
+                        // Set the "DevicePolicy" registry value as DWORD with value 4 (Hex: 4)
+                        affinityPolicyKey.SetValue("DevicePolicy", 4, RegistryValueKind.DWord);
+
+                        // Show the selected CPU affinity in binary format (or a user-friendly format)
+                        string selectedCoresStr = string.Join(", ", selectedCores);
+                        MessageBox.Show($"CPU Affinity for device '{device.DeviceName}' has been set to cores: {selectedCoresStr}.\n" +
+                                        $"DevicePolicy set to 0x4 (DWORD).");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Unable to access or create 'Affinity Policy' key.");
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                MessageBox.Show("Unauthorized access: please run as administrator.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating CPU Affinity: {ex.Message}");
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         private string GetSupportedModes(RegistryKey deviceKey)
         {
             bool supportsMsi = false;
@@ -170,20 +576,21 @@ private async void LoadPciDevicesAsync()
                 }
             }
 
-            var modes = "LineBased";
-            if (supportsMsi)
-            {
-                modes += ", MSI";
-            }
+            var modes = "LB";  // Default mode
             if (supportsMsix)
             {
-                modes += ", MSI-X";
+                modes += ", MSI-X";  // If MSI-X is supported, only show MSI-X
+            }
+            else if (supportsMsi)
+            {
+                modes += ", MSI";  // If MSI-X is not supported but MSI is, show MSI
             }
 
             return modes;
         }
 
-        
+
+
 
 
 

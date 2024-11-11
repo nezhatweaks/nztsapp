@@ -84,6 +84,19 @@
             </Setter>
         </Style>
 
+        <Style x:Key="RoundedButtonStyle3" TargetType="Button">
+            <Setter Property="Width" Value="90"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Background" Value="#1e284a"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <!-- White text color -->
+            <!-- To make the button round -->
+        </Style>
+
+
         <!-- Hamburger Button Style -->
         <Style x:Key="HamburgerButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
@@ -208,10 +221,97 @@
                     <Setter Property="Background" Value="#5A5C60"/>
                 </Trigger>
                 <Trigger Property="Tag" Value="Active">
-                    <Setter Property="Background" Value="Red"/>
+                    <Setter Property="Background" Value="#1e284a"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <Style x:Key="RoundedButtonStyleX" TargetType="Button">
+            <!-- Set the font size -->
+            <Setter Property="FontSize" Value="14"/>
+            <!-- Remove the default border and background from the button -->
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+
+            <!-- Button content inside a Border with CornerRadius -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="#343B40"
+                            BorderBrush="Transparent"
+                            BorderThickness="1"
+                            CornerRadius="15"
+                            Padding="10,5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <!-- Text color -->
+            <Setter Property="Foreground" Value="White"/>
+
+            <!-- Hover effect -->
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#4A5157"/>
+                    <!-- Slightly lighter color on hover -->
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#2C3338"/>
+                    <!-- Darker color when clicked -->
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Button" x:Key="TabButtonStyle2">
+            <!-- Default button properties -->
+            <Setter Property="Background" Value="#2C2F33"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#2F3136"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+
+            <!-- Button ControlTemplate -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}" 
+                        CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                      VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <!-- Button state triggers -->
+            <Style.Triggers>
+                <!-- Mouse Over Trigger -->
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#3D4147"/>
+                </Trigger>
+
+                <!-- Button Pressed Trigger -->
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#5A5C60"/>
+                </Trigger>
+
+                <!-- Active Tab Trigger based on Tag property -->
+                <Trigger Property="Tag" Value="Active">
+                    <Setter Property="Background" Value="#1d6b75"/>
+                    <!-- Active tab color -->
+                    
+                    <!-- Active tab border color -->
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
 
 
     </Window.Resources>
@@ -270,8 +370,7 @@
             </Grid>
 
             <!-- Sidebar: Categories with Toggle Visibility -->
-            <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto" Margin="0,55,0,35" 
-  Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
+            <ScrollViewer Height="Auto" VerticalScrollBarVisibility="Auto" Margin="0,55,0,35" Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
                 <ScrollViewer.Resources>
                     <Style TargetType="ScrollBar">
                         <Setter Property="Background" Value="Transparent"/>
@@ -282,25 +381,13 @@
                                     <Grid Background="Transparent" Margin="0,50,0,0">
                                         <Track Name="PART_Track" IsDirectionReversed="true">
                                             <Track.DecreaseRepeatButton>
-                                                <RepeatButton Name="PART_DecreaseButton"
-                                          Content="▲"
-                                          Command="ScrollBar.LineUpCommand"
-                                          Background="Transparent"
-                                          Width="0" Height="0"/>
+                                                <RepeatButton Name="PART_DecreaseButton" Content="▲" Command="ScrollBar.LineUpCommand" Background="Transparent" Width="0" Height="0"/>
                                             </Track.DecreaseRepeatButton>
                                             <Track.Thumb>
-                                                <Thumb Name="Thumb" 
-                                   Background="Black" 
-                                   Opacity="0.7" 
-                                   Width="3" 
-                                   MinHeight="200"/>
+                                                <Thumb Name="Thumb" Background="Black" Opacity="0.7" Width="3" MinHeight="200"/>
                                             </Track.Thumb>
                                             <Track.IncreaseRepeatButton>
-                                                <RepeatButton Name="PART_IncreaseButton"
-                                          Content="▼"
-                                          Command="ScrollBar.LineDownCommand"
-                                          Background="Transparent"
-                                          Width="0" Height="0"/>
+                                                <RepeatButton Name="PART_IncreaseButton" Content="▼" Command="ScrollBar.LineDownCommand" Background="Transparent" Width="0" Height="0"/>
                                             </Track.IncreaseRepeatButton>
                                         </Track>
                                     </Grid>
@@ -312,7 +399,6 @@
 
                 <!-- Main layout with two columns: Sidebar and Main Content -->
                 <Grid>
-
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="200"/>
                         <!-- Sidebar Width -->
@@ -320,51 +406,92 @@
                         <!-- Main Content Area -->
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel x:Name="Sidebar" Orientation="Vertical" Background="#23272A" 
-            VerticalAlignment="Stretch" Visibility="Collapsed">
+                    <StackPanel x:Name="Sidebar" Orientation="Vertical" Background="#23272A" VerticalAlignment="Stretch" Visibility="Collapsed">
 
                         <!-- Header -->
                         <TextBlock Text="" FontWeight="Bold" FontSize="16" Foreground="White" Margin="0,0,0,10"/>
 
+                        <!-- Tab Buttons (Basic and Advanced) -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0, 10, 0, 20">
+                            <Button x:Name="BasicTabButton" 
+            Content="Basic" 
+            FontSize="12" 
+            Style="{StaticResource TabButtonStyle2}"  
+            Click="SwitchToBasicTab" 
+            Width="90" Height="25" 
+            Margin="5,0,0,0" 
+            HorizontalAlignment="Stretch"
+                                    Tag="Active"/>
+
+                            <!-- Advanced Tab Button -->
+                            <Button x:Name="AdvancedTabButton" 
+            Content="Advanced" 
+            FontSize="12" 
+            Style="{StaticResource TabButtonStyle2}" 
+            Click="SwitchToAdvancedTab" 
+            Width="90" Height="25" 
+            Margin="5,0,0,0"
+            HorizontalAlignment="Stretch"
+                                    Tag="Inactive"/>
+                        </StackPanel>
+
                         <!-- Search Bar -->
-                        <Grid Margin="0,0,0,20" Background="Transparent">
-                            <TextBox x:Name="SearchBox" Padding="5" Width="180" Height="30"  
-                 Background="#343B40" Foreground="White" BorderBrush="Gray" 
-                 BorderThickness="1" TextChanged="SearchBox_TextChanged" 
-                 GotFocus="SearchBox_GotFocus" LostFocus="SearchBox_LostFocus"
-                 />
-                            <Button x:Name="CancelButton" Content="✖" Width="30" Height="30" 
-                Background="Transparent" Foreground="Gray" BorderThickness="0" 
-                HorizontalAlignment="Right" VerticalAlignment="Center" 
-                Visibility="Collapsed"/>
+                        <Grid Margin="0,0,0,0" Background="Transparent">
+                            <TextBox x:Name="SearchBox" Padding="5" Width="180" Height="30" Background="#343B40" Foreground="White" BorderBrush="Gray" BorderThickness="1" TextChanged="SearchBox_TextChanged" GotFocus="SearchBox_GotFocus" LostFocus="SearchBox_LostFocus" Visibility="Collapsed"/>
+                            <Button x:Name="CancelButton" Content="✖" Width="30" Height="30" Background="Transparent" Foreground="Gray" BorderThickness="0" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="Collapsed"/>
                         </Grid>
 
-                        <!-- Buttons Section -->
+                        <!-- Basic Content (visible by default) -->
+                        <StackPanel x:Name="BasicContent" Visibility="Visible">
+                            <TextBlock Text="🚀 1-Click" VerticalAlignment="Center" Margin="10"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Button Content="⚡️" FontSize="20" Style="{StaticResource RoundedButtonStyle3}" Click="OptimizeAll_Click">
+                                    <Button.ToolTip>
+                                        <ToolTip Content="Apply Recommend Settings" />
+                                    </Button.ToolTip>
+                                </Button>
+                                <Button Content="🌀" FontSize="20" Style="{StaticResource RoundedButtonStyle3}" Click="RestoreAll_Click">
+                                    <Button.ToolTip>
+                                        <ToolTip Content="Restore Recommend Settings" />
+                                    </Button.ToolTip>
+                                </Button>
+                            </StackPanel>
 
-                        <Button Content="Home" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="GoToHomePageButton_Click"/>
-                        <Button Content="1-Click" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Home_Click"/>
-                        <Button Content="Logs" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Changelog_Click"/>
-                        <Button Content="Settings" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Settings_Click"/>
-                        <Separator Margin="0,20,0,10"/>
-                        <Button Content="PowerPlan" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="PowerPlan_Click"/>
-                        <Button Content="WinPriority" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Win32PrioritySeparation_Click"/>
-                        <Button Content="Gaming" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Windows_Click"/>
-                        <Button Content="Telemetry" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Debloat_Click"/>
-                        <Button Content="Security" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Security_Click"/>
-                        <Button Content="Storage" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Storage_Click"/>
-                        <Button Content="File System" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Supercache_Click"/>
-                        <Button Content="Memory" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="MemoryMan_Click"/>
-                        <Button Content="MMCSS" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="MMCSS_Click"/>
-                        <Button Content="NVIDIA" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Nvidia_Click"/>
-                        <Button Content="Misc" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Monitor_Click"/>
-                        <Button Content="Radeon" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="AMD_Click"/>
-                        <Button Content="Process" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="CPUPriority_Click"/>
-                        <Button Content="MSI Mode" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="MSI_Click"/>
+                            <Border Background="Transparent" Margin="0,20,0,10" />
+
+                            <Button Content="Home" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="GoToHomePageButton_Click"/>
+                            <Button Content="Logs" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Changelog_Click"/>
+                            <Button Content="Hardware" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="BIOSMan_Click"/>
+                            <Button Content="Settings" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Settings_Click"/>
+                            <Button Content="Power" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="PowerPlan_Click"/>
+                            <Button Content="WinPriority" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Win32PrioritySeparation_Click"/>
+                            <Button Content="Gaming" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Windows_Click"/>
+                            <Button Content="Security" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Security_Click"/>
+                            <Button Content="Memory" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="MemoryMan_Click"/>
+                            <Button Content="MMCSS" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="MMCSS_Click"/>
+                            <Button Content="NVIDIA" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Nvidia_Click"/>
+                            <Button Content="Radeon" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="AMD_Click"/>
+                            <Button Content="Misc" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Monitor_Click"/>
+                        </StackPanel>
+
+                        <!-- Advanced Content (hidden by default) -->
+                        <StackPanel x:Name="AdvancedContent" Visibility="Collapsed">
+
+                            <Button Content="Affinity" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="MSI_Click"/>
+                            <Button Content="Process" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="CPUPriority_Click"/>
+                            <Button Content="Telemetry" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Debloat_Click"/>
+                            <Button Content="Storage" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Storage_Click"/>
+                            <Button Content="File System" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Supercache_Click"/>
+                            
+                        </StackPanel>
+
+                        
                     </StackPanel>
 
                     <Frame x:Name="MainUIApp" NavigationUIVisibility="Hidden"/>
                 </Grid>
             </ScrollViewer>
+
 
 
 
@@ -523,7 +650,7 @@ VerticalAlignment="Center">
                         MouseDown="VerifiedContent_MouseDown" 
                         MouseMove="VerifiedContent_MouseMove" 
                         MouseUp="VerifiedContent_MouseUp">
-                            <TextBlock Text="Welcome To NZTS APP" 
+                            <TextBlock Text="NZTS APP" 
                            FontWeight="Bold" 
                            FontSize="30" 
                            Foreground="Gray" 
@@ -545,43 +672,54 @@ VerticalAlignment="Center">
             MouseDown="ExperimentalContent_MouseDown" 
             MouseMove="ExperimentalContent_MouseMove" 
             MouseUp="ExperimentalContent_MouseUp">
-                            <TextBlock Text="What’s New in V0.5.0?" 
+                            <TextBlock Text="What’s New in V0.5.1?" 
                FontWeight="Bold" 
                FontSize="24" 
                Foreground="Gray" 
-               HorizontalAlignment="Center" 
+               HorizontalAlignment="Left" 
                Margin="0,20,0,0"/>
 
-                            <TextBlock Text="✨ Introducing File System!" 
+                            <TextBlock Text="➕ Introducing File System!" 
                FontSize="14" 
                Foreground="LightGray" 
-               HorizontalAlignment="Center" 
+               HorizontalAlignment="Left" 
                Margin="0,5,0,0"/>
 
-                           
 
-                            <TextBlock Text="🔧 Fixed Radeon Registry Errors for smoother performance." 
+
+                            <TextBlock Text="➕ Fixed Radeon Toggle Buttons Bugs" 
                FontSize="14" 
                Foreground="LightGray" 
-               HorizontalAlignment="Center" 
+               HorizontalAlignment="Left" 
                Margin="0,5,0,0"/>
 
-                            <TextBlock Text="📄 1-Click Optimization has a brand new dedicated page!" 
-               FontSize="14" 
-               Foreground="LightGray" 
-               HorizontalAlignment="Center" 
-               Margin="0,5,0,0"/>
-
-                            <TextBlock Text="🎮 Remade game selection presets in the Process tab." 
-               FontSize="14" 
-               Foreground="LightGray" 
-               HorizontalAlignment="Center" 
-               Margin="0,5,0,0"/>
-
-                            <TextBlock Text="💻 Added Second and Third Level Data Cache" 
+                            <TextBlock Text="➕ Introducing Affinity (MSI Mode and Intterupt Affinity)" 
 FontSize="14" 
 Foreground="LightGray" 
-HorizontalAlignment="Center" 
+HorizontalAlignment="Left" 
+Margin="0,5,0,0"/>
+
+                            <TextBlock Text="➕ 1-Click Optimization has moved to sidebar!" 
+               FontSize="14" 
+               Foreground="LightGray" 
+               HorizontalAlignment="Left" 
+               Margin="0,5,0,0"/>
+
+                            <TextBlock Text="➕ Remade game selection presets in the Process tab." 
+               FontSize="14" 
+               Foreground="LightGray" 
+               HorizontalAlignment="Left"  
+               Margin="0,5,0,0"/>
+
+                            <TextBlock Text="➕ Added Second/Third Level Data Cache and Disable OS Mitigations" 
+FontSize="14" 
+Foreground="LightGray" 
+HorizontalAlignment="Left" 
+Margin="0,5,0,0"/>
+                            <TextBlock Text="➕ Added Intel/AMD Processor Power Management in Gaming Tab" 
+FontSize="14" 
+Foreground="LightGray" 
+HorizontalAlignment="Left" 
 Margin="0,5,0,0"/>
 
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
@@ -595,17 +733,9 @@ Padding="5"
 Cursor="Hand"
 Click="Supercache_Click"/>
 
-                                <Button Content="#radeon" 
-FontSize="14" 
-Foreground="LightGray" 
-Background="Transparent" 
-BorderBrush="LightGray" 
-Margin="5"
-Padding="5"
-Cursor="Hand"
-Click="AMD_Click"/>
+                                
 
-                                <Button Content="#1clickoptimization" 
+                                <Button Content="#affinity" 
 FontSize="14" 
 Foreground="LightGray" 
 Background="Transparent" 
@@ -613,7 +743,9 @@ BorderBrush="LightGray"
 Margin="5"
 Padding="5"
 Cursor="Hand"
-Click="Home_Click"/>
+Click="MSI_Click"/>
+
+
 
                                 <Button Content="#process" 
 FontSize="14" 
@@ -633,8 +765,19 @@ Margin="5"
 Padding="5"
 Cursor="Hand"
 Click="MemoryMan_Click"/>
+
+                                <Button Content="#gaming" 
+FontSize="14" 
+Foreground="LightGray" 
+Background="Transparent" 
+BorderBrush="LightGray" 
+Margin="5"
+Padding="5"
+Cursor="Hand"
+Click="Windows_Click"/>
                             </StackPanel>
                         </StackPanel>
+                        
                         
                         
 

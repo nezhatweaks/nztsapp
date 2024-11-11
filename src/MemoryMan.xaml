@@ -23,7 +23,7 @@
                                          Height="10" 
                                          HorizontalAlignment="Left" 
                                          VerticalAlignment="Center" 
-                                         Margin="20,0,0,0" />
+                                         Margin="0,0,0,0" />
                             </Border>
                             <ContentPresenter HorizontalAlignment="Center" 
                                               VerticalAlignment="Center" 
@@ -173,21 +173,14 @@ MinHeight="200"/>
                             </StackPanel>
                         </Border>
 
-                        <!-- SecondLevelDataCache -->
-                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,50,0">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="Second Level Data Cache" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Adjusts the second level data cache settings."/>
-                                <ToggleButton x:Name="SecondLevelDataCacheToggle" Style="{StaticResource iOSToggleButton}" Click="SecondLevelDataCacheToggle_Click" Width="50"/>
-                                <TextBlock x:Name="SecondLevelDataCacheStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
+                        
 
-                        <!-- ThirdLevelDataCache -->
+                        <!-- Disable Mitigations -->
                         <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,50,0">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="Third Level Data Cache" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Adjusts the third level data cache settings."/>
-                                <ToggleButton x:Name="ThirdLevelDataCacheToggle" Style="{StaticResource iOSToggleButton}" Click="ThirdLevelDataCacheToggle_Click" Width="50"/>
-                                <TextBlock x:Name="ThirdLevelDataCacheStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Disable OS Mitigations" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disable OS Mitigations to increase PC performance."/>
+                                <ToggleButton x:Name="DisableOSMitigationsToggle" Style="{StaticResource iOSToggleButton}" Click="DisableOSMitigationsToggle_Click" Width="50"/>
+                                <TextBlock x:Name="DisableOSMitigationsStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>
@@ -199,6 +192,24 @@ MinHeight="200"/>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="Large Page Minimum" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Set to 0xFFFFFFFF for maximum performance."/>
                             <ToggleButton x:Name="LargePageMinimumToggle" Style="{StaticResource iOSToggleButton}" Width="50"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- SecondLevelDataCache -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Second Level Data Cache" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Adjusts the second level data cache settings."/>
+                            <ToggleButton x:Name="SecondLevelDataCacheToggle" Style="{StaticResource iOSToggleButton}" Click="SecondLevelDataCacheToggle_Click" Width="50"/>
+                            <TextBlock x:Name="SecondLevelDataCacheStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- ThirdLevelDataCache -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,50,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Third Level Data Cache" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Adjusts the third level data cache settings."/>
+                            <ToggleButton x:Name="ThirdLevelDataCacheToggle" Style="{StaticResource iOSToggleButton}" Click="ThirdLevelDataCacheToggle_Click" Width="50"/>
+                            <TextBlock x:Name="ThirdLevelDataCacheStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>

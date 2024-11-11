@@ -1,0 +1,116 @@
+﻿<UserControl x:Class="NZTS_App.Views.BIOSMan"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:NZTS_App.Views"
+             Height="Auto" >
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#2C2F33"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="#36393F" >
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,15,0,35">
+
+            <!-- Custom Scrollbar -->
+            <ScrollViewer.Resources>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Width" Value="10"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ScrollBar">
+                                <Grid Background="Transparent" Margin="0,50,0,0">
+                                    <Track Name="PART_Track" IsDirectionReversed="true">
+                                        <Track.DecreaseRepeatButton>
+                                            <RepeatButton Name="PART_DecreaseButton"
+                          Content="▲"
+                          Command="ScrollBar.LineUpCommand"
+                          Background="Transparent"
+                          Width="0" Height="0"/>
+                                        </Track.DecreaseRepeatButton>
+                                        <Track.Thumb>
+                                            <Thumb Name="Thumb" 
+                   Background="Black" 
+                   Opacity="0.7" 
+                   Width="3" 
+                   MinHeight="200"/>
+                                        </Track.Thumb>
+                                        <Track.IncreaseRepeatButton>
+                                            <RepeatButton Name="PART_IncreaseButton"
+                          Content="▼"
+                          Command="ScrollBar.LineDownCommand"
+                          Background="Transparent"
+                          Width="0" Height="0"/>
+                                        </Track.IncreaseRepeatButton>
+                                    </Track>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ScrollViewer.Resources>
+
+            <!-- Content Section -->
+            <StackPanel>
+                <ProgressBar Name="LoadingIndicator"
+             IsIndeterminate="True"
+             Visibility="Collapsed"
+             Height="4"
+             Margin="10"
+             Background="white"
+             Foreground="Red"/>
+                <!-- BIOS Information -->
+                <TextBlock Text="BIOS Manufacturer:" FontWeight="Bold"/>
+                <!-- Wrap TextBlock in Border for padding, border, and rounded corners -->
+                <Border Background="#2C2F33" Margin="10" Padding="8" BorderBrush="#7289DA" BorderThickness="0" CornerRadius="8">
+                    <TextBlock Name="ManufacturerTextBlock" VerticalAlignment="Center"/>
+                </Border>
+
+                <TextBlock Text="BIOS Version:" FontWeight="Bold"/>
+                <Border Background="#2C2F33" Margin="10" Padding="8" BorderBrush="#7289DA" BorderThickness="0" CornerRadius="8">
+                    <TextBlock Name="VersionTextBlock" VerticalAlignment="Center"/>
+                </Border>
+
+                <TextBlock Text="BIOS Serial Number:" FontWeight="Bold"/>
+                <Border Background="#2C2F33" Margin="10" Padding="8" BorderBrush="#7289DA" BorderThickness="0" CornerRadius="8">
+                    <TextBlock Name="SerialNumberTextBlock" VerticalAlignment="Center"/>
+                </Border>
+
+                <TextBlock Text="BIOS Release Date:" FontWeight="Bold"/>
+                <Border Background="#2C2F33" Margin="10" Padding="8" BorderBrush="#7289DA" BorderThickness="0" CornerRadius="8">
+                    <TextBlock Name="ReleaseDateTextBlock" VerticalAlignment="Center"/>
+                </Border>
+
+                <!-- DRAM Speed Info Display Section -->
+                <TextBlock Text="DRAM Speed (MHz):" FontWeight="Bold"/>
+                <Border Background="#2C2F33" Margin="10" Padding="8" BorderBrush="#7289DA" BorderThickness="0" CornerRadius="8">
+                    <TextBlock Name="DRAMSpeedTextBlock" VerticalAlignment="Center"/>
+                </Border>
+
+                <!-- Processor Speed Info Display Section -->
+                <TextBlock Text="Processor Speed (MHz):" FontWeight="Bold"/>
+                <Border Background="#2C2F33" Margin="10" Padding="8" BorderBrush="#7289DA" BorderThickness="0" CornerRadius="8">
+                    <TextBlock Name="ProcessorSpeedTextBlock" VerticalAlignment="Center"/>
+                </Border>
+                
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

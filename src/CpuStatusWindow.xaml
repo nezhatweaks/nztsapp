@@ -1,0 +1,8 @@
+﻿<Window x:Class="NZTS_App.CpuStatusWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Benchmarking Status" Height="150" Width="400">
+    <Grid>
+        <TextBlock Name="StatusTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="Bold"/>
+    </Grid>
+</Window>

@@ -79,7 +79,9 @@ namespace NZTS_App
     }},
     {"Start", new List<Tuple<string, string, ValueType, bool, string>>()
     {
-        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\MMCSS", "00000002", ValueType.DWord, false, "00000002")
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\MMCSS", "00000002", ValueType.DWord, false, "00000002"),
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\intelppm", "00000001", ValueType.DWord, false, "00000003"),
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\amdppm", "00000001", ValueType.DWord, false, "00000003")
     }},
     {"VsyncIdleTimeout", new List<Tuple<string, string, ValueType, bool, string>>()
     {
@@ -108,7 +110,7 @@ namespace NZTS_App
     {"Enabled", new List<Tuple<string, string, ValueType, bool, string>>()
     {
         new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity", "00000000", ValueType.DWord, false, "00000000")
-        
+
     }},
     {"DisableMshybridNvsrSwitch", new List<Tuple<string, string, ValueType, bool, string>>()
     {
@@ -627,54 +629,87 @@ namespace NZTS_App
 
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string searchText = SearchBox.Text.ToLower();
+            string searchText = SearchBox.Text.ToLower(); // Convert search text to lowercase.
 
-            // Iterate through each button in the sidebar
+            // Iterate through each child in the Sidebar
             foreach (var child in Sidebar.Children)
             {
                 if (child is Button button)
                 {
-                    // Safely get the button content
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-                    var buttonContent = button.Content?.ToString().ToLower() ?? string.Empty;
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                    // Use 'as' to safely cast Content to a string
+                    var buttonContent = button.Content as string ?? string.Empty;
 
                     // Set button visibility based on search text
-                    button.Visibility = buttonContent.Contains(searchText)
+                    button.Visibility = buttonContent.ToLower().Contains(searchText)
                         ? Visibility.Visible
                         : Visibility.Collapsed;
                 }
+                else if (child is Separator separator)
+                {
+                    // Hide or show the separator based on the search text
+                    // Show separators only if search text is empty
+                    separator.Visibility = string.IsNullOrEmpty(searchText) ? Visibility.Visible : Visibility.Collapsed;
+                }
+            }
+
+            // Optionally, show/hide the Cancel button based on search text
+            CancelButton.Visibility = !string.IsNullOrEmpty(searchText) ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+
+
+
+        // Event handler for when the SearchBox gains focus
+        private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            // If the SearchBox has placeholder text ("Search..."), clear it when the user focuses on the box
+            if (SearchBox.Text == "Search..." && SearchBox.Foreground == new SolidColorBrush(Colors.Gray))
+            {
+                SearchBox.Text = "";  // Clear the placeholder text
+                SearchBox.Foreground = new SolidColorBrush(Colors.White);  // Change text color to white
             }
         }
 
-        
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
+        // Event handler for when the SearchBox loses focus
         private void SearchBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            // Show placeholder if the TextBox is empty when losing focus
+            // If the SearchBox is empty when it loses focus, display the placeholder text
             if (string.IsNullOrEmpty(SearchBox.Text))
             {
-                
+                SearchBox.Text = "Search...";  // Set placeholder text
+                SearchBox.Foreground = new SolidColorBrush(Colors.Gray);  // Change text color to gray (indicating placeholder)
             }
         }
+
+
+
+
+        // Switch to the Basic Tab
+        private void SwitchToBasicTab(object sender, RoutedEventArgs e)
+        {
+            // Show Basic content and hide Advanced content
+            BasicContent.Visibility = Visibility.Visible;
+            AdvancedContent.Visibility = Visibility.Collapsed;
+
+            // Update the active tab style based on Tag
+            BasicTabButton.Tag = "Active";   // Set Basic tab as active
+            AdvancedTabButton.Tag = "Inactive"; // Set Advanced tab as inactive
+        }
+
+        // Switch to the Advanced Tab
+        private void SwitchToAdvancedTab(object sender, RoutedEventArgs e)
+        {
+            // Show Advanced content and hide Basic content
+            BasicContent.Visibility = Visibility.Collapsed;
+            AdvancedContent.Visibility = Visibility.Visible;
+
+            // Update the active tab style based on Tag
+            AdvancedTabButton.Tag = "Active";   // Set Advanced tab as active
+            BasicTabButton.Tag = "Inactive";    // Set Basic tab as inactive
+        }
+
+
+
 
 
 
@@ -794,14 +829,14 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
 
         private void AnimateTransition(StackPanel currentContent, StackPanel nextContent, Button activeButton)
         {
-            // Set the next content's initial state to collapsed
-            nextContent.Visibility = Visibility.Collapsed; // Hide it initially
-            nextContent.Opacity = 0; // Ensure it's transparent
-            nextContent.RenderTransform = new TranslateTransform(0, 0); // Start at original position
+            // Set the next content's initial state
+            nextContent.Visibility = Visibility.Collapsed;
+            nextContent.Opacity = 0;
+            nextContent.RenderTransform = new TranslateTransform(nextContent.ActualWidth, 0); // Start from off-screen
 
             var storyboard = new Storyboard();
 
-            // Fade out the current content
+            // Fade out current content
             var fadeOutAnimation = new DoubleAnimation
             {
                 From = 1,
@@ -812,7 +847,7 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
             Storyboard.SetTarget(fadeOutAnimation, currentContent);
             Storyboard.SetTargetProperty(fadeOutAnimation, new PropertyPath("Opacity"));
 
-            // Translate the current content out to the left
+            // Translate current content off-screen (to the left)
             var translateOutAnimation = new DoubleAnimation
             {
                 From = 0,
@@ -823,7 +858,7 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
             Storyboard.SetTarget(translateOutAnimation, currentContent.RenderTransform);
             Storyboard.SetTargetProperty(translateOutAnimation, new PropertyPath("(TranslateTransform.X)"));
 
-            // Fade in the next content
+            // Fade in next content
             var fadeInAnimation = new DoubleAnimation
             {
                 From = 0,
@@ -834,10 +869,10 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
             Storyboard.SetTarget(fadeInAnimation, nextContent);
             Storyboard.SetTargetProperty(fadeInAnimation, new PropertyPath("Opacity"));
 
-            // Translate the next content in from the right
+            // Translate next content from the right (off-screen)
             var translateInAnimation = new DoubleAnimation
             {
-                From = nextContent.ActualWidth, // Start from off-screen to the right
+                From = nextContent.ActualWidth,
                 To = 0,
                 Duration = TimeSpan.FromMilliseconds(300),
                 EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut }
@@ -845,6 +880,7 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
             Storyboard.SetTarget(translateInAnimation, nextContent.RenderTransform);
             Storyboard.SetTargetProperty(translateInAnimation, new PropertyPath("(TranslateTransform.X)"));
 
+            // Add animations to the storyboard
             storyboard.Children.Add(fadeOutAnimation);
             storyboard.Children.Add(translateOutAnimation);
             storyboard.Children.Add(fadeInAnimation);
@@ -852,26 +888,19 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
 
             storyboard.Completed += (s, e) =>
             {
-                // Collapse the current content after fading out
+                // Finalize the transition after animation
                 currentContent.Visibility = Visibility.Collapsed;
                 currentContent.RenderTransform = new TranslateTransform(0, 0); // Reset transform
-                ResetContentVisibility(currentContent); // Reset visibility of child elements
-
-                // Set next content to visible after animation completes
                 nextContent.Visibility = Visibility.Visible;
-                nextContent.Opacity = 1; // Ensure it's fully visible after animation
+                nextContent.Opacity = 1; // Ensure next content is visible
 
-                // Update the active button based on the next content
-                if (nextContent == VerifiedContent)
-                    SetActiveButton(VerifiedButton);
-                else if (nextContent == ExperimentalContent)
-                    SetActiveButton(ExperimentalButton);
-                else if (nextContent == ResourcesContent)
-                    SetActiveButton(ResourcesButton);
+                // Update the active button
+                SetActiveButton(activeButton);
             };
 
-            storyboard.Begin(); // Start the storyboard to run all animations
+            storyboard.Begin(); // Start the animations
         }
+
 
 
 
@@ -1151,6 +1180,12 @@ private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
             var storageControl = new Views.Storage(this);
             ShowContentWithAnimation(storageControl); // Call the method without animation
 
+        }
+
+        private void BIOSMan_Click(object sender, RoutedEventArgs e)
+        {
+            var biosControl = new BIOSMan(this);
+            ShowContentWithAnimation(biosControl); // Call the method to display with animation
         }
 
         private void Windows_Click(object sender, RoutedEventArgs e)

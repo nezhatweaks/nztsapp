@@ -19,7 +19,7 @@
                                          Height="10" 
                                          HorizontalAlignment="Left" 
                                          VerticalAlignment="Center" 
-                                         Margin="20,0,0,0" />
+                                         Margin="0,0,0,0" />
                             </Border>
                             <ContentPresenter HorizontalAlignment="Center" 
                                               VerticalAlignment="Center" 
@@ -59,12 +59,32 @@
             </Border>
 
             <!-- Enable Game Bar -->
-            <Border BorderBrush="Yellow" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+            <Border BorderBrush="Yellow" BorderThickness="1" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="Enable Game Bar" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Enabling the Game Bar allows quick access to gaming features."/>
                     <ToggleButton x:Name="GameBarToggle"
                                   Style="{StaticResource iOSToggleButton}"
                                   Click="GameBarToggle_Click" Width="50"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Intel Processor Start Value -->
+            <Border Background="Green" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Tweak Intel Processor" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Maximize Intel CPU Frequency."/>
+                    <ToggleButton x:Name="IntelToggle"
+                                  Style="{StaticResource iOSToggleButton}"
+                                  Click="IntelToggle_Click" Width="50"/>
+                </StackPanel>
+            </Border>
+
+            <!-- AMD Processor Start Value -->
+            <Border Background="Green" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Tweak AMD Processor" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Maximize AMD CPU Frequency."/>
+                    <ToggleButton x:Name="AmdToggle"
+                                  Style="{StaticResource iOSToggleButton}"
+                                  Click="AmdToggle_Click" Width="50"/>
                 </StackPanel>
             </Border>
         </StackPanel>

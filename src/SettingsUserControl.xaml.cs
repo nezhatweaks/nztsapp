@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
-using System.IO.Compression;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using Newtonsoft.Json.Linq; // Make sure to install Newtonsoft.Json via NuGet
+using Newtonsoft.Json.Linq; // Ensure you have this NuGet package installed
+
 namespace NZTS_App.Views
 {
     public partial class SettingsUserControl : UserControl
@@ -18,19 +18,26 @@ namespace NZTS_App.Views
             mainWindow = window;
             mainWindow.TitleTextBlock.Content = "Settings";
         }
-        // GitHub API URL for latest release
+
+        // GitHub API URL for the latest release
         private const string LatestReleaseUrl = "https://api.github.com/repos/nezhatweaks/nztsapp/releases/latest";
         private const string NewZipUrlTemplate = "https://github.com/nezhatweaks/nztsapp/releases/download/v{0}/NZTS_APP_v{0}.zip";
+
+        // Check for updates when the button is clicked
         private async void CheckForUpdates_Click(object sender, RoutedEventArgs e)
         {
             await CheckForUpdates();
         }
+
+        // Display current version of the app
         private void DisplayCurrentVersion()
         {
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
             var currentVersion = assembly?.GetName().Version?.ToString() ?? "unknown version";
             VersionTextBlock.Text = $"v{currentVersion}";
         }
+
+        // Check for available updates
         private async Task CheckForUpdates()
         {
             try
@@ -41,15 +48,18 @@ namespace NZTS_App.Views
                     ShowErrorMessage("Failed to retrieve the latest version.");
                     return;
                 }
+
                 // Remove the 'v' prefix if present
                 latestVersionStr = latestVersionStr.TrimStart('v');
-                // Get current version
+
+                // Get the current version of the app
                 var assembly = System.Reflection.Assembly.GetExecutingAssembly();
                 string currentVersionStr = assembly.GetName().Version?.ToString() ?? "0.0.0.0";
+
                 // Compare versions
                 if (new Version(currentVersionStr) < new Version(latestVersionStr))
                 {
-                    // Prompt user for update
+                    // Prompt user for an update
                     if (MessageBox.Show($"A new version (v{latestVersionStr}) is available! Would you like to download and update now?",
                                         "Update Available", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
                     {
@@ -66,22 +76,46 @@ namespace NZTS_App.Views
                 ShowErrorMessage($"Error checking for updates: {ex.Message}");
             }
         }
+
+        // Get the latest version from GitHub API
         private async Task<string?> GetLatestVersion()
         {
             using (HttpClient client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Add("User-Agent", "NZTS_App"); // Required by GitHub API
-                HttpResponseMessage response = await client.GetAsync(LatestReleaseUrl);
-                if (!response.IsSuccessStatusCode)
+                client.DefaultRequestHeaders.Add("User-Agent", "NZTS_App"); // Add user-agent for GitHub API
+
+                try
                 {
-                    ShowErrorMessage($"Failed to retrieve latest release.\nStatus code: {response.StatusCode}\nReason: {response.ReasonPhrase}");
-                    return null; // Explicitly return null on error
+                    // Send a GET request to the GitHub API
+                    HttpResponseMessage response = await client.GetAsync(LatestReleaseUrl);
+
+                    // Check if the response is not successful (i.e., status code is not in the range 200-299)
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        ShowErrorMessage($"Failed to retrieve latest release. Status code: {response.StatusCode}");
+                        return null; // Return null if the status code indicates failure
+                    }
+
+                    // Read the response content as a string
+                    var json = await response.Content.ReadAsStringAsync();
+
+                    // Parse the JSON response to extract the release information
+                    var release = JObject.Parse(json);
+
+                    // Return the "tag_name" or null if it doesn't exist
+                    return release["tag_name"]?.ToString();
                 }
-                var json = await response.Content.ReadAsStringAsync();
-                var release = JObject.Parse(json);
-                return release["tag_name"]?.ToString(); // This will return something like "v1.0.0"
+                catch (Exception ex)
+                {
+                    // Handle any exceptions that might occur (e.g., network issues)
+                    ShowErrorMessage($"An error occurred while checking for updates: {ex.Message}");
+                    return null; // Return null if there was an exception
+                }
             }
         }
+
+
+        // Download the update and apply it after closing the app
         private async Task DownloadAndApplyUpdate(string latestVersionStr)
         {
             try
@@ -102,12 +136,14 @@ namespace NZTS_App.Views
                         await response.Content.CopyToAsync(fileStream);
                     }
                 }
+
                 // Notify the user and prepare to close the application
                 MessageBox.Show("The application will now close to apply the update. Please restart it afterward.", "Updating...", MessageBoxButton.OK, MessageBoxImage.Information);
-                // Construct the path to UpdateExtractor.exe in the Updates folder
+
+                // Launch the extractor and pass the path to the ZIP file as an argument
                 string updatesFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Updates");
                 string extractorPath = Path.Combine(updatesFolderPath, "UpdateExtractor.exe");
-                // Start the extraction process in the new console application
+
                 var extractionProcess = new System.Diagnostics.Process
                 {
                     StartInfo = new System.Diagnostics.ProcessStartInfo
@@ -118,9 +154,9 @@ namespace NZTS_App.Views
                         CreateNoWindow = true
                     }
                 };
+
                 extractionProcess.Start();
-                // Close the application forcefully
-                Environment.Exit(0);
+                Environment.Exit(0); // Close the app to allow extraction to take place
             }
             catch (HttpRequestException httpEx)
             {
@@ -136,9 +172,11 @@ namespace NZTS_App.Views
             }
         }
 
+
+        // Display an error message in a MessageBox
         private void ShowErrorMessage(string message)
         {
             MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
-}  
+}

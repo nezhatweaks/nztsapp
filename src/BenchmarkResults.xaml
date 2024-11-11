@@ -1,0 +1,29 @@
+﻿<Window x:Class="NZTS_App.BenchmarkResults"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Benchmark Results" Height="450" Width="800">
+    <Grid>
+        <!-- Display current CPU being benchmarked -->
+        <TextBlock Name="CpuStatusTextBlock" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10" FontSize="16" FontWeight="Bold"/>
+
+        <!-- Table for Performance Metrics -->
+        <DataGrid Name="BenchmarkDataGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                  Margin="10" AutoGenerateColumns="False" IsReadOnly="True"
+                  ItemsSource="{Binding BenchmarkResults}">
+
+            <!-- Manually define the columns and bind to formatted properties -->
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Core Name" Binding="{Binding CoreName}" />
+                <DataGridTextColumn Header="CPU Label" Binding="{Binding CpuLabel}" />
+                <DataGridTextColumn Header="FPS" Binding="{Binding FpsFormatted}" />
+                <DataGridTextColumn Header="Average FPS" Binding="{Binding AverageFpsFormatted}" />
+                <DataGridTextColumn Header="Max FPS" Binding="{Binding MaxFpsFormatted}" />
+                <DataGridTextColumn Header="Min FPS" Binding="{Binding MinFpsFormatted}" />
+                <DataGridTextColumn Header="1% Low" Binding="{Binding Lows1PercentFormatted}" Visibility="Collapsed" />
+                <DataGridTextColumn Header="0.1% Low" Binding="{Binding Lows0_1PercentFormatted}" Visibility="Collapsed"  />
+                <DataGridTextColumn Header="Std. Dev." Binding="{Binding StandardDeviationFormatted}" Visibility="Collapsed"  />
+            </DataGrid.Columns>
+
+        </DataGrid>
+    </Grid>
+</Window>

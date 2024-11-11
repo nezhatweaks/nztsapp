@@ -24,7 +24,7 @@
                                          Height="10" 
                                          HorizontalAlignment="Left" 
                                          VerticalAlignment="Center" 
-                                         Margin="20,0,0,0" />
+                                         Margin="0,0,0,0" />
                             </Border>
                             <ContentPresenter HorizontalAlignment="Center" 
                                               VerticalAlignment="Center" 

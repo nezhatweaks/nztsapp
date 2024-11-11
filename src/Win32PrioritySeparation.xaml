@@ -101,7 +101,6 @@
     <Border BorderBrush="#36393F" BorderThickness="1" CornerRadius="20" Margin="10,0,0,0" Background="#36393F" ToolTip="Determines how Windows prioritizes threads and processes, affecting their responsiveness and overall performance.">
         <Grid Margin="10">
             <StackPanel Margin="10">
-                <TextBlock Text="Win32PrioritySeperation" FontWeight="Bold" FontSize="20" Margin="0,0,0,25"/>
                 <TextBlock Text="Choose a preset..." FontStyle="Italic" Margin="0,0,0,0" Foreground="AntiqueWhite"/>
                 <ComboBox x:Name="Win32PrioritySeparationComboBox" Style="{StaticResource DiscordComboBox}" SelectionChanged="PresetSelectionChanged" Margin="10">
                     <ComboBoxItem Content="Preset 1 (Value: 0x00fa332a)" Tag="0x00fa332a"/>

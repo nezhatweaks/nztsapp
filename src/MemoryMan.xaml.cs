@@ -44,7 +44,10 @@ namespace NZTS_App.Views
             LargePageMinimumToggle.Click += LargePageMinimumToggle_Click; 
             SecondLevelDataCacheToggle.Click += SecondLevelDataCacheToggle_Click;
             ThirdLevelDataCacheToggle.Click += ThirdLevelDataCacheToggle_Click;
+            DisableOSMitigationsToggle.Click += DisableOSMitigationsToggle_Click;
         }
+
+        
 
         private void LoadCurrentSettings()
         {
@@ -80,6 +83,12 @@ namespace NZTS_App.Views
                         // ThirdLevelDataCache
                         var thirdLevelCacheValue = key.GetValue("ThirdLevelDataCache");
                         ThirdLevelDataCacheToggle.IsChecked = thirdLevelCacheValue != null;
+
+                        // Mitigations
+                        var DisableOSMitigationsValue = key.GetValue("FeatureSettingsOverride");
+                        var DisableOSMitigationsMask = key.GetValue("FeatureSettingsOverrideMask");
+                        DisableOSMitigationsToggle.IsChecked = DisableOSMitigationsValue != null && DisableOSMitigationsMask != null;
+
                     }
                     else
                     {
@@ -186,6 +195,23 @@ namespace NZTS_App.Views
                 DeleteRegistryValue("LargePageMinimum");
             }
         }
+
+        private void DisableOSMitigationsToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (DisableOSMitigationsToggle.IsChecked == true)
+            {
+                // Set to tweaked values
+                UpdateRegistryValue("FeatureSettingsOverride", 0x00000003);  // Tweaked value for FeatureSettingsOverride
+                UpdateRegistryValue("FeatureSettingsOverrideMask", 0x00000003);  // Tweaked value for FeatureSettingsOverrideMask
+            }
+            else
+            {
+                // Set to default values (default value for FeatureSettingsOverride is 0x00000048, FeatureSettingsOverrideMask is 0x00000003)
+                UpdateRegistryValue("FeatureSettingsOverride", 0x00000048);  // Default value for FeatureSettingsOverride
+                UpdateRegistryValue("FeatureSettingsOverrideMask", 0x00000003);  // Default value for FeatureSettingsOverrideMask
+            }
+        }
+
 
         private void UpdateRegistryValue(string valueName, int value)
         {

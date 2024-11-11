@@ -13,10 +13,22 @@
     <Compile Update="AMD.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="BenchmarkResults.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="BIOSMan.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="ChangelogUserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="CpuAffinityDialog.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="CPUPriorityControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="CpuStatusWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Debloat.xaml.cs">
@@ -69,10 +81,22 @@
     <Page Update="AMD.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="BenchmarkResults.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="BIOSMan.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="ChangelogUserControl.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="CpuAffinityDialog.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="CPUPriorityControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="CpuStatusWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Debloat.xaml">

@@ -8,8 +8,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <AssemblyVersion>0.5.0.0</AssemblyVersion>
-    <FileVersion>0.5.0.0</FileVersion>
+    <AssemblyVersion>0.5.1.0</AssemblyVersion>
+    <FileVersion>0.5.1.0</FileVersion>
     <PackageIcon>nezhalogo12.2.jpg</PackageIcon>
     <ApplicationIcon>nezhalogo12.2.3.ico</ApplicationIcon>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
@@ -62,9 +62,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Hardware.Info" Version="101.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NvAPIWrapper.Net" Version="0.8.1.101" />
+    <PackageReference Include="OpenTK.GLWpfControl" Version="4.3.3" />
+    <PackageReference Include="SkiaSharp.Views.WPF" Version="2.88.3" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.10" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
@@ -86,6 +90,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Presets\nezha.pow">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Presets\NZTS_MAX.pow">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Properties\Settings.settings">

@@ -28,7 +28,7 @@ namespace NZTS_App
             LoadPowerPlans();
             CheckPlatformAoAcOverride();
             mainWindow = window;
-            mainWindow.TitleTextBlock.Content = "Power Plan";
+            mainWindow.TitleTextBlock.Content = "Power";
         }
 
         private void LoadPowerPlans()

@@ -49,17 +49,9 @@
         </Grid.RowDefinitions>
 
         <!-- Title -->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0" Grid.Row="0">
-            <TextBlock Text="MSI MODE" FontSize="20" FontWeight="Bold" Foreground="White" ToolTip="Enables Message Signaled Interrupts (MSI) for this device, allowing it to send interrupts via messages rather than traditional line-based methods."/>
-            <Border  BorderThickness="1" Margin="10,-1,0,0" CornerRadius="5" Background="#2A2A2A">
-                <TextBlock Text="No Logging!" 
-                   Background="Red" 
-                   FontSize="14" 
-                   FontWeight="Bold" 
-                   Padding="5" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Center" ToolTip="If you are not sure about this settings, please leave the settings alone."/>
-            </Border>
+        <StackPanel Width="700" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-10,0,0,0" Grid.Row="0">
+            
+            
 
             <!-- Backup Button -->
             <Button Content="Restore Point" 
@@ -67,6 +59,14 @@
             Click="BackupButton_Click" 
             Margin="10,0,0,0" 
             HorizontalAlignment="Left" Width="100" />
+
+            <Button x:Name="StartBenchmarkButton" Content="Benchmark" Click="StartBenchmarkButton_Click" Width="100" Style="{StaticResource RoundedButtonStyle}"  />
+            <TextBlock x:Name="CpuStatusTextBlock"
+                   VerticalAlignment="Top" HorizontalAlignment="Left"
+                   Margin="10,10,10,10" Width="600" />
+
+
+
         </StackPanel>
 
 
@@ -75,11 +75,10 @@
 
         <!-- Device List -->
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Row="1" Margin="0,10,-170,-30">
-            <ListView x:Name="DeviceListView" Width="900">
+            <ListView x:Name="DeviceListView" MouseDoubleClick="DeviceListView_MouseDoubleClick" Width="900">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding DeviceName}" Width="150"/>
-                        <GridViewColumn Header="IRQ" DisplayMemberBinding="{Binding Irq}" Width="30"/>
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding DeviceName}" Width="280"/>
                         <GridViewColumn Header="MSI" Width="30">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
@@ -90,17 +89,17 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Limit" Width="110">
+                        <GridViewColumn Header="MSI Limit" Width="95">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBox Width="40" MaxLength="4" Text="{Binding MessageNumberLimit, UpdateSourceTrigger=PropertyChanged}" />
-                                        <Button Content="Set Limit" Click="SetLimitButton_Click" />
+                                        <Button Content="Apply" Click="SetLimitButton_Click" />
                                     </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Modes" DisplayMemberBinding="{Binding SupportedModes}" Width="150"/>
+                        <GridViewColumn Header="Modes" DisplayMemberBinding="{Binding SupportedModes}" Width="75"/>
                         <GridViewColumn Header="Priority" Width="80">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>

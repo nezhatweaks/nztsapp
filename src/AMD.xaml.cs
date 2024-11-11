@@ -26,11 +26,8 @@ namespace NZTS_App.Views
             // Load general settings
             LoadRegistryValue("EnableUlps", EnableUlpsSwitch);
             LoadRegistryValue("PP_ThermalAutoThrottlingEnable", ThermalThrottlingSwitch);
-            
             LoadRegistryValue("DisableBlockWrite", DisableBlockWriteSwitch);
             LoadRegistryValue("StutterMode", StutterModeSwitch);
-            
-            
             LoadRegistryValue("DisableFBCForFullScreenApp", DisableFBCForFullscreenSwitch);
             LoadRegistryValue("DisableFBCSupport", DisableFBCSupportSwitch);
             LoadRegistryValue("EnableAspmL0s", EnableAspmL0sSwitch);
@@ -51,6 +48,7 @@ namespace NZTS_App.Views
             LoadRegistryValue("GLPBMode_DEF", GLPBModeDefSwitch, UMDRegistryKeyPath);
         }
 
+
         private void LoadRegistryValue(string valueName, ToggleButton toggleButton, string? registryPath = null)
         {
             string path = registryPath ?? AMDRegistryKeyPath;
@@ -59,35 +57,41 @@ namespace NZTS_App.Views
             try
             {
                 key = OpenRegistryKey(path);
-
                 if (key != null)
                 {
                     object? value = key.GetValue(valueName);
-                    if (value == null)
-                    {
-                        // Create the registry value if it doesn't exist
-                        SetRegistryValue(key, valueName, false); // Default to false if not set
-                        toggleButton.IsChecked = false;
-                    }
-                    else
+                    if (value != null)
                     {
                         toggleButton.IsChecked = GetToggleState(value);
                     }
+                    else
+                    {
+                        toggleButton.IsChecked = false;
+                    }
+                }
+                else
+                {
+                    ShowError($"Registry key not found: {path}");
                 }
             }
             catch (UnauthorizedAccessException)
             {
-                ShowError("You do not have permission to access the registry key. Please run the application as an administrator.");
+                ShowError("Access denied. Please run the application as an administrator.");
             }
             catch (Exception ex)
             {
-                ShowError($"Error loading {valueName} value: {ex.Message}");
+                ShowError($"Failed to load {valueName}: {ex.Message}");
             }
             finally
             {
                 key?.Close();
             }
         }
+
+
+
+
+
 
         private RegistryKey? OpenRegistryKey(string path)
         {
@@ -114,14 +118,25 @@ namespace NZTS_App.Views
 
         private bool? GetToggleState(object? value)
         {
-            return value switch
+            // Check for integer type (0 = disabled, 1 = enabled)
+            if (value is int intValue)
             {
-                int currentValue => currentValue != 1, // 1 means disabled
-                byte[] binaryValue => binaryValue.Length > 0 && binaryValue[0] == 0x30, // Assuming 0x30 means enabled
-                string stringValue => stringValue == "0", // Assuming "0" means enabled
-                _ => null // Return null for unexpected value types without showing an error
-            };
+                return intValue != 1;
+            }
+            // Check for byte[] (0x30 = enabled, 0x31 = disabled)
+            if (value is byte[] binaryValue)
+            {
+                return binaryValue.Length > 0 && binaryValue[0] == 0x30;
+            }
+            // Check for string type ("0" = enabled, "1" = disabled)
+            if (value is string stringValue)
+            {
+                return stringValue == "0";
+            }
+            return null;
         }
+
+
 
         private RegistryKey? OpenRegistryKey(string path, bool writable = false)
         {
@@ -138,6 +153,7 @@ namespace NZTS_App.Views
             return key;
         }
 
+
         private void ToggleRegistryValue(string valueName, bool enable, string? registryPath = null)
         {
             string path = registryPath ?? AMDRegistryKeyPath;
@@ -145,18 +161,11 @@ namespace NZTS_App.Views
 
             try
             {
-                // Open the registry key, creating it if it doesn't exist
+                // Open the registry key with write access
                 key = OpenRegistryKey(path, writable: true);
-
-                // Ensure UMD key is created if this is a UMD setting
-                if (path == UMDRegistryKeyPath)
-                {
-                    OpenRegistryKey(UMDRegistryKeyPath, writable: true);
-                }
 
                 if (key != null)
                 {
-                    // Set the value, creating it if necessary
                     SetRegistryValue(key, valueName, enable);
                     mainWindow?.MarkSettingsApplied();
                     App.changelogUserControl?.AddLog("Applied", $"{valueName} has been set to {(enable ? "Enabled" : "Disabled")}");
@@ -177,56 +186,81 @@ namespace NZTS_App.Views
         }
 
 
+
+
         private void SetRegistryValue(RegistryKey key, string valueName, bool enable)
         {
-            switch (valueName)
+            try
             {
-                case "EnableUlps":
-                case "PP_ThermalAutoThrottlingEnable":
-                case "StutterMode":
-                case "EnableAspmL0s":
-                case "EnableAspmL1":
-                case "DisableBlockWrite":
-                    key.SetValue(valueName, enable ? 0 : 1, RegistryValueKind.DWord);
-                    break;
+                // Handle values based on their expected types
 
-                case "DisableDMACopy":
-                case "DisableDrmdmaPowerGating":
-                case "DisableFBCSupport":
-                    key.SetValue(valueName, enable ? 1 : 0, RegistryValueKind.DWord);
-                    break;
+                switch (valueName)
+                {
+                    // For DWORD values (Enable/Disable style values)
+                    case "EnableUlps":
+                    case "PP_ThermalAutoThrottlingEnable":
+                    case "StutterMode":
+                    case "EnableAspmL0s":
+                    case "EnableAspmL1":
+                    case "DisableBlockWrite":
+                    case "DisableFBCSupport":
+                        // Write 0 (off) or 1 (on)
+                        key.SetValue(valueName, enable ? 0 : 1, RegistryValueKind.DWord);
+                        break;
 
-                case "Main3D":
-                case "FlipQueueSize":
-                case "ShaderCache":
-                case "VSyncControl":
-                case "CatalystAI":
-                case "TFQ":
-                    byte[] newValue = enable ? new byte[] { 0x30, 0x00 } : new byte[] { 0x31, 0x00 };
-                    key.SetValue(valueName, newValue, RegistryValueKind.Binary);
-                    break;
+                    // For other DWORD values that follow the same behavior
+                    case "DisableDMACopy":
+                    case "DisableDrmdmaPowerGating":
+                    
+                        // These values are inverted (1 = enabled, 0 = disabled)
+                        key.SetValue(valueName, enable ? 1 : 0, RegistryValueKind.DWord);
+                        break;
 
-                case "ForceTripleBuffering":
-                case "PowerState":
-                case "Tessellation":
-                case "TextureOpt":
-                    byte[] multiByteValue = enable ? new byte[] { 0x30, 0x00, 0x00, 0x00 } : new byte[] { 0x31, 0x00, 0x00, 0x00 };
-                    key.SetValue(valueName, multiByteValue, RegistryValueKind.Binary);
-                    break;
+                    // For binary values (0x30/0x31 style for on/off)
+                    case "Main3D":
+                    case "FlipQueueSize":
+                    case "ShaderCache":
+                    case "VSyncControl":
+                    case "CatalystAI":
+                    case "TFQ":
+                        // Binary: 0x30 is enabled, 0x31 is disabled
+                        byte[] binaryValue = enable ? new byte[] { 0x30, 0x00 } : new byte[] { 0x31, 0x00 };
+                        key.SetValue(valueName, binaryValue, RegistryValueKind.Binary);
+                        break;
 
-                case "Main3D_DEF":
-                case "CatalystAI_DEF":
-                case "GLPBMode_DEF":
-                case "DisableFBCForFullScreenApp":
-                    string stringValue = enable ? "0" : "1";
-                    key.SetValue(valueName, stringValue, RegistryValueKind.String);
-                    break;
+                    // For multi-byte binary values (e.g., 0x30, 0x00, 0x00, 0x00)
+                    case "ForceTripleBuffering":
+                    case "PowerState":
+                    case "Tessellation":
+                    case "TextureOpt":
+                        // Multi-byte binary values, default to 0x30 or 0x31 with extra padding
+                        byte[] multiByteValue = enable ? new byte[] { 0x30, 0x00, 0x00, 0x00 } : new byte[] { 0x31, 0x00, 0x00, 0x00 };
+                        key.SetValue(valueName, multiByteValue, RegistryValueKind.Binary);
+                        break;
 
-                default:
-                    ShowError($"Unsupported registry value: '{valueName}'");
-                    break;
+                    // For string values (e.g., "0" = enabled, "1" = disabled)
+                    case "Main3D_DEF":
+                    case "CatalystAI_DEF":
+                    case "GLPBMode_DEF":
+                    case "DisableFBCForFullScreenApp":
+                        // String: "0" means enabled, "1" means disabled
+                        string stringValue = enable ? "0" : "1";
+                        key.SetValue(valueName, stringValue, RegistryValueKind.String);
+                        break;
+
+                    default:
+                        ShowError($"Unsupported registry value: '{valueName}'");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that occur while setting the registry value
+                ShowError($"Error setting registry value '{valueName}': {ex.Message}");
             }
         }
+
+
 
 
 

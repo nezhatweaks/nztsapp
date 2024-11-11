@@ -21,7 +21,7 @@
                                          Height="10"
                                          HorizontalAlignment="Left"
                                          VerticalAlignment="Center"
-                                         Margin="20,0,0,0" />
+                                         Margin="0,0,0,0" />
                             </Border>
                             <ContentPresenter HorizontalAlignment="Center"
                                               VerticalAlignment="Center"
@@ -120,13 +120,13 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <StackPanel Margin="10,70,-10,0" >
+        <StackPanel Margin="10,20,-10,0" >
             <StackPanel x:Name="VerifiedContent" Visibility="Visible" Orientation="Vertical"  >
                 <TextBlock x:Name="CardTitleTextBlock" FontSize="24" HorizontalAlignment="Center" Visibility="Collapsed" />
                 <TextBlock x:Name="CardDescriptionTextBlock" FontSize="18" HorizontalAlignment="Center" Visibility="Collapsed" />
 
                 <!-- ScrollViewer for scrolling capability -->
-                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="250" >
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="350" >
                     <ScrollViewer.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="Transparent"/>
@@ -134,7 +134,7 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="ScrollBar" >
-                                        <Grid Background="Transparent" Margin="-20,20,0,0" >
+                                        <Grid Background="Transparent" Margin="0,20,0,0" >
                                             <Track Name="PART_Track" IsDirectionReversed="true">
                                                 <Track.DecreaseRepeatButton>
                                                     <RepeatButton Name="PART_DecreaseButton"
@@ -174,7 +174,7 @@
                             <DataTemplate>
                                 <Grid Margin="5">
                                     <!-- Card Button -->
-                                    <Button Click="CardButton_Click" Width="180" Height="240"
+                                    <Button Click="CardButton_Click" Width="120" Height="160"
                                     Background="Black" Foreground="White" FontSize="16" FontWeight="Bold">
                                         <Button.Template>
                                             <ControlTemplate TargetType="Button">
@@ -200,16 +200,16 @@
 
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="border" Property="Background" Value="Red"/>
-                                                        <Setter TargetName="border" Property="BorderBrush" Value="Red"/>
+                                                        <Setter TargetName="border" Property="Background" Value="Blue"/>
+                                                        <Setter TargetName="border" Property="BorderBrush" Value="Blue"/>
                                                         <Setter TargetName="border" Property="Effect">
                                                             <Setter.Value>
-                                                                <DropShadowEffect Color="Red" ShadowDepth="5" BlurRadius="20" Opacity="1" />
+                                                                <DropShadowEffect Color="Blue" ShadowDepth="5" BlurRadius="20" Opacity="1" />
                                                             </Setter.Value>
                                                         </Setter>
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
-                                                        <Setter TargetName="border" Property="Background" Value="Red"/>
+                                                        <Setter TargetName="border" Property="Background" Value="Blue"/>
                                                     </Trigger>
                                                 </ControlTemplate.Triggers>
                                             </ControlTemplate>
@@ -324,7 +324,7 @@ MinHeight="200"/>
                                 <ToggleButton x:Name="UseLargePagesToggle"
                                               Style="{StaticResource iOSToggleButton}"
                                               Click="UseLargePagesToggle_Click" Width="50"/>
-                                <TextBlock x:Name="UseLargePagesStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,20,0,0">
@@ -332,7 +332,7 @@ MinHeight="200"/>
                                 <ToggleButton x:Name="DisableHeapCoalesceToggle"
                                               Style="{StaticResource iOSToggleButton}"
                                               Click="DisableHeapCoalesceToggle_Click" Width="50"/>
-                                <TextBlock x:Name="DisableHeapCoalesceStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
@@ -345,7 +345,7 @@ MinHeight="200"/>
             </ScrollViewer>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Margin="0,10,0,-50">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Margin="0,20,0,-50">
             <Button x:Name="VerifiedButton" 
                     Content="Presets" 
                     Click="SwitchToVerifiedTab" 

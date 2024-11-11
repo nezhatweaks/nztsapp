@@ -201,9 +201,9 @@ namespace NZTS_App
         private void ResetGameUI()
         {
             UseLargePagesToggle.IsChecked = false;
-            UseLargePagesStatusTextBlock.Text = "Disabled";
+            
             DisableHeapCoalesceToggle.IsChecked = false;
-            DisableHeapCoalesceStatusTextBlock.Text = "Disabled";
+            
             PriorityComboBox.SelectedIndex = -1;
             GPUSchedulingComboBox.SelectedIndex = -1;
         }
@@ -342,7 +342,7 @@ namespace NZTS_App
         new Card { Title = "BO6", ExecutableName = "mp24-cod.exe", Description = "", ImageSource = "pack://application:,,,/Images/bo6.png" },
         new Card { Title = "Apex Legends", ExecutableName = "r5apex.exe", Description = "", ImageSource = "pack://application:,,,/Images/apex.png" },
         new Card { Title = "PUBG", ExecutableName = "TslGame.exe", Description = "", ImageSource = "pack://application:,,,/Images/pubg.png" },
-        new Card { Title = "Minecraft (Java)", ExecutableName = "javaw.exe", Description = "", ImageSource = "pack://application:,,,/Images/minecraft.png" },
+        new Card { Title = "MC (Java)", ExecutableName = "javaw.exe", Description = "", ImageSource = "pack://application:,,,/Images/minecraft.png" },
         new Card { Title = "Roblox", ExecutableName = "RobloxPlayerBeta.exe", Description = "", ImageSource = "pack://application:,,,/Images/roblox.png" },
         
         
@@ -581,7 +581,7 @@ namespace NZTS_App
             try
             {
                 bool useLargePages = UseLargePagesToggle.IsChecked == true;
-                UseLargePagesStatusTextBlock.Text = useLargePages ? "Enabled" : "Disabled";
+                
 
                 // Set the value in the registry
                 string registryPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\";
@@ -647,18 +647,18 @@ namespace NZTS_App
                         if (value is int intValue)
                         {
                             UseLargePagesToggle.IsChecked = intValue == 1; // Set toggle based on registry value
-                            UseLargePagesStatusTextBlock.Text = intValue == 1 ? "Enabled" : "Disabled";
+                            
                         }
                         else
                         {
                             UseLargePagesToggle.IsChecked = false; // Default if value is not set
-                            UseLargePagesStatusTextBlock.Text = "Disabled";
+                            
                         }
                     }
                     else
                     {
                         UseLargePagesToggle.IsChecked = false; // No key found
-                        UseLargePagesStatusTextBlock.Text = "Disabled";
+                        
                     }
                 }
             }
@@ -688,18 +688,18 @@ namespace NZTS_App
                         if (value is int intValue)
                         {
                             DisableHeapCoalesceToggle.IsChecked = intValue == 1; // Set toggle based on registry value
-                            DisableHeapCoalesceStatusTextBlock.Text = intValue == 1 ? "Enabled" : "Disabled";
+                            
                         }
                         else
                         {
                             DisableHeapCoalesceToggle.IsChecked = false; // Default if value is not set
-                            DisableHeapCoalesceStatusTextBlock.Text = "Disabled";
+                            
                         }
                     }
                     else
                     {
                         DisableHeapCoalesceToggle.IsChecked = false; // No key found
-                        DisableHeapCoalesceStatusTextBlock.Text = "Disabled";
+                        
                     }
                 }
             }
@@ -718,7 +718,7 @@ namespace NZTS_App
             try
             {
                 bool disableHeapCoalesce = DisableHeapCoalesceToggle.IsChecked == true;
-                DisableHeapCoalesceStatusTextBlock.Text = disableHeapCoalesce ? "Enabled" : "Disabled";
+                
 
                 string registryPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\";
                 foreach (var game in games)
