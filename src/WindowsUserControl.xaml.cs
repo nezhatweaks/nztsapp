@@ -191,7 +191,6 @@ namespace NZTS_App.Views
         {
             try
             {
-                // Open the registry key for Intel processor (creating it if it doesn't exist)
                 using (var key = Registry.LocalMachine.OpenSubKey(IntelKeyPath, writable: true))
                 {
                     if (key == null)
@@ -199,15 +198,19 @@ namespace NZTS_App.Views
                         // Create the key if it doesn't exist and set the default value
                         using (var newKey = Registry.LocalMachine.CreateSubKey(IntelKeyPath))
                         {
-                            newKey?.SetValue("Start", 3, RegistryValueKind.DWord); // Default to 3 (disabled)
+                            newKey?.SetValue("Start", 4, RegistryValueKind.DWord); // Default to 4 (OFF)
                         }
                     }
 
-                    // Update the Intel processor setting
-                    var newValue = IntelToggle.IsChecked == true ? 1 : 3;
+                    var currentValue = (int?)key?.GetValue("Start", 4) ?? 4;
+                    int newValue = currentValue == 1 ? 4 : 1; // Toggle between 1 (ON) and 4 (OFF)
+
                     key?.SetValue("Start", newValue, RegistryValueKind.DWord);
+
+                    IntelToggle.Tag = newValue;  // Update the Tag to reflect the current state
+                    IntelToggle.Content = newValue == 1 ? "ON" : "OFF";  // Update UI with state value
                     mainWindow?.MarkSettingsApplied();
-                    App.changelogUserControl?.AddLog("Applied", $"Intel Processor service has been {(newValue == 1 ? "Tweaked" : "Restore")}");
+                    App.changelogUserControl?.AddLog("Applied", $"Intel Processor service has been set to {GetIntelStateDescription(newValue)}");
                 }
             }
             catch (UnauthorizedAccessException)
@@ -224,7 +227,6 @@ namespace NZTS_App.Views
         {
             try
             {
-                // Open the registry key for AMD processor (creating it if it doesn't exist)
                 using (var key = Registry.LocalMachine.OpenSubKey(AmdKeyPath, writable: true))
                 {
                     if (key == null)
@@ -232,15 +234,19 @@ namespace NZTS_App.Views
                         // Create the key if it doesn't exist and set the default value
                         using (var newKey = Registry.LocalMachine.CreateSubKey(AmdKeyPath))
                         {
-                            newKey?.SetValue("Start", 3, RegistryValueKind.DWord); // Default to 3 (disabled)
+                            newKey?.SetValue("Start", 4, RegistryValueKind.DWord); // Default to 4 (OFF)
                         }
                     }
 
-                    // Update the AMD processor setting
-                    var newValue = AmdToggle.IsChecked == true ? 1 : 3;
+                    var currentValue = (int?)key?.GetValue("Start", 4) ?? 4;
+                    int newValue = currentValue == 1 ? 4 : 1; // Toggle between 1 (ON) and 4 (OFF)
+
                     key?.SetValue("Start", newValue, RegistryValueKind.DWord);
+
+                    AmdToggle.Tag = newValue;  // Update the Tag to reflect the current state
+                    AmdToggle.Content = newValue == 1 ? "ON" : "OFF";  // Update UI with state value
                     mainWindow?.MarkSettingsApplied();
-                    App.changelogUserControl?.AddLog("Applied", $"AMD Processor service has been {(newValue == 1 ? "Tweaked" : "Restore")}");
+                    App.changelogUserControl?.AddLog("Applied", $"AMD Processor service has been set to {GetAmdStateDescription(newValue)}");
                 }
             }
             catch (UnauthorizedAccessException)
@@ -253,10 +259,95 @@ namespace NZTS_App.Views
             }
         }
 
+        private void IntelReset_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                using (var key = Registry.LocalMachine.OpenSubKey(IntelKeyPath, writable: true))
+                {
+                    if (key == null)
+                    {
+                        using (var newKey = Registry.LocalMachine.CreateSubKey(IntelKeyPath))
+                        {
+                            newKey?.SetValue("Start", 3, RegistryValueKind.DWord); // Default to 3 (Restored)
+                        }
+                    }
+
+                    key?.SetValue("Start", 3, RegistryValueKind.DWord);  // Reset to 3
+                    IntelToggle.Tag = 3;  // Set the Tag to reflect the Reset state
+                    IntelToggle.Content = "Restored"; // Reset value
+                    mainWindow?.MarkSettingsApplied();
+                    App.changelogUserControl?.AddLog("Applied", "Intel Processor service has been reset.");
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                ShowError("You do not have permission to modify the registry. Please run the application as an administrator.");
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Error resetting Intel Processor setting: {ex.Message}");
+            }
+        }
+
+        private void AmdReset_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                using (var key = Registry.LocalMachine.OpenSubKey(AmdKeyPath, writable: true))
+                {
+                    if (key == null)
+                    {
+                        using (var newKey = Registry.LocalMachine.CreateSubKey(AmdKeyPath))
+                        {
+                            newKey?.SetValue("Start", 3, RegistryValueKind.DWord); // Default to 3 (Restored)
+                        }
+                    }
+
+                    key?.SetValue("Start", 3, RegistryValueKind.DWord);  // Reset to 3
+                    AmdToggle.Tag = 3;  // Set the Tag to reflect the Reset state
+                    AmdToggle.Content = "Restored"; // Reset value
+                    mainWindow?.MarkSettingsApplied();
+                    App.changelogUserControl?.AddLog("Applied", "AMD Processor service has been reset.");
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                ShowError("You do not have permission to modify the registry. Please run the application as an administrator.");
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Error resetting AMD Processor setting: {ex.Message}");
+            }
+        }
+
+
+
+
+        private string GetIntelStateDescription(int state)
+        {
+            switch (state)
+            {
+                case 1: return "ON";
+                case 4: return "OFF";
+                default: return "Unknown";
+            }
+        }
+
+        private string GetAmdStateDescription(int state)
+        {
+            switch (state)
+            {
+                case 1: return "ON";
+                case 4: return "OFF";
+                default: return "Unknown";
+            }
+        }
+
+
         private void ShowError(string message)
         {
             MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
-
     }
 }

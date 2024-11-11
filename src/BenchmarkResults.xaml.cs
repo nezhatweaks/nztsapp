@@ -21,5 +21,4 @@ namespace NZTS_App
             CpuStatusTextBlock.Text = status;  // Assuming CpuStatusTextBlock is defined in XAML
         }
     }
-
 }

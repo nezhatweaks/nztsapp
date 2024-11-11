@@ -79,9 +79,8 @@ namespace NZTS_App
     }},
     {"Start", new List<Tuple<string, string, ValueType, bool, string>>()
     {
-        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\MMCSS", "00000002", ValueType.DWord, false, "00000002"),
-        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\intelppm", "00000001", ValueType.DWord, false, "00000003"),
-        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\amdppm", "00000001", ValueType.DWord, false, "00000003")
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\MMCSS", "00000002", ValueType.DWord, false, "00000002")
+        
     }},
     {"VsyncIdleTimeout", new List<Tuple<string, string, ValueType, bool, string>>()
     {

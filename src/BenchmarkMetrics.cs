@@ -30,7 +30,6 @@ namespace NZTS_App
         public BenchmarkMetrics()
         {
             _benchmarkResults = new List<BenchmarkResult>(); // Initialize the list
-            PropertyChanged = null; // Initialize PropertyChanged to null
         }
 
         // Add a new benchmark result to the list
@@ -41,6 +40,7 @@ namespace NZTS_App
             if (fpsValues.Count == 0)
             {
                 fpsValues.Add(0);  // Add a dummy value to avoid errors
+                Console.WriteLine($"Warning: No FPS values provided for CPU {cpuId}. Defaulting to 0.");
             }
 
             // Convert cpuId into both user-friendly and CPU{cpuId} labels
@@ -48,31 +48,63 @@ namespace NZTS_App
             var cpuLabel = $"CPU{cpuId}"; // For example: "CPU0", "CPU1", etc.
 
             // Create the benchmark result
-            var result = new BenchmarkResult
-            {
-                CpuLabel = cpuLabel,       // Original "CPU0", "CPU1", etc.
-                CoreName = coreAndThread,  // User-friendly "Core X, Thread Y"
-                Fps = avgFps,              // Assuming avgFps is the main FPS value
-                AverageFps = avgFps,
-                MaxFps = maxFps,
-                MinFps = minFps,
-                Lows1Percent = lowPercentile1,
-                Lows0_1Percent = lowPercentile0_1,
-                StandardDeviation = standardDeviation
-            };
+            var result = new BenchmarkResult(
+    cpuLabel,        // Original "CPU0", "CPU1", etc.
+    coreAndThread,   // User-friendly "Core X, Thread Y"
+    avgFps,          // Assuming avgFps is the main FPS value
+    avgFps,          // Average FPS
+    maxFps,          // Max FPS
+    minFps,          // Min FPS
+    lowPercentile1,  // 1% Low FPS
+    lowPercentile0_1, // 0.1% Low FPS
+    standardDeviation // Standard deviation
+);
 
             // Add the result to the BenchmarkResults list
             BenchmarkResults.Add(result);
+
+
         }
 
         // Helper method to get the core and thread description from the cpuId
         private string GetCoreAndThreadDescription(int cpuId)
         {
-            // Assuming no hyper-threading, just sequential mapping
-            int coreNumber = cpuId / 2 + 1;  // CPU 0, 1 -> Core 1, CPU 2, 3 -> Core 2, etc.
-            int threadNumber = (cpuId % 2 == 0) ? 1 : 2;  // Even cpuId -> Thread 1, Odd cpuId -> Thread 2
+            // Get the number of physical cores and logical processors (including HT)
+            int physicalCoreCount = GetPhysicalCoreCount();
+            int logicalProcessorCount = Environment.ProcessorCount;
 
-            return $"Core {coreNumber}, Thread {threadNumber}";
+            // Check if Hyper-Threading (HT) is enabled
+            bool isHTEnabled = logicalProcessorCount > physicalCoreCount;
+
+            // Core number is based on cpuId divided by logical processors per physical core
+            int coreNumber = cpuId / (logicalProcessorCount / physicalCoreCount) + 1;
+
+            if (isHTEnabled)
+            {
+                // If HT is enabled, show both core and thread
+                int threadNumber = (cpuId % 2 == 0) ? 1 : 2;  // Example: CPU 0 could be Thread 1, CPU 1 could be Thread 2
+                return $"Core {coreNumber}, Thread {threadNumber}";
+            }
+            else
+            {
+                // If HT is disabled, only show core number (no thread info)
+                return $"Core {coreNumber}";
+            }
+        }
+
+
+        // Helper method to get the number of physical cores
+        private int GetPhysicalCoreCount()
+        {
+            int coreCount = 0;
+            using (var searcher = new System.Management.ManagementObjectSearcher("SELECT * FROM Win32_Processor"))
+            {
+                foreach (var queryObj in searcher.Get())
+                {
+                    coreCount = Convert.ToInt32(queryObj["NumberOfCores"]);
+                }
+            }
+            return coreCount;
         }
 
         // Implement INotifyPropertyChanged
@@ -116,14 +148,14 @@ namespace NZTS_App
                     // Prepare the row data
                     string row = $"{result.CpuLabel}, {result.CoreName}, {result.AverageFps:F2}, {result.MaxFps:F2}, {result.MinFps:F2}, {result.Lows1Percent:F2}, {result.Lows0_1Percent:F2}, ";
 
-                    // Mark the best and runner-up rows with appropriate labels
+                    // Add Best and Runner-up FPS to the row
                     if (result == bestResult)
                     {
-                        row += "Best";
+                        row += $"{bestResult.MaxFps:F2}";
                     }
                     else if (result == runnerUpResult)
                     {
-                        row += "Runner-up";
+                        row += $"{runnerUpResult.MaxFps:F2}";
                     }
                     else
                     {
