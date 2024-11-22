@@ -4,7 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="400" Background="#2C2F33">
+             d:DesignHeight="300" d:DesignWidth="400">
 
     <UserControl.Resources>
         <Style x:Key="iOSToggleButton" TargetType="ToggleButton">
@@ -47,13 +47,13 @@
             <Setter Property="Background" Value="#36393F"/>
             <Setter Property="CornerRadius" Value="5"/>
             <Setter Property="BorderBrush" Value="#2F3136"/>
-            <Setter Property="BorderThickness" Value="1"/>
+            
         </Style>
     </UserControl.Resources>
 
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,0">
         <!-- Header Border -->
-        <Border Background="#36393F" Padding="10" CornerRadius="10" BorderBrush="Transparent" BorderThickness="2">
+        <Border Background="#36393F" Padding="10" CornerRadius="10" BorderThickness="2">
             <TextBlock Text="MMCSS Settings" FontSize="20" FontWeight="Bold" Foreground="White"/>
         </Border>
 

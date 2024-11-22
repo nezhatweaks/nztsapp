@@ -63,7 +63,7 @@
                             </Border>
                             <ContentPresenter HorizontalAlignment="Center" 
                                               VerticalAlignment="Center" 
-                                              Margin="35,0,0,0" />
+                                              Margin="45,0,0,0" />
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
@@ -103,28 +103,35 @@
                 </StackPanel>
 
                 <!-- Select Power Plan -->
-                <TextBlock Text="Select a Power Plan to Import:" FontWeight="Bold" Margin="0,10,0,5"/>
+                <TextBlock Text="Select a Power Plan to Import:" FontWeight="Bold" Margin="0,0,0,0"/>
 
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <StackPanel Orientation="Horizontal" Margin="30,10,0,5">
+                <Button x:Name="BrowseButton" Width="74" 
+        Content="Browse" 
+        Style="{StaticResource DiscordButtonStyle}" 
+        IsEnabled="False" 
+        Click="BrowseButton_Click"/>
                 <Button x:Name="ImportPresetPlanButton" 
                             Content="Presets" 
                             Style="{StaticResource DiscordButtonStyle}" 
                             IsEnabled="False"
                             Click="ImportPresetPlan_Click"/>
-                    <Button x:Name="BrowseButton" Width="144" 
-                            Content="Browse" 
-                            Style="{StaticResource DiscordButtonStyle}" 
-                            IsEnabled="False" 
-                            Click="BrowseButton_Click"/>
+                    
                     <Button x:Name="OpenPowerOptionsButton" 
         Content="Power Options"
         Style="{StaticResource DiscordButtonStyle}" 
-        Click="OpenPowerOptionsButton_Click" 
-         Width="120"/>
-                </StackPanel>
+        Click="OpenPowerOptionsButton_Click"
+        Width="120">
+    
+</Button>
+
+
+                
+
+            </StackPanel>
 
                 <ListBox x:Name="PowerPlanListBox" Width="550" Height="190" 
-                         SelectionChanged="PowerPlanListBox_SelectionChanged" Margin="0,0,0,10">
+                         SelectionChanged="PowerPlanListBox_SelectionChanged" Margin="0,0,0,0">
                     <!-- Items will be populated in the code-behind -->
                 </ListBox>
             <StackPanel Orientation="Horizontal" Margin="40,0,0,0">
@@ -132,7 +139,23 @@
                         Content="Import" 
                         Style="{StaticResource DiscordButtonStyle}" 
                         IsEnabled="False" 
-                        Click="ImportPowerPlan_Click" Height="35"  Width="300"/>
+                        Click="ImportPowerPlan_Click" Height="35"  Width="100"/>
+
+                <Button x:Name="RunBatchButton"
+        Content="Optimize Power Settings"
+        Style="{StaticResource DiscordButtonStyle}"
+        Click="RunBatchButton_Click"
+        Background="Orange"
+        Width="180"
+        Height="40"
+        Margin="10">
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Restore Power Settings" Click="RestorePowerSettings_Click"/>
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
+
 
 
 

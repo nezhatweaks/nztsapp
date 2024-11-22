@@ -1,8 +1,8 @@
 ﻿<Window x:Class="NZTS_App.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="NZTS APP"  Height="450" Width="800"
-        WindowStyle="None" AllowsTransparency="True" ResizeMode="CanResize" Background="#2C2F33"
+        Title="NZTS APP"  Height="550" Width="1000"
+        WindowStyle="None" AllowsTransparency="True" ResizeMode="CanResize" Background="#202224"
         Foreground="White" FontFamily="Segoe UI" FontSize="14"
         MouseMove="MainWindow_MouseMove"
         MouseDown="MainWindow_MouseDown"
@@ -326,7 +326,7 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Grid VerticalAlignment="Top" Background="#23272A" Height="40" MouseDown="TitleBar_MouseDown">
+            <Grid VerticalAlignment="Top" Background="#181a1c" Height="40" MouseDown="TitleBar_MouseDown">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <!-- Placeholder for potential future use -->
@@ -450,7 +450,7 @@
                                         <ToolTip Content="Apply Recommend Settings" />
                                     </Button.ToolTip>
                                 </Button>
-                                <Button Content="🌀" FontSize="20" Style="{StaticResource RoundedButtonStyle3}" Click="RestoreAll_Click">
+                                <Button Content="❌" FontSize="20" Style="{StaticResource RoundedButtonStyle3}" Click="RestoreAll_Click">
                                     <Button.ToolTip>
                                         <ToolTip Content="Restore Recommend Settings" />
                                     </Button.ToolTip>
@@ -652,7 +652,7 @@ VerticalAlignment="Center">
                         MouseUp="VerifiedContent_MouseUp">
                             <TextBlock Text="NZTS APP" 
                            FontWeight="Bold" 
-                           FontSize="30" 
+                           FontSize="40" 
                            Foreground="Gray" 
                            HorizontalAlignment="Center" 
                            Margin="0,20,0,0"/>
@@ -665,117 +665,71 @@ VerticalAlignment="Center">
                        Width="280" 
                        Height="200" 
                        HorizontalAlignment="Center" 
-                       Margin="0,10,0,0"/>
+                       Margin="0,0,0,0"/>
                         </StackPanel>
 
                         <StackPanel x:Name="ExperimentalContent" Visibility="Collapsed" Margin="20"
             MouseDown="ExperimentalContent_MouseDown" 
             MouseMove="ExperimentalContent_MouseMove" 
             MouseUp="ExperimentalContent_MouseUp">
-                            <TextBlock Text="What’s New in V0.5.1?" 
+                            <TextBlock Text="What’s New in V0.6.0?" 
                FontWeight="Bold" 
                FontSize="24" 
                Foreground="Gray" 
                HorizontalAlignment="Left" 
                Margin="0,20,0,0"/>
 
-                            <TextBlock Text="➕ Introducing File System!" 
+                            
+
+
+
+                            <TextBlock Text="➕ Added HackFlags Tweaks in Misc and Process" 
                FontSize="14" 
                Foreground="LightGray" 
                HorizontalAlignment="Left" 
                Margin="0,5,0,0"/>
 
-
-
-                            <TextBlock Text="➕ Fixed Radeon Toggle Buttons Bugs" 
-               FontSize="14" 
-               Foreground="LightGray" 
-               HorizontalAlignment="Left" 
-               Margin="0,5,0,0"/>
-
-                            <TextBlock Text="➕ Introducing Affinity (MSI Mode and Interrupt Affinity)" 
+                            <TextBlock Text="➕ Added IO Priority and Fixed CPU Priority Bugs in Process" 
 FontSize="14" 
 Foreground="LightGray" 
 HorizontalAlignment="Left" 
 Margin="0,5,0,0"/>
 
-                            <TextBlock Text="➕ 1-Click Optimization has moved to sidebar!" 
-               FontSize="14" 
-               Foreground="LightGray" 
-               HorizontalAlignment="Left" 
-               Margin="0,5,0,0"/>
 
-                            <TextBlock Text="➕ Remade game selection presets in the Process tab." 
-               FontSize="14" 
-               Foreground="LightGray" 
-               HorizontalAlignment="Left"  
-               Margin="0,5,0,0"/>
-
-                            <TextBlock Text="➕ Added Second/Third Level Data Cache and Disable OS Mitigations" 
+                            <TextBlock Text="➕ Updated the window style for Logs and Affinity Pages" 
 FontSize="14" 
 Foreground="LightGray" 
 HorizontalAlignment="Left" 
 Margin="0,5,0,0"/>
-                            <TextBlock Text="➕ Added Intel/AMD Processor Power Management in Gaming Tab" 
+
+
+                            <TextBlock Text="➕ Added System Cache Dirty Page Threshold in Memory" 
+FontSize="14" 
+Foreground="LightGray" 
+HorizontalAlignment="Left" 
+Margin="0,5,0,0"/>
+                            <TextBlock Text="➕ Added Optimize Power Settings in Power" 
+FontSize="14" 
+Foreground="LightGray" 
+HorizontalAlignment="Left" 
+Margin="0,5,0,0"/>
+                            <TextBlock Text="➕ Reworked Win32PrioritySeperation Page" 
 FontSize="14" 
 Foreground="LightGray" 
 HorizontalAlignment="Left" 
 Margin="0,5,0,0"/>
 
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
-                                <Button Content="#filesystem" 
-FontSize="14" 
-Foreground="LightGray" 
-Background="Transparent" 
-BorderBrush="LightGray" 
-Margin="5"
-Padding="5"
-Cursor="Hand"
-Click="Supercache_Click"/>
 
-                                
+                                <Button Content="#misc" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="Monitor_Click" />
+                                <Button Content="#process" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="CPUPriority_Click" />
+                                <Button Content="#affinity" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="MSI_Click" />
+                                <Button Content="#memory" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="MemoryMan_Click" />
+                                <Button Content="#power" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="PowerPlan_Click" />
+                                <Button Content="#winpriority" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="Win32PrioritySeparation_Click" />
 
-                                <Button Content="#affinity" 
-FontSize="14" 
-Foreground="LightGray" 
-Background="Transparent" 
-BorderBrush="LightGray" 
-Margin="5"
-Padding="5"
-Cursor="Hand"
-Click="MSI_Click"/>
-
-
-
-                                <Button Content="#process" 
-FontSize="14" 
-Foreground="LightGray" 
-Background="Transparent" 
-BorderBrush="LightGray" 
-Margin="5"
-Padding="5"
-Cursor="Hand"
-Click="CPUPriority_Click"/>
-                                <Button Content="#memory" 
-FontSize="14" 
-Foreground="LightGray" 
-Background="Transparent" 
-BorderBrush="LightGray" 
-Margin="5"
-Padding="5"
-Cursor="Hand"
-Click="MemoryMan_Click"/>
-
-                                <Button Content="#gaming" 
-FontSize="14" 
-Foreground="LightGray" 
-Background="Transparent" 
-BorderBrush="LightGray" 
-Margin="5"
-Padding="5"
-Cursor="Hand"
-Click="Windows_Click"/>
                             </StackPanel>
+
                         </StackPanel>
                         
                         

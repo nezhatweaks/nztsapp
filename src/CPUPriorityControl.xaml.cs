@@ -30,6 +30,7 @@ namespace NZTS_App
             mainWindow.TitleTextBlock.Content = "Process";
             InitializePriorityOptions(); // Add this line to initialize priority options
             InitializeGPUSchedulingOptions(); // Add this line to initialize GPU scheduling options
+            InitializeIOPriorityOptions(); // Initialize I/O priority options
 
         }
 
@@ -48,12 +49,24 @@ namespace NZTS_App
             GPUSchedulingComboBox.Items.Add(new ComboBoxItem { Content = "High Performance" });
         }
 
+        private void InitializeIOPriorityOptions()
+        {
+            IOPriorityComboBox.Items.Add(new ComboBoxItem { Content = "Very Low" });
+            IOPriorityComboBox.Items.Add(new ComboBoxItem { Content = "Low" });
+            IOPriorityComboBox.Items.Add(new ComboBoxItem { Content = "Normal" });
+            IOPriorityComboBox.Items.Add(new ComboBoxItem { Content = "High" });
+            IOPriorityComboBox.Items.Add(new ComboBoxItem { Content = "Critical" });
+        }
+
+
 
         public class Game : INotifyPropertyChanged
         {
             private string? name;
             private string? priority;
             private string? gpuScheduling;
+            private string? ioPriority;
+
 
             public required string Name
             {
@@ -90,7 +103,35 @@ namespace NZTS_App
                     }
                 }
             }
-            
+
+            public required string IOPriority
+            {
+                get => ioPriority ?? "Normal";  // Default to "Normal" if not set
+                set
+                {
+                    if (ioPriority != value)
+                    {
+                        ioPriority = value;
+                        OnPropertyChanged(nameof(IOPriority));
+                    }
+                }
+            }
+
+            private string GetIOPriorityString(int priorityValue)
+            {
+                return priorityValue switch
+                {
+                    0 => "Very Low",
+                    1 => "Low",
+                    2 => "Normal",
+                    3 => "High",
+                    4 => "Critical",
+                    _ => "Normal"
+                };
+            }
+
+
+
 
 
 
@@ -120,11 +161,19 @@ namespace NZTS_App
                                 GPUScheduling = gpuValue != null && gpuValue is int gpuSchedulingValue
                                     ? gpuSchedulingValue == 1 ? "High Performance" : "Default"
                                     : "Default";
+
+                                var ioPriorityValue = perfOptionsKey.GetValue("IOPriority");
+                                IOPriority = ioPriorityValue != null && ioPriorityValue is int ioPriorityInt
+                                    ? GetIOPriorityString(ioPriorityInt)
+                                    : "Normal";  // Default to "Normal" if no value is found
+
                             }
                         }
                     }
                 }
             }
+
+
 
 
 
@@ -176,7 +225,7 @@ namespace NZTS_App
                     return;
                 }
 
-                var newGame = new Game { Name = gameName, Priority = "Normal", GPUScheduling = "Default" };
+                var newGame = new Game { Name = gameName, Priority = "Normal", GPUScheduling = "Default", IOPriority = "Normal" };
                 newGame.SetPriorityFromRegistry();
                 games.Add(newGame);
                 GameListView.SelectedItem = newGame;
@@ -203,9 +252,13 @@ namespace NZTS_App
             UseLargePagesToggle.IsChecked = false;
             
             DisableHeapCoalesceToggle.IsChecked = false;
-            
+
+            HackFlagsToggle.IsChecked = false;
+
             PriorityComboBox.SelectedIndex = -1;
             GPUSchedulingComboBox.SelectedIndex = -1;
+            IOPriorityComboBox.SelectedIndex = -1;
+
         }
 
         private void SwitchToVerifiedTab(object sender, RoutedEventArgs e)
@@ -243,7 +296,9 @@ namespace NZTS_App
             UpdateComboBoxForSelectedGame(selectedGame);
             InitializeUseLargePagesToggle(selectedGame);
             InitializeDisableHeapCoalesceToggle(selectedGame);
+            InitializeHackFlagsToggle(selectedGame);
             UpdateGPUSchedulingComboBoxForSelectedGame(selectedGame); // Update GPU scheduling UI
+            UpdateIOPriorityComboBoxForSelectedGame(selectedGame); // Update GPU scheduling UI
         }
 
         private bool isUpdatingComboBox = false;
@@ -275,6 +330,21 @@ namespace NZTS_App
         }
 
 
+        private void UpdateIOPriorityComboBoxForSelectedGame(Game selectedGame)
+        {
+            if (IOPriorityComboBox.Items.Count == 0) return;
+
+            // Find the matching ComboBoxItem based on the IOPriority of the selected game
+            var matchingItem = IOPriorityComboBox.Items
+                .Cast<ComboBoxItem>()
+                .FirstOrDefault(item => item.Content?.ToString() == selectedGame.IOPriority);
+
+            // Set the selected item of the ComboBox or default to the first item if no match is found
+            IOPriorityComboBox.SelectedItem = matchingItem ?? IOPriorityComboBox.Items[0]; // Default to "Normal"
+        }
+
+
+
         private void PriorityComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (isUpdatingComboBox) return;
@@ -304,20 +374,37 @@ namespace NZTS_App
             }
         }
 
-        
+        private void IOPriorityComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (IOPriorityComboBox.SelectedItem is ComboBoxItem selectedItem)
+            {
+                string selectedPriority = selectedItem.Content.ToString() ?? "Normal";
+                // Update the selected game's I/O priority (assuming you have the currently selected game)
+                if (GameListView.SelectedItem is Game selectedGame)
+                {
+                    selectedGame.IOPriority = selectedPriority;
+                }
+            }
+        }
+
+
+
 
         private int GetPriorityValue(string priority)
         {
             return priority switch
             {
                 "High" => 0x00000003,
-                "Above Normal" => 0x00000002,
-                "Normal" => 0x00000001,
-                "Below Normal" => 0x00000000,
-                "Low" => 0x00000000,
+                "Above Normal" => 0x00000006,
+                "Normal" => 0x00000002,
+                "Below Normal" => 0x00000005,
+                "Low" => 0x00000001,
                 _ => 0
             };
         }
+
+        
+
 
 
 
@@ -391,10 +478,13 @@ namespace NZTS_App
                 {
                     if (perfKey != null)
                     {
-                        perfKey.SetValue("CpuPriorityClass", 3);
+                        perfKey.SetValue("CpuPriorityClass", 6);
+                        perfKey.SetValue("IOPriority", 3);
                         perfKey.SetValue("DisableHeapCoalesceOnFree", 1);
                         perfKey.SetValue("GPUScheduling", 1);
                         perfKey.SetValue("UseLargePages", 1);
+                        perfKey.SetValue("HackFlags", 1);
+
                     }
                 }
 
@@ -407,6 +497,7 @@ namespace NZTS_App
                         mainKey.SetValue("DisableHeapCoalesceOnFree", 1);
                         mainKey.SetValue("GPUScheduling", 1);
                         mainKey.SetValue("UseLargePages", 1);
+                        mainKey.SetValue("HackFlags", 1);
                     }
                 }
             }
@@ -445,10 +536,13 @@ namespace NZTS_App
                     if (perfKey != null)
                     {
                         perfKey.DeleteValue("CpuPriorityClass", false);
+                        perfKey.DeleteValue("IOPriority", false);
                         perfKey.DeleteValue("DisableHeapCoalesceOnFree", false);
                         perfKey.DeleteValue("GPUScheduling", false);
                         perfKey.DeleteValue("UseLargePages", false);
-                        
+                        perfKey.DeleteValue("HackFlags", false);
+
+
                     }
                 }
 
@@ -460,7 +554,9 @@ namespace NZTS_App
                         mainKey.DeleteValue("DisableHeapCoalesceOnFree", false);
                         mainKey.DeleteValue("GPUScheduling", false);
                         mainKey.DeleteValue("UseLargePages", false);
-                        
+                        mainKey.DeleteValue("HackFlags", false);
+
+
                     }
                 }
             }
@@ -469,19 +565,6 @@ namespace NZTS_App
                 MessageBox.Show($"Error reverting settings: {ex.Message}");
             }
         }
-
-
-
-
-
-
-
-
-        
-
-        
-
-
 
 
 
@@ -508,7 +591,8 @@ namespace NZTS_App
             {
                 Name = executableName,
                 Priority = "Normal",
-                GPUScheduling = "Default" // Set this to a valid default value
+                GPUScheduling = "Default", // Set this to a valid default value
+                IOPriority = "Normal"
             };
 
             games.Add(newGame);
@@ -518,6 +602,7 @@ namespace NZTS_App
             // Set default UseLargePages value
             SetUseLargePagesForNewGame(newGame, false); // Default to false, change as needed
             SetDisableHeapCoalesceForNewGame(newGame, false); // Default to false
+            SetHackFlagsForNewGame(newGame, false); // Default to false
 
 
             // Automatically select the newly added game
@@ -541,6 +626,26 @@ namespace NZTS_App
                 }
             }
         }
+
+        private void SetHackFlagsForNewGame(Game game, bool hackFlagsEnabled)
+        {
+            string registryPath = $@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{game.Name}";
+            using (var gameKey = Registry.LocalMachine.CreateSubKey(registryPath, true))
+            {
+                if (gameKey != null)
+                {
+                    if (hackFlagsEnabled)
+                    {
+                        gameKey.SetValue("HackFlags", 1, RegistryValueKind.DWord);
+                    }
+                    else
+                    {
+                        gameKey.DeleteValue("HackFlags", false); // Remove HackFlags if disabled
+                    }
+                }
+            }
+        }
+
 
 
         private void SetDisableHeapCoalesce(bool disableHeapCoalesce)
@@ -629,6 +734,42 @@ namespace NZTS_App
                 }
             }
         }
+
+        private void HackFlagsToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (GameListView.SelectedItem is Game selectedGame)
+            {
+                string registryPath = $@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{selectedGame.Name}";
+
+                try
+                {
+                    using (var gameKey = Registry.LocalMachine.CreateSubKey(registryPath, true))
+                    {
+                        if (gameKey != null)
+                        {
+                            if (HackFlagsToggle.IsChecked == true)
+                            {
+                                // Set the HackFlags DWORD to 1
+                                gameKey.SetValue("HackFlags", 1, RegistryValueKind.DWord);
+                                App.changelogUserControl?.AddLog("Applied", $"HackFlags for {selectedGame.Name} enabled.");
+                            }
+                            else
+                            {
+                                // Delete the HackFlags DWORD
+                                gameKey.DeleteValue("HackFlags", false);
+                                App.changelogUserControl?.AddLog("Applied", $"HackFlags for {selectedGame.Name} disabled.");
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error updating HackFlags: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    App.changelogUserControl?.AddLog("Failed", $"Error updating HackFlags: {ex.Message}");
+                }
+            }
+        }
+
 
 
         private void InitializeUseLargePagesToggle(Game selectedGame)
@@ -750,6 +891,45 @@ namespace NZTS_App
             }
         }
 
+        private void InitializeHackFlagsToggle(Game selectedGame)
+        {
+            string registryPath = $@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{selectedGame.Name}";
+
+            try
+            {
+                using (var gameKey = Registry.LocalMachine.OpenSubKey(registryPath))
+                {
+                    if (gameKey != null)
+                    {
+                        object? value = gameKey.GetValue("HackFlags");
+
+                        // Check if the value is an integer and set the toggle accordingly
+                        if (value is int intValue)
+                        {
+                            HackFlagsToggle.IsChecked = intValue == 1; // Set toggle based on registry value
+                        }
+                        else
+                        {
+                            HackFlagsToggle.IsChecked = false; // Default if value is not set
+                        }
+                    }
+                    else
+                    {
+                        HackFlagsToggle.IsChecked = false; // No key found
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                MessageBox.Show("You do not have permission to access the registry. Please run the application as an administrator.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while reading the registry: {ex.Message}");
+            }
+        }
+
+
 
 
 
@@ -761,8 +941,11 @@ namespace NZTS_App
             {
                 selectedGame.Priority = "Normal";
                 selectedGame.GPUScheduling = "Default";
+                selectedGame.IOPriority = "Normal";
                 UseLargePagesToggle.IsChecked = false;
                 DisableHeapCoalesceToggle.IsChecked = false;
+                HackFlagsToggle.IsChecked = false;
+
                 GameListView.Items.Refresh();
 
                 selectedGame.GPUScheduling = "Default"; // Set to "Default"
@@ -781,11 +964,23 @@ namespace NZTS_App
         {
             foreach (var game in games)
             {
-                int priorityValue = GetPriorityValue(game.Priority);
-                if (priorityValue == 0)
+                // Get the CPU and I/O priority values separately
+                int cpuPriorityValue = GetPriorityValue(game.Priority);
+                int ioPriorityValue = GetPriorityValue(game.IOPriority);
+
+                // Validate CPU priority
+                if (cpuPriorityValue == 0)
                 {
-                    App.changelogUserControl?.AddLog("Invalid", $"Invalid priority for {game.Name}.");
-                    MessageBox.Show($"Invalid priority for {game.Name}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    App.changelogUserControl?.AddLog("Invalid", $"Invalid CPU priority for {game.Name}.");
+                    MessageBox.Show($"Invalid CPU priority for {game.Name}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    continue;
+                }
+
+                // Validate I/O priority
+                if (ioPriorityValue == 0)
+                {
+                    App.changelogUserControl?.AddLog("Invalid", $"Invalid I/O priority for {game.Name}.");
+                    MessageBox.Show($"Invalid I/O priority for {game.Name}.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     continue;
                 }
 
@@ -801,37 +996,57 @@ namespace NZTS_App
                             {
                                 if (perfOptionsKey != null)
                                 {
-                                    perfOptionsKey.SetValue("CpuPriorityClass", priorityValue, RegistryValueKind.DWord);
+                                    // Set CPU priority
+                                    perfOptionsKey.SetValue("CpuPriorityClass", cpuPriorityValue, RegistryValueKind.DWord);
+
+                                    // Set I/O priority
+                                    perfOptionsKey.SetValue("IOPriority", ioPriorityValue, RegistryValueKind.DWord);
 
                                     // Save Use Large Pages setting for the game
                                     bool useLargePages = UseLargePagesToggle.IsChecked == true;
                                     perfOptionsKey.SetValue("UseLargePages", useLargePages ? 1 : 0, RegistryValueKind.DWord);
 
                                     // Save GPU Scheduling setting
-                                    int gpuSchedulingValue = game.GPUScheduling == "High Performance" ? 1 : 0; // Use string comparison
+                                    int gpuSchedulingValue = game.GPUScheduling == "High Performance" ? 1 : 0;
                                     perfOptionsKey.SetValue("GPUScheduling", gpuSchedulingValue, RegistryValueKind.DWord);
 
                                     // Log and show message for Use Large Pages
                                     string largePagesMessage = useLargePages ? "enabled" : "disabled";
-                                    App.changelogUserControl?.AddLog("Applied", $"Use Large Pages for {game.Name} set to {largePagesMessage}.");
-                                    MessageBox.Show($"Use Large Pages for {game.Name} has been {largePagesMessage}.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                                    App.changelogUserControl?.AddLog("Applied", $"Use Large Pages for {game.Name} set to {largePagesMessage}");
 
                                     // Save Disable Heap Coalesce setting
                                     bool disableHeapCoalesce = DisableHeapCoalesceToggle.IsChecked == true;
                                     perfOptionsKey.SetValue("DisableHeapCoalesceOnFree", disableHeapCoalesce ? 1 : 0, RegistryValueKind.DWord);
                                     App.changelogUserControl?.AddLog("Applied", $"Disable Heap Coalesce on Free for {game.Name} set to {(disableHeapCoalesce ? "enabled" : "disabled")}");
 
-                                    // Show message for Disable Heap Coalesce
-                                    MessageBox.Show($"Disable Heap Coalesce on Free for {game.Name} has been {(disableHeapCoalesce ? "enabled" : "disabled")}.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                                    // Save HackFlags setting
+                                    bool hackFlagsEnabled = HackFlagsToggle.IsChecked == true;
+                                    if (hackFlagsEnabled)
+                                    {
+                                        perfOptionsKey.SetValue("HackFlags", 1, RegistryValueKind.DWord);
+                                        App.changelogUserControl?.AddLog("Applied", $"HackFlags for {game.Name} set to enabled.");
+                                    }
+                                    else
+                                    {
+                                        perfOptionsKey.DeleteValue("HackFlags", false);
+                                        App.changelogUserControl?.AddLog("Applied", $"HackFlags for {game.Name} set to disabled.");
+                                    }
 
-                                    // Show message for GPU Scheduling
-                                    string gpuSchedulingMessage = gpuSchedulingValue == 1 ? "High Performance" : "Default";
-                                    MessageBox.Show($"GPU Scheduling for {game.Name} set to {gpuSchedulingMessage}.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                                    // Concatenate all the messages into one string for display
+                                    string message = $"Disable Heap Coalesce on Free for {game.Name} has been {(disableHeapCoalesce ? "enabled" : "disabled")}.\n" +
+                                                     $"GPU Scheduling for {game.Name} set to {(gpuSchedulingValue == 1 ? "High Performance" : "Default")}.\n" +
+                                                     $"CPU Priority for {game.Name} set to {game.Priority}.\n" +
+                                                     $"IO Priority for {game.Name} set to {game.IOPriority}.\n" +
+                                                     $"Use Large Pages for {game.Name} has been {largePagesMessage}.";
 
-                                    // Show message for Priority
-                                    MessageBox.Show($"Priority for {game.Name} set to {game.Priority}.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                                    App.changelogUserControl?.AddLog("Applied", $"Priority for {game.Name} set to {game.Priority}.");
+                                    // Show all messages in one message box
+                                    MessageBox.Show(message, "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
+                                    // Log the changes for clarity
+                                    App.changelogUserControl?.AddLog("Applied", $"CPU Priority for {game.Name} set to {game.Priority}.");
+                                    App.changelogUserControl?.AddLog("Applied", $"IOPriority for {game.Name} set to {game.IOPriority}.");
+
+                                    // Notify main window that settings have been applied
                                     var mainWindow = Application.Current.MainWindow as MainWindow;
                                     mainWindow?.MarkSettingsApplied();
                                 }
@@ -846,6 +1061,7 @@ namespace NZTS_App
                 }
             }
         }
+
 
 
 

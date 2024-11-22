@@ -9,7 +9,10 @@ namespace NZTS_App.Views
     public partial class SuperCacheUserControl : UserControl
     {
         private const string SuperCacheKeyPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\FS Templates";
-        private MainWindow mainWindow;
+        private const string PowerfulKey = "Powerful";
+        private readonly MainWindow mainWindow;
+
+        private static readonly string[] CacheTypes = { "Super Cache", "Huge Cache", "Large Cache", "Medium Cache" };
 
         public SuperCacheUserControl(MainWindow window)
         {
@@ -27,17 +30,18 @@ namespace NZTS_App.Views
                 {
                     if (key == null)
                     {
+                        // Create new key and load settings
                         using (var newKey = Registry.LocalMachine.CreateSubKey(SuperCacheKeyPath))
                         {
                             CreatePowerfulEntry(newKey);
-                            LoadCurrentSettings(); // Reload settings after creating
                         }
-                        return;
                     }
-
-                    DeleteExistingCacheEntries(key);
-                    CreatePowerfulEntry(key);
-                    LoadCacheSettings(key);
+                    else
+                    {
+                        DeleteExistingCacheEntries(key);
+                        CreatePowerfulEntry(key);
+                        LoadCacheSettings(key);
+                    }
                 }
             }
             catch (UnauthorizedAccessException)
@@ -52,7 +56,7 @@ namespace NZTS_App.Views
 
         private void LoadCacheSettings(RegistryKey key)
         {
-            PowerfulToggle.IsChecked = GetRegistryValueAsBool(key, "Powerful");
+            PowerfulToggle.IsChecked = GetRegistryValueAsBool(key, PowerfulKey);
         }
 
         private bool GetRegistryValueAsBool(RegistryKey key, string cacheType)
@@ -70,8 +74,7 @@ namespace NZTS_App.Views
 
         private void DeleteExistingCacheEntries(RegistryKey key)
         {
-            string[] cacheTypes = { "Super Cache", "Huge Cache", "Large Cache", "Medium Cache" };
-            foreach (var cacheType in cacheTypes)
+            foreach (var cacheType in CacheTypes)
             {
                 key.DeleteSubKeyTree(cacheType, false);
             }
@@ -79,40 +82,34 @@ namespace NZTS_App.Views
 
         private void CreatePowerfulEntry(RegistryKey key)
         {
-            string powerfulKey = "Powerful";
-            using (var subKey = key.CreateSubKey(powerfulKey))
+            using (var subKey = key.CreateSubKey(PowerfulKey))
             {
                 if (subKey != null)
                 {
                     // Set the default value ("@") for the Powerful key to "Powerful PC"
                     subKey.SetValue(null, "Powerful PC", RegistryValueKind.String); // Default value
-
                     subKey.SetValue("Enabled", 1, RegistryValueKind.DWord); // Enable Powerful by default
-
-                    // Create binary values (if needed, you can modify this section)
-                    byte[] binaryData = new byte[32]; // 32 bytes of 0xFF
-                    for (int i = 0; i < binaryData.Length; i++)
-                    {
-                        binaryData[i] = 0xFF;
-                    }
-
-                    subKey.SetValue("NameCache", binaryData, RegistryValueKind.Binary);
-                    subKey.SetValue("PathCache", binaryData, RegistryValueKind.Binary);
+                    subKey.SetValue("NameCache", GetBinaryData(), RegistryValueKind.Binary);
+                    subKey.SetValue("PathCache", GetBinaryData(), RegistryValueKind.Binary);
                 }
             }
 
             // Now, set the default string value for the FS Templates key
-            using (var fsTemplatesKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\FS Templates", writable: true))
+            using (var fsTemplatesKey = Registry.LocalMachine.OpenSubKey(SuperCacheKeyPath, writable: true))
             {
-                if (fsTemplatesKey != null)
-                {
-                    fsTemplatesKey.SetValue(null, "Powerful PC", RegistryValueKind.String); // Set default value
-                }
+                fsTemplatesKey?.SetValue(null, "Powerful PC", RegistryValueKind.String); // Set default value
             }
         }
 
-
-
+        private byte[] GetBinaryData()
+        {
+            byte[] binaryData = new byte[32]; // 32 bytes of 0xFF
+            for (int i = 0; i < binaryData.Length; i++)
+            {
+                binaryData[i] = 0xFF;
+            }
+            return binaryData;
+        }
 
         private void ShowError(string message)
         {
@@ -121,7 +118,7 @@ namespace NZTS_App.Views
 
         private void PowerfulToggle_Click(object sender, RoutedEventArgs e)
         {
-            UpdateRegistryValue("Powerful", PowerfulToggle.IsChecked == true);
+            UpdateRegistryValue(PowerfulKey, PowerfulToggle.IsChecked == true);
         }
 
         private void UpdateRegistryValue(string cacheType, bool isChecked)
@@ -134,6 +131,7 @@ namespace NZTS_App.Views
                 {
                     if (key != null)
                     {
+                        // Set default string value if not set
                         if (key.GetValue("") == null)
                         {
                             key.SetValue("", cacheType, RegistryValueKind.String);
@@ -141,11 +139,7 @@ namespace NZTS_App.Views
 
                         key.SetValue("Enabled", isChecked ? 1 : 0, RegistryValueKind.DWord);
 
-                        byte[] binaryData = new byte[32]; // 32 bytes of 0xFF
-                        for (int i = 0; i < binaryData.Length; i++)
-                        {
-                            binaryData[i] = 0xFF;
-                        }
+                        byte[] binaryData = GetBinaryData();
 
                         if (isChecked)
                         {
@@ -154,14 +148,8 @@ namespace NZTS_App.Views
                         }
                         else
                         {
-                            if (key.GetValue("NameCache") != null)
-                            {
-                                key.DeleteValue("NameCache", false);
-                            }
-                            if (key.GetValue("PathCache") != null)
-                            {
-                                key.DeleteValue("PathCache", false);
-                            }
+                            key.DeleteValue("NameCache", false);
+                            key.DeleteValue("PathCache", false);
                         }
 
                         // Now, set the binary values in the FileSystem key
@@ -176,14 +164,8 @@ namespace NZTS_App.Views
                                 }
                                 else
                                 {
-                                    if (fileSystemKey.GetValue("NameCache") != null)
-                                    {
-                                        fileSystemKey.DeleteValue("NameCache", false);
-                                    }
-                                    if (fileSystemKey.GetValue("PathCache") != null)
-                                    {
-                                        fileSystemKey.DeleteValue("PathCache", false);
-                                    }
+                                    fileSystemKey.DeleteValue("NameCache", false);
+                                    fileSystemKey.DeleteValue("PathCache", false);
                                 }
                             }
                         }
@@ -205,7 +187,6 @@ namespace NZTS_App.Views
                 ShowError($"Error updating {cacheType}: {ex.Message}");
             }
         }
-
 
         private void SwitchToVerifiedTab(object sender, RoutedEventArgs e)
         {

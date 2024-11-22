@@ -24,13 +24,15 @@
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <!-- Hover effect -->
+                            <!-- Subtle Hover effect -->
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#5A6FB1"/>
+                                <Setter Property="Background" Value="#4B5360"/>
+                                <Setter Property="Foreground" Value="#B0B3B8"/>
                             </Trigger>
                             <!-- Pressed effect -->
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="#4D5D99"/>
+                                <Setter Property="Background" Value="#3A424F"/>
+                                <Setter Property="Foreground" Value="#A1A6A9"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -40,6 +42,50 @@
 
         <!-- Converter for MSI checkbox -->
         <local:MsiToBoolConverter x:Key="MsiToBoolConverter" />
+
+        <!-- ListView Discord Style -->
+        <Style x:Key="DiscordListViewStyle" TargetType="ListView">
+            <Setter Property="Background" Value="#2F3136"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#1E2124"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <Border Background="#33373D" BorderBrush="#3A3F44" BorderThickness="1" CornerRadius="8" Padding="5">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding DeviceName}" VerticalAlignment="Center" Margin="10,0" Width="200" Foreground="#D0D0D0"/>
+                                <CheckBox IsChecked="{Binding Msi, Converter={StaticResource MsiToBoolConverter}}" Margin="5" />
+                                <TextBlock Text="{Binding SupportedModes}" VerticalAlignment="Center" Margin="10,0" Width="75" Foreground="#D0D0D0"/>
+                                <ComboBox ItemsSource="{Binding Path=PriorityOptions}" SelectedItem="{Binding Path=InterruptPriority, Mode=TwoWay}" Width="80" />
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ListViewItem hover effects -->
+        <Style TargetType="ListViewItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#D0D0D0"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Style.Triggers>
+                <!-- Hover effect -->
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#3A3F44"/>
+                    <Setter Property="Foreground" Value="#E0E0E0"/>
+                </Trigger>
+                <!-- Selected effect -->
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#4B5360"/>
+                    <Setter Property="Foreground" Value="#FFFFFF"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
     </UserControl.Resources>
 
     <Grid>
@@ -50,32 +96,19 @@
 
         <!-- Title -->
         <StackPanel Width="700" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-10,0,0,0" Grid.Row="0">
-            
-            
-
             <!-- Backup Button -->
             <Button Content="Restore Point" 
-            Style="{StaticResource RoundedButtonStyle}" 
-            Click="BackupButton_Click" 
-            Margin="10,0,0,0" 
-            HorizontalAlignment="Left" Width="100" />
-
-            <Button x:Name="StartBenchmarkButton" Content="Benchmark" Click="StartBenchmarkButton_Click" Width="100" Style="{StaticResource RoundedButtonStyle}"  />
-            <TextBlock x:Name="CpuStatusTextBlock"
-                   VerticalAlignment="Top" HorizontalAlignment="Left"
-                   Margin="10,10,10,10" Width="600" />
-
-
-
+                    Style="{StaticResource RoundedButtonStyle}" 
+                    Click="BackupButton_Click" 
+                    Margin="10,0,0,0" 
+                    HorizontalAlignment="Left" Width="100" />
+            <Button x:Name="StartBenchmarkButton" Content="Benchmark" Click="StartBenchmarkButton_Click" Width="100" Style="{StaticResource RoundedButtonStyle}" />
+            <TextBlock x:Name="CpuStatusTextBlock" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,10,10" Width="600" />
         </StackPanel>
 
-
-        <!-- Warning Border -->
-        
-
         <!-- Device List -->
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Row="1" Margin="0,10,-170,-30">
-            <ListView x:Name="DeviceListView" MouseDoubleClick="DeviceListView_MouseDoubleClick" Width="900">
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Row="1" Margin="0,10,-190,-50">
+            <ListView x:Name="DeviceListView" MouseDoubleClick="DeviceListView_MouseDoubleClick" Width="900" Style="{StaticResource DiscordListViewStyle}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Name" DisplayMemberBinding="{Binding DeviceName}" Width="280"/>
@@ -85,7 +118,7 @@
                                     <CheckBox IsChecked="{Binding Msi, Converter={StaticResource MsiToBoolConverter}}"
                                               Checked="CheckBox_Checked"
                                               Unchecked="CheckBox_Unchecked"
-                                              Tag="{Binding}"/>
+                                              Tag="{Binding}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -104,7 +137,6 @@
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        
                                         <ComboBox ItemsSource="{Binding Path=PriorityOptions}" SelectedItem="{Binding Path=InterruptPriority, Mode=TwoWay}" />
                                     </StackPanel>
                                 </DataTemplate>

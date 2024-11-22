@@ -80,7 +80,7 @@ namespace NZTS_App
     {"Start", new List<Tuple<string, string, ValueType, bool, string>>()
     {
         new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\MMCSS", "00000002", ValueType.DWord, false, "00000002")
-        
+
     }},
     {"VsyncIdleTimeout", new List<Tuple<string, string, ValueType, bool, string>>()
     {
@@ -150,6 +150,16 @@ namespace NZTS_App
     {"EnableAspmL1", new List<Tuple<string, string, ValueType, bool, string>>
     {
         new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000", "00000000", ValueType.DWord, false, "00000001")
+    }},
+    {"HackFlags", new List<Tuple<string, string, ValueType, bool, string>>
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PnP\Pci", "00000100", ValueType.DWord, false, "00000000"),
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\intelppm\Parameters", "00000001", ValueType.DWord, false, "00000000"),
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\amdppm\Parameters", "00000001", ValueType.DWord, false, "00000000"),
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\pci\Parameters", "00000001", ValueType.DWord, false, "00000000"),
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BasicRender\Parameters", "00000001", ValueType.DWord, false, "00000000"),
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\GraphicsPerfSvc\Parameters", "00000001", ValueType.DWord, false, "00000000"),
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\nvstor\Parameters", "00000001", ValueType.DWord, false, "00000000")
     }}
 };
 
@@ -171,7 +181,7 @@ namespace NZTS_App
             ResourcesContent.RenderTransform = translateTransform;
 
             // Set default title if needed
-            TitleTextBlock.Content = "Home";
+            TitleTextBlock.Content = "💫";
             
         }
 
@@ -1518,7 +1528,7 @@ namespace NZTS_App
             // Show the main window content
             Main.Visibility = Visibility.Visible;
 
-            TitleTextBlock.Content = "Home"; // Set the title when showing the home page
+            TitleTextBlock.Content = "💫"; // Set the title when showing the home page
         }
 
 

@@ -5,12 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    
+
     <UserControl.Resources>
 
-
         <!-- Rounded Button Style with Hover/Click Animations -->
-        <Style x:Key="RoundedButtonStyle"  TargetType="Button">
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#141414"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="13"/>
@@ -24,8 +23,8 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                        CornerRadius="10"
-                        BorderBrush="Transparent">
+                                CornerRadius="10"
+                                BorderBrush="Transparent">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -42,28 +41,75 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        </UserControl.Resources>
-        <Grid>
-        
+
+        <!-- Discord-style ListView -->
+        <Style x:Key="DiscordListViewStyle" TargetType="ListView">
+            <Setter Property="Background" Value="#2f3136"/>
+            <!-- Dark background -->
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <!-- Discord-style ListViewItem -->
+        <Style x:Key="DiscordListViewItemStyle" TargetType="ListViewItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Padding" Value="5,7"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Style.Triggers>
+                <!-- Hover Effect -->
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#3a3c43"/>
+                </Trigger>
+                <!-- Selected Item Effect -->
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#4e5058"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Discord-style GridView Column Headers -->
+        <Style x:Key="DiscordGridViewHeaderStyle" TargetType="GridViewColumnHeader">
+            <Setter Property="Background" Value="#202225"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="#2f3136"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+    </UserControl.Resources>
+
+    <Grid>
         <!-- Title -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10">
-
             <Button Content="Clear" Width="125" Style="{StaticResource RoundedButtonStyle}" Click="ClearLogs_Click" Margin="-5,0,0,0" />
             <Button Content="Export" Width="125" Style="{StaticResource RoundedButtonStyle}" Click="ExportLogs_Click" Margin="5,0,0,0" />
         </StackPanel>
 
-
         <!-- Changelog List -->
-        <ListView Name="ChangeLogListView" Margin="0,60,-200,10">
+        <ListView Name="ChangeLogListView" Style="{StaticResource DiscordListViewStyle}" Margin="0,60,-200,-20">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Timestamp" DisplayMemberBinding="{Binding Timestamp}" Width="170"/>
-                    <GridViewColumn Header="Action" DisplayMemberBinding="{Binding Action}" Width="70"/>
-                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="600"/>
+                    <GridViewColumn Header="Timestamp" DisplayMemberBinding="{Binding Timestamp}" Width="170" HeaderContainerStyle="{StaticResource DiscordGridViewHeaderStyle}"/>
+                    <GridViewColumn Header="Action" DisplayMemberBinding="{Binding Action}" Width="70" HeaderContainerStyle="{StaticResource DiscordGridViewHeaderStyle}"/>
+                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="600" HeaderContainerStyle="{StaticResource DiscordGridViewHeaderStyle}"/>
                 </GridView>
             </ListView.View>
         </ListView>
 
     </Grid>
-    
 </UserControl>

@@ -112,6 +112,8 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
+    
+    
 
     <Grid>
         <Grid.RowDefinitions>
@@ -126,7 +128,7 @@
                 <TextBlock x:Name="CardDescriptionTextBlock" FontSize="18" HorizontalAlignment="Center" Visibility="Collapsed" />
 
                 <!-- ScrollViewer for scrolling capability -->
-                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="350" >
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="300" >
                     <ScrollViewer.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="Transparent"/>
@@ -175,25 +177,25 @@
                                 <Grid Margin="5">
                                     <!-- Card Button -->
                                     <Button Click="CardButton_Click" Width="120" Height="160"
-                                    Background="Black" Foreground="White" FontSize="16" FontWeight="Bold">
+                        Background="Black" Foreground="White" FontSize="16" FontWeight="Bold">
                                         <Button.Template>
                                             <ControlTemplate TargetType="Button">
                                                 <Border x:Name="border" Background="{TemplateBinding Background}" 
-                                                BorderBrush="Black" BorderThickness="1" CornerRadius="5" Padding="3">
+                                    BorderBrush="Black" BorderThickness="1" CornerRadius="0" Padding="3">
                                                     <Border.Effect>
                                                         <DropShadowEffect Color="Black" ShadowDepth="5" BlurRadius="10" Opacity="0.5" />
                                                     </Border.Effect>
                                                     <Grid>
                                                         <Image x:Name="CardImage" Stretch="UniformToFill" 
-                                                       Source="{Binding ImageSource}" Margin="0,0,0,0" />
+                                           Source="{Binding ImageSource}" Margin="0,0,0,0" />
                                                         <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center" 
-                                                            Background="Transparent">
+                                                Background="Transparent">
                                                             <TextBlock Text="{Binding Title}" 
-                                                               FontSize="16" Margin="0,0,0,5" Background="Black"
-                                                               HorizontalAlignment="Center" Foreground="White" />
+                                                   FontSize="16" Margin="0,0,0,5" Background="Black"
+                                                   HorizontalAlignment="Center" Foreground="White" />
                                                             <TextBlock Text="{Binding Description}" FontSize="18" 
-                                                               FontWeight="Bold" Foreground="{TemplateBinding Foreground}" 
-                                                               HorizontalAlignment="Center" />
+                                                   FontWeight="Bold" Foreground="{TemplateBinding Foreground}" 
+                                                   HorizontalAlignment="Center" />
                                                         </StackPanel>
                                                     </Grid>
                                                 </Border>
@@ -216,19 +218,22 @@
                                         </Button.Template>
                                     </Button>
 
-                                    <!-- Revert Button inside each card -->
+                                    <!-- Only add Revert Button for individual game cards -->
                                     <Button x:Name="RevertButton" Click="RevertButton_Click" Width="30" Height="30" 
-                                    Background="Black" 
-                                    Style="{StaticResource MinimalButtonStyle}" 
-                                    Content="↩️" 
-                                    HorizontalAlignment="Right" 
-                                    VerticalAlignment="Top" 
-                                    Margin="0,5,5,0" />
+                        Background="Black" 
+                        Style="{StaticResource MinimalButtonStyle}" 
+                        Content="↩️" 
+                        HorizontalAlignment="Right" 
+                        VerticalAlignment="Top" 
+                        Margin="0,5,5,0" 
+                         />
                                     <!-- Adjust margin to position as needed -->
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
+
+
                 </ScrollViewer>
             </StackPanel>
 
@@ -311,9 +316,13 @@ MinHeight="200"/>
                     <TextBlock Text="Settings" Foreground="White" FontSize="20" FontWeight="Bold" />
                     <Border Background="#2F3136" Padding="10" CornerRadius="10" BorderThickness="1" BorderBrush="Transparent" Margin="0,10,0,0">
                         <StackPanel>
-                            <TextBlock Text="Priority" Foreground="White" FontWeight="SemiBold"/>
+                            <TextBlock Text="CPU Priority" Foreground="White" FontWeight="SemiBold"/>
                             <ComboBox x:Name="PriorityComboBox" Width="200" Margin="0,5,0,10" SelectionChanged="PriorityComboBox_SelectionChanged"
                                       Background="#202225" Foreground="Black" BorderBrush="Transparent"/>
+
+                            <TextBlock Text="IO Priority" Foreground="White" FontWeight="SemiBold"/>
+                            <ComboBox x:Name="IOPriorityComboBox" Width="200" Margin="0,5,0,10" SelectionChanged="IOPriorityComboBox_SelectionChanged"
+          Background="#202225" Foreground="Black" BorderBrush="Transparent"/>
 
                             <TextBlock Text="GPU Scheduling" Foreground="White" FontWeight="SemiBold"/>
                             <ComboBox x:Name="GPUSchedulingComboBox" Width="200" Margin="0,5,0,10" SelectionChanged="GPUSchedulingComboBox_SelectionChanged"
@@ -335,6 +344,14 @@ MinHeight="200"/>
                                 
                             </StackPanel>
 
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,20,0,0">
+                                <TextBlock  Text="Max Perf" FontWeight="Bold" Margin="0,0,20,0" ToolTip="Enable or disable Maximum Performance for the application."/>
+                                <ToggleButton x:Name="HackFlagsToggle"
+                  Style="{StaticResource iOSToggleButton}"
+                  Click="HackFlagsToggle_Click" Width="50"/>
+                            </StackPanel>
+
+
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
                                 <Button Content="Save" Width="100" Margin="5" Click="SavePriorityButton_Click" Background="#7289DA" Foreground="White"/>
                                 <Button Content="Reset" Width="100" Margin="5" Click="ResetPriorityButton_Click" Background="#7289DA" Foreground="White"/>
@@ -347,17 +364,17 @@ MinHeight="200"/>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Margin="0,20,0,-50">
             <Button x:Name="VerifiedButton" 
-                    Content="Presets" 
+                    Content="Core" 
                     Click="SwitchToVerifiedTab" 
                     Style="{StaticResource TabButtonStyle}" 
                     Tag="Active" 
-                    Width="100" Height="25"/>
+                    Width="175" Height="25"/>
             <Button x:Name="ExperimentalButton" 
-                    Content="Manual" 
+                    Content="Extended" 
                     Click="SwitchToExperimentalTab" 
                     Style="{StaticResource TabButtonStyle}" 
                     Tag="Inactive" 
-                    Width="100" Height="25"/>
+                    Width="175" Height="25"/>
         </StackPanel>
     </Grid>
 </UserControl>

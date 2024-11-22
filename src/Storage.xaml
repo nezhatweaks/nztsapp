@@ -94,7 +94,7 @@
                 </Border>
 
                 <!-- Delete Temp Files Button -->
-                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="80" Margin="50,10,0,0">
+                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10"  Margin="50,10,0,0">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <Button x:Name="DeleteTempFilesButton" 
                             Content="Delete Temp Files" 

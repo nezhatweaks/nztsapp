@@ -254,7 +254,7 @@
                     <!-- Flip Queue Size -->
                     <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="50,10,50,0">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Tweaked Flip Queue Size" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Sets the Flip Queue Size."/>
+                            <TextBlock Text="Tweak Flip Queue Size" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Sets the Flip Queue Size."/>
                             <ToggleButton x:Name="FlipQueueSizeSwitch" Style="{StaticResource iOSToggleButton}" Click="FlipQueueSizeSwitch_Click" Width="50"/>
                         </StackPanel>
                     </Border>
@@ -345,13 +345,13 @@
                     Click="SwitchToVerifiedTab" 
                     Style="{StaticResource TabButtonStyle}" 
                     Tag="Active" 
-                    Width="100" Height="25"/>
+                    Width="175" Height="25"/>
             <Button x:Name="ExperimentalButton" 
                     Content="Extended" 
                     Click="SwitchToExperimentalTab" 
                     Style="{StaticResource TabButtonStyle}" 
                     Tag="Inactive" 
-                    Width="100" Height="25"/>
+                    Width="175" Height="25"/>
         </StackPanel>
     </StackPanel>
 </UserControl>

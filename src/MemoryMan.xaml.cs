@@ -45,9 +45,10 @@ namespace NZTS_App.Views
             SecondLevelDataCacheToggle.Click += SecondLevelDataCacheToggle_Click;
             ThirdLevelDataCacheToggle.Click += ThirdLevelDataCacheToggle_Click;
             DisableOSMitigationsToggle.Click += DisableOSMitigationsToggle_Click;
+            SystemCacheDirtyPageThresholdToggle.Click += SystemCacheDirtyPageThresholdToggle_Click;
         }
 
-        
+
 
         private void LoadCurrentSettings()
         {
@@ -73,6 +74,10 @@ namespace NZTS_App.Views
                         var heapCoalesceValue = key.GetValue("DisableHeapCoalesceOnFree");
                         DisableHeapCoalesceOnFreeToggle.IsChecked = (heapCoalesceValue is int disableHeapInt && disableHeapInt == 1);
 
+                        var systemCacheDirtyPageThresholdValue = key.GetValue("SystemCacheDirtyPageThreshold");
+                        SystemCacheDirtyPageThresholdToggle.IsChecked = systemCacheDirtyPageThresholdValue != null && (int)systemCacheDirtyPageThresholdValue == 3;
+
+
                         // LargePageMinimum
                         var largePageMinimumValue = key.GetValue("LargePageMinimum");
                         LargePageMinimumToggle.IsChecked = (largePageMinimumValue is int largePageMinInt && largePageMinInt == unchecked((int)0xFFFFFFFF));
@@ -87,7 +92,18 @@ namespace NZTS_App.Views
                         // Mitigations
                         var DisableOSMitigationsValue = key.GetValue("FeatureSettingsOverride");
                         var DisableOSMitigationsMask = key.GetValue("FeatureSettingsOverrideMask");
-                        DisableOSMitigationsToggle.IsChecked = DisableOSMitigationsValue != null && DisableOSMitigationsMask != null;
+
+                        // Check if FeatureSettingsOverride is 0x00000048 (default value)
+                        if (DisableOSMitigationsValue is int disableOSMitigations && disableOSMitigations == 0x00000048)
+                        {
+                            // Set the toggle off if the value is 0x00000048
+                            DisableOSMitigationsToggle.IsChecked = false;
+                        }
+                        else
+                        {
+                            // Use existing logic if FeatureSettingsOverride is not the default value
+                            DisableOSMitigationsToggle.IsChecked = DisableOSMitigationsValue != null && DisableOSMitigationsMask != null;
+                        }
 
                     }
                     else
@@ -125,6 +141,19 @@ namespace NZTS_App.Views
             ExperimentalButton.Tag = "Active";
             VerifiedButton.Tag = "Inactive";
         }
+
+        private void SystemCacheDirtyPageThresholdToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (SystemCacheDirtyPageThresholdToggle.IsChecked == true)
+            {
+                UpdateRegistryValue("SystemCacheDirtyPageThreshold", 3); // Set to tweaked value
+            }
+            else
+            {
+                DeleteRegistryValue("SystemCacheDirtyPageThreshold"); // Delete if toggled off (reset to original)
+            }
+        }
+
 
         private void SecondLevelDataCacheToggle_Click(object sender, RoutedEventArgs e)
         {

@@ -130,14 +130,7 @@ Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
                       Click="MusNotificationToggle_Click" Width="50"/>
                     </StackPanel>
                 </Border>
-                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Hosts UWP apps. Prevents UWP apps from running correctly.">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="Stub wwahost.exe" FontWeight="Bold" Margin="0,0,10,0"/>
-                        <ToggleButton x:Name="WwahostToggle"
-                      Style="{StaticResource iOSToggleButton}"
-                      Click="WwahostToggle_Click" Width="50"/>
-                    </StackPanel>
-                </Border>
+                
                 
                 <TextBlock Text="XBOX Service(s)" Foreground="White" FontSize="20" FontWeight="Bold" Margin="50,10,0,0" />
                 <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Manages game activity status. Disables Xbox Game Bar features.">
@@ -206,6 +199,16 @@ Grid.RowSpan="2" PanningMode="VerticalOnly" IsDeferredScrollingEnabled="True">
 
                 <TextBlock Text="UWP/Updates" Foreground="White" FontSize="20" FontWeight="Bold" Margin="50,10,0,0" />
 
+
+                <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Hosts UWP apps. Prevents UWP apps from running correctly.">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Stub wwahost.exe" FontWeight="Bold" Margin="0,0,10,0"/>
+                        <ToggleButton x:Name="WwahostToggle"
+      Style="{StaticResource iOSToggleButton}"
+      Click="WwahostToggle_Click" Width="50"/>
+                    </StackPanel>
+                </Border>
+                
                 <Border  Background="Red" BorderThickness="3" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" ToolTip="Task Host. Manages system tasks.">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Stub taskhostw.exe" FontWeight="Bold" Margin="0,0,10,0"/>

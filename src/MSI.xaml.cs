@@ -34,6 +34,7 @@ namespace NZTS_App.Views
         private MainWindow mainWindow;
         private CpuBenchmark _cpuBenchmark;
 
+
         public MSI(MainWindow window)
         {
             InitializeComponent();

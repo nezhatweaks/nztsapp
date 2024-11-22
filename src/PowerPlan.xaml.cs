@@ -351,15 +351,128 @@ namespace NZTS_App
             }
         }
 
-        
+        private void RunBatchButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Name of the embedded resource (usually the namespace + file name)
+                string resourceName = "NZTS_App.power.bat";  // Adjust this to match your namespace and file name
 
+                // Get the current executing assembly
+                var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
+                // Read the resource file as a stream
+                using (Stream? resourceStream = assembly.GetManifestResourceStream(resourceName))
+                {
+                    if (resourceStream == null)
+                    {
+                        MessageBox.Show("Batch file not found in resources.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
 
+                    // Create a temporary file to store the batch content
+                    string tempBatchFilePath = Path.Combine(Path.GetTempPath(), "power.bat");
 
+                    // Write the content of the resource to the temporary file
+                    using (FileStream fileStream = new FileStream(tempBatchFilePath, FileMode.Create, FileAccess.Write))
+                    {
+                        // Safely copy stream content, null check is already done above
+                        resourceStream.CopyTo(fileStream);
+                    }
 
+                    // Make sure the file is created successfully
+                    if (File.Exists(tempBatchFilePath))
+                    {
+                        // Start the batch file
+                        var processInfo = new ProcessStartInfo
+                        {
+                            FileName = tempBatchFilePath,
+                            UseShellExecute = true,  // Run using the shell
+                            CreateNoWindow = false  // Show command prompt window
+                        };
 
+                        // Start the batch file
+                        Process.Start(processInfo);
 
+                        // Log success and notify the user
+                        App.changelogUserControl?.AddLog("Applied", "Batch file executed successfully.");
+                        MessageBox.Show("Power batch file executed successfully.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to create temporary batch file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that may occur
+                string errorMsg = $"An error occurred while executing the batch file: {ex.Message}";
+                MessageBox.Show(errorMsg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.changelogUserControl?.AddLog("Failed", errorMsg);
+            }
+        }
 
+        private void RestorePowerSettings_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Name of the embedded resource (adjust this based on your project structure)
+                string resourceName = "NZTS_App.power-restore.bat";  // Adjust to the correct namespace and file name
+
+                // Get the current executing assembly
+                var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+
+                // Read the resource file as a stream
+                using (Stream? resourceStream = assembly.GetManifestResourceStream(resourceName))
+                {
+                    if (resourceStream == null)
+                    {
+                        MessageBox.Show("Restore batch file not found in resources.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    // Create a temporary file to store the batch content
+                    string tempBatchFilePath = Path.Combine(Path.GetTempPath(), "power-restore.bat");
+
+                    // Write the content of the resource to the temporary file
+                    using (FileStream fileStream = new FileStream(tempBatchFilePath, FileMode.Create, FileAccess.Write))
+                    {
+                        resourceStream.CopyTo(fileStream);
+                    }
+
+                    // Make sure the file is created successfully
+                    if (File.Exists(tempBatchFilePath))
+                    {
+                        // Start the batch file
+                        var processInfo = new ProcessStartInfo
+                        {
+                            FileName = tempBatchFilePath,
+                            UseShellExecute = true,  // Run using the shell
+                            CreateNoWindow = false  // Show command prompt window
+                        };
+
+                        // Start the batch file
+                        Process.Start(processInfo);
+
+                        // Log success and notify the user
+                        App.changelogUserControl?.AddLog("Applied", "Restore power settings batch file executed successfully.");
+                        MessageBox.Show("Restore power settings batch file executed successfully.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to create temporary restore batch file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that may occur
+                string errorMsg = $"An error occurred while executing the restore batch file: {ex.Message}";
+                MessageBox.Show(errorMsg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                App.changelogUserControl?.AddLog("Failed", errorMsg);
+            }
+        }
 
 
     }

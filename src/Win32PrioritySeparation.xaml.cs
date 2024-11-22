@@ -18,8 +18,6 @@ namespace NZTS_App.Views
             mainWindow.TitleTextBlock.Content = "WinPriority";
         }
 
-
-
         // Load current registry value and display it
         private void LoadCurrentWin32PrioritySeparationValue()
         {
@@ -47,22 +45,33 @@ namespace NZTS_App.Views
             }
         }
 
-        // Event handler for when the preset selection changes
-        private void PresetSelectionChanged(object sender, SelectionChangedEventArgs e)
+        // Event handler for when any preset button is clicked
+        private void PresetButton_Click(object sender, RoutedEventArgs e)
         {
-            // You can add logic here if needed when the user changes the selection
-            // For example, you might want to update the current value display or enable/disable buttons
-        }
-
-        // Apply the selected preset value
-        private void ApplyPreset_Click(object sender, RoutedEventArgs e)
-        {
-            if (Win32PrioritySeparationComboBox.SelectedItem is ComboBoxItem selectedItem)
+            if (sender is Button presetButton)
             {
-                int selectedValue = Convert.ToInt32(selectedItem.Tag.ToString(), 16);  // Convert hex string to int
-                ApplyWin32PrioritySeparationValue(selectedValue);
+                // Ensure Tag is not null before accessing it
+                if (presetButton.Tag is string tagValue && !string.IsNullOrEmpty(tagValue))
+                {
+                    int selectedValue;
+                    // Try to parse the tagValue as a hex number
+                    if (int.TryParse(tagValue, System.Globalization.NumberStyles.HexNumber, null, out selectedValue))
+                    {
+                        ApplyWin32PrioritySeparationValue(selectedValue);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid preset value.");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Preset button has no value assigned.");
+                }
             }
         }
+
+
 
         // Apply the value to the registry
         private void ApplyWin32PrioritySeparationValue(int value)
@@ -99,6 +108,30 @@ namespace NZTS_App.Views
         private void RestoreWin32PrioritySeparation_Click(object sender, RoutedEventArgs e)
         {
             ApplyWin32PrioritySeparationValue(0x00000002);  // Default value
+        }
+
+        // Switch to Verified tab
+        private void SwitchToVerifiedTab(object sender, RoutedEventArgs e)
+        {
+            // Change tab button state
+            VerifiedButton.Tag = "Active";
+            ExperimentalButton.Tag = "Inactive";
+
+            // Show Verified content and hide Experimental content
+            VerifiedContent.Visibility = Visibility.Visible;
+            ExperimentalContent.Visibility = Visibility.Collapsed;
+        }
+
+        // Switch to Experimental tab
+        private void SwitchToExperimentalTab(object sender, RoutedEventArgs e)
+        {
+            // Change tab button state
+            VerifiedButton.Tag = "Inactive";
+            ExperimentalButton.Tag = "Active";
+
+            // Show Experimental content and hide Verified content
+            VerifiedContent.Visibility = Visibility.Collapsed;
+            ExperimentalContent.Visibility = Visibility.Visible;
         }
     }
 }

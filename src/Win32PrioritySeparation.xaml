@@ -13,7 +13,7 @@
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Height" Value="30"/>
-            <Setter Property="Width" Value="60"/>
+            <Setter Property="Width" Value="180"/>
         </Style>
 
         <!-- Discord-like Button Style -->
@@ -42,91 +42,122 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
-        <!-- Discord-like ComboBox Style -->
-        <Style TargetType="ComboBox" x:Key="DiscordComboBox">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <!-- Change text color to black -->
-            <Setter Property="BorderBrush" Value="#7289DA"/>
+        <Style TargetType="Button" x:Key="TabButtonStyle">
+            <Setter Property="Background" Value="#2C2F33"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#2F3136"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="5,0"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="ComboBox">
-                        <Grid>
-                            <ToggleButton Name="ToggleButton" 
-                                          Focusable="False" 
-                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource AncestorType={x:Type ComboBox}}}" 
-                                          Background="White" 
-                                          BorderBrush="#7289DA" 
-                                          BorderThickness="1" 
-                                          ClickMode="Press">
-                                <ContentPresenter Margin="3,3,23,3" 
-                                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" 
-                                                  Content="{TemplateBinding SelectionBoxItem}" 
-                                                  VerticalAlignment="Center" 
-                                                  HorizontalAlignment="Left" />
-                            </ToggleButton>
-                            <Popup Name="Popup" 
-                                   Placement="Bottom" 
-                                   AllowsTransparency="True" 
-                                   IsOpen="{TemplateBinding IsDropDownOpen}" 
-                                   PopupAnimation="Slide">
-                                <Grid Background="White">
-                                    <!-- Set dropdown background to white -->
-                                    <Border BorderThickness="1" BorderBrush="#7289DA" CornerRadius="2">
-                                        <ScrollViewer Margin="4,6,4,6">
-                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
-                                        </ScrollViewer>
-                                    </Border>
-                                </Grid>
-                            </Popup>
-                        </Grid>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}" 
+                        CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                      VerticalAlignment="Center"/>
+                        </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#E0E0E0"/>
+                    <Setter Property="Background" Value="#3D4147"/>
                 </Trigger>
-                <Trigger Property="IsDropDownOpen" Value="True">
-                    <Setter Property="Background" Value="#D0D0D0"/>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#5A5C60"/>
+                </Trigger>
+                <Trigger Property="Tag" Value="Active">
+                    <Setter Property="Background" Value="#4875e8"/>
+                    <!-- Active tab color -->
+
+                    <!-- Active tab border color -->
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style TargetType="Button" x:Key="BestButton">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="DarkRed" Offset="0" />
+                        <GradientStop Color="Red" Offset="1" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Width" Value="180"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="Red"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+
     </UserControl.Resources>
 
-    <Border BorderBrush="#36393F" BorderThickness="1" CornerRadius="20" Margin="10,0,0,0" Background="#36393F" ToolTip="Determines how Windows prioritizes threads and processes, affecting their responsiveness and overall performance.">
+    
         <Grid Margin="10">
-            <StackPanel Margin="10">
-                <TextBlock Text="Choose a preset..." FontStyle="Italic" Margin="0,0,0,0" Foreground="AntiqueWhite"/>
-                <ComboBox x:Name="Win32PrioritySeparationComboBox" Style="{StaticResource DiscordComboBox}" SelectionChanged="PresetSelectionChanged" Margin="10">
-                    <ComboBoxItem Content="Preset 1 (Value: 0x00fa332a)" Tag="0x00fa332a"/>
-                    <ComboBoxItem Content="Preset 2 (Value: 0x0000e82a)" Tag="0x0000e82a"/>
-                    <ComboBoxItem Content="Preset 3 (Value: 0xfb882828)" Tag="0xfb882828"/>
-                    <ComboBoxItem Content="Preset 4 (Value: 0x00fa2a2a)" Tag="0x00fa2a2a"/>
-                    <ComboBoxItem Content="Preset 5 (Value: 0x00000028)" Tag="0x00000028"/>
-                    <ComboBoxItem Content="Preset 6 (Value: 0x00fa002a)" Tag="0x00fa002a"/>
-                    <ComboBoxItem Content="Preset 7 (Value: 0x0000002a)" Tag="0x0000002a"/>
-                    <ComboBoxItem Content="Preset 8 (Value: 0x00000026)" Tag="0x00000026"/>
-                    <ComboBoxItem Content="Preset 9 (Value: 0x0fff9887)" Tag="0x0fff9887"/>
-                    <ComboBoxItem Content="Preset 10 (Value: 0xfb000000)" Tag="0xfb000000"/>
-                    <ComboBoxItem Content="Default (Value: 0x00000002)" Tag="0x00000002"/>
-                </ComboBox>
-                <TextBlock x:Name="CurrentValueTextBlock" FontWeight="Bold" Margin="0,10,0,0"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
-                    <Button x:Name="ApplyPresetButton" 
-                            Content="Apply" 
-                            Style="{StaticResource DiscordButton}" 
-                            Click="ApplyPreset_Click" Width="125"/>
-                    <Button x:Name="Restore" 
-                            Content="Default" 
-                            Style="{StaticResource DiscordButton}" 
-                            Click="RestoreWin32PrioritySeparation_Click" Width="125"/>
+            
+            <StackPanel Margin="0">
+                
+
+                <!-- Buttons for each preset -->
+            <TextBlock x:Name="CurrentValueTextBlock" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" x:Name="VerifiedContent" Visibility="Visible">
+                <!-- Verified content goes here -->
+
+                <Button Content="0x00fa332a" Style="{StaticResource BestButton}" Tag="fa332a" Click="PresetButton_Click"/>
+                <Button Content="0x0000e82a" Style="{StaticResource DiscordButton}" Tag="e82a" Click="PresetButton_Click"/>
+                    <Button Content="0xfb882828" Style="{StaticResource DiscordButton}" Tag="fb882828" Click="PresetButton_Click"/>
+                    <Button Content="0x00fa2a2a" Style="{StaticResource DiscordButton}" Tag="00fa2a2a" Click="PresetButton_Click"/>
+                <Button Content="0x00000028" Style="{StaticResource DiscordButton}" Tag="00000028" Click="PresetButton_Click"/>
+                
                 </StackPanel>
+
+            <StackPanel x:Name="ExperimentalContent" Visibility="Collapsed">
+                <!-- Experimental content goes here -->
+                <Button Content="0x00fa002a" Style="{StaticResource DiscordButton}" Tag="00fa002a" Click="PresetButton_Click"/>
+                <Button Content="0x0000002a" Style="{StaticResource DiscordButton}" Tag="0000002a" Click="PresetButton_Click"/>
+                <Button Content="0x00000026" Style="{StaticResource DiscordButton}" Tag="00000026" Click="PresetButton_Click"/>
+                <Button Content="0x0fff9887" Style="{StaticResource DiscordButton}" Tag="0fff9887" Click="PresetButton_Click"/>
+                <Button Content="0xfb000000" Style="{StaticResource BestButton}" Tag="fb000000" Click="PresetButton_Click"/>
             </StackPanel>
-        </Grid>
-    </Border>
+
+            
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                <Button Content="Default" Style="{StaticResource DiscordButton}" Tag="00000002" Click="PresetButton_Click"/>
+            </StackPanel>
+                
+                
+            </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Margin="0,300,0,0">
+            <Button x:Name="VerifiedButton" 
+            Content="Reduce Input Lag" 
+            Click="SwitchToVerifiedTab" 
+            Style="{StaticResource TabButtonStyle}" 
+            Tag="Active" 
+            Width="175" Height="25"/>
+            <Button x:Name="ExperimentalButton" 
+            Content="+FPS" 
+            Click="SwitchToExperimentalTab" 
+            Style="{StaticResource TabButtonStyle}" 
+            Tag="Inactive" 
+            Width="175" Height="25"/>
+        </StackPanel>
+            
+            
+
+
+    </Grid>
+    
+    
+    
 </UserControl>

@@ -88,7 +88,7 @@
         <ContentControl x:Name="ContentSuperCache" Background="#2C2F33" Width="400" Height="400" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0">
             <StackPanel>
                 <StackPanel x:Name="VerifiedContent" Visibility="Visible">
-                    <TextBlock Text="No experimental configurations available at this time." 
+                    <TextBlock Text="No verified configurations available at this time." 
 FontWeight="Bold" 
 FontSize="14" 
 Foreground="Gray" 
@@ -127,13 +127,13 @@ Margin="0,5,0,0"/>
                     Click="SwitchToVerifiedTab" 
                     Style="{StaticResource TabButtonStyle}" 
                     Tag="Active" 
-                    Width="100" Height="25"/>
+                    Width="175" Height="25"/>
             <Button x:Name="ExperimentalButton" 
                     Content="Experimental" 
                     Click="SwitchToExperimentalTab" 
                     Style="{StaticResource TabButtonStyle}" 
                     Tag="Inactive" 
-                    Width="100" Height="25"/>
+                    Width="175" Height="25"/>
         </StackPanel>
 
     </StackPanel>

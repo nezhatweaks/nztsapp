@@ -46,43 +46,185 @@
         </Style>
     </UserControl.Resources>
 
-    <ContentControl x:Name="ContentMonitor" Background="#2C2F33" Width="400" Height="400" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,60,0,0" Grid.RowSpan="2">
-        <StackPanel>
-            
+    <ContentControl x:Name="ContentMonitor" Background="#2C2F33" Width="400" Height="400" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-50,0,0" Grid.RowSpan="2">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-            <!-- VsyncIdleTimeout -->
-            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="Disable Vsync Idle" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disabling Vsync Idle can improve responsiveness."/>
-                    <ToggleButton x:Name="VsyncIdleToggle"
-                                  Style="{StaticResource iOSToggleButton}"
-                                  Click="VsyncIdleToggle_Click" Width="50"/>
-                    <TextBlock x:Name="VsyncStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+            <!-- ScrollViewer with custom ScrollBar style -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0" Height="300">
+                <ScrollViewer.Resources>
+                    <Style TargetType="ScrollBar">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Width" Value="23"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ScrollBar" >
+                                    <Grid Background="Transparent" Margin="0,20,0,0">
+                                        <Track Name="PART_Track" IsDirectionReversed="true">
+                                            <Track.DecreaseRepeatButton>
+                                                <RepeatButton Name="PART_DecreaseButton"
+                                                          Content="▲"
+                                                          Command="ScrollBar.LineUpCommand"
+                                                          Background="Transparent"
+                                                          Width="0" Height="0"/>
+                                            </Track.DecreaseRepeatButton>
+                                            <Track.Thumb>
+                                                <Thumb Name="Thumb" 
+                                                   Background="Black" 
+                                                   Opacity="0.7" 
+                                                   Width="3" 
+                                                   MinHeight="300"/>
+                                            </Track.Thumb>
+                                            <Track.IncreaseRepeatButton>
+                                                <RepeatButton Name="PART_IncreaseButton"
+                                                          Content="▼"
+                                                          Command="ScrollBar.LineDownCommand"
+                                                          Background="Transparent"
+                                                          Width="0" Height="0"/>
+                                            </Track.IncreaseRepeatButton>
+                                        </Track>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ScrollViewer.Resources>
+
+                <!-- StackPanel with all settings -->
+                <StackPanel>
+                    <!-- VsyncIdleTimeout -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Disable Vsync Idle" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disabling Vsync Idle can improve responsiveness."/>
+                            <ToggleButton x:Name="VsyncIdleToggle"
+                                      Style="{StaticResource iOSToggleButton}"
+                                      Click="VsyncIdleToggle_Click" Width="50"/>
+                            <TextBlock x:Name="VsyncStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- MonitorRefreshLatencyTolerance -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Reduced Monitor Refresh Latency" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Adjusting this setting can affect display responsiveness."/>
+                            <ToggleButton x:Name="RefreshLatencyToggle"
+                                      Style="{StaticResource iOSToggleButton}"
+                                      Click="RefreshLatencyToggle_Click" Width="50"/>
+                            <TextBlock x:Name="RefreshLatencyStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- MonitorLatencyTolerance -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Reduced Monitor Latency" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Adjusting this can help reduce latency."/>
+                            <ToggleButton x:Name="LatencyToggle"
+                                      Style="{StaticResource iOSToggleButton}"
+                                      Click="LatencyToggle_Click" Width="50"/>
+                            <TextBlock x:Name="LatencyStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Power Max Performance (HackFlags) -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Tweak Power HackFlags" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Enable to tweak power settings for better performance."/>
+                            <ToggleButton x:Name="TweakPowerHackFlagsToggle"
+  Style="{StaticResource iOSToggleButton}"
+  Click="TweakPowerHackFlagsToggle_Click" Width="50"/>
+                            <TextBlock x:Name="TweakPowerHackFlagsStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- PCI Max Performance (HackFlags) -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Tweak PCI HackFlags (PnP)" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Enabling PCI Max Performance can boost performance at the cost of power consumption."/>
+                            <ToggleButton x:Name="PCIMaxPerfToggle"
+                                      Style="{StaticResource iOSToggleButton}"
+                                      Click="PCIMaxPerfToggle_Click" Width="50"/>
+                            <TextBlock x:Name="PCIMaxPerfStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- New PCI HackFlags toggle -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Tweak PCI HackFlags (Service)" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Tweak PCI HackFlags for performance optimization."/>
+                            <ToggleButton x:Name="PCIHackFlagsToggle"
+                      Style="{StaticResource iOSToggleButton}"
+                      Click="PCIHackFlagsToggle_Click" Width="50"/>
+                            <TextBlock x:Name="PCIHackFlagsStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Intel HackFlags -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Intel Max Perf" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Toggle Intel-specific HackFlags for performance optimizations."/>
+                            <ToggleButton x:Name="IntelPpmToggle"
+                                      Style="{StaticResource iOSToggleButton}"
+                                      Click="IntelPpmToggle_Click" Width="50"/>
+                            <TextBlock x:Name="IntelPpmStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- AMD HackFlags -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="AMD Max Perf" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Toggle AMD-specific HackFlags for performance optimizations."/>
+                            <ToggleButton x:Name="AmdPpmToggle"
+                                      Style="{StaticResource iOSToggleButton}"
+                                      Click="AmdPpmToggle_Click" Width="50"/>
+                            <TextBlock x:Name="AmdPpmStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Tweak BasicRender HackFlags -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Tweak BasicRender HackFlags" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Enabling this setting tweaks the HackFlags for BasicRender to improve performance."/>
+                            <ToggleButton x:Name="BasicRenderToggle"
+                      Style="{StaticResource iOSToggleButton}"
+                      Click="BasicRenderToggle_Click" Width="50"/>
+                            <TextBlock x:Name="BasicRenderStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Tweak GraphicsPerf HackFlags -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Tweak GraphicsPerf HackFlags" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Enabling this setting tweaks the HackFlags for GraphicsPerf to improve performance."/>
+                            <ToggleButton x:Name="GraphicsPerfToggle"
+   Style="{StaticResource iOSToggleButton}"
+   Click="BasicRenderToggle_Click" Width="50"/>
+                            <TextBlock x:Name="GraphicsPerfStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Tweak nvstor HackFlags -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Tweak nvstor HackFlags" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Enabling this setting tweaks the HackFlags for Nvstor to improve performance."/>
+                            <ToggleButton x:Name="nvstorToggle"
+Style="{StaticResource iOSToggleButton}"
+Click="BasicRenderToggle_Click" Width="50"/>
+                            <TextBlock x:Name="nvstorStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+
+
+
+
+
                 </StackPanel>
-            </Border>
+            </ScrollViewer>
 
-            <!-- MonitorRefreshLatencyTolerance -->
-            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="Reduced Monitor Refresh Latency" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Adjusting this setting can affect display responsiveness."/>
-                    <ToggleButton x:Name="RefreshLatencyToggle"
-                                  Style="{StaticResource iOSToggleButton}"
-                                  Click="RefreshLatencyToggle_Click" Width="50"/>
-                    <TextBlock x:Name="RefreshLatencyStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Border>
-
-            <!-- MonitorLatencyTolerance -->
-            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="Reduced Monitor Latency" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Adjusting this can help reduce latency."/>
-                    <ToggleButton x:Name="LatencyToggle"
-                                  Style="{StaticResource iOSToggleButton}"
-                                  Click="LatencyToggle_Click" Width="50"/>
-                    <TextBlock x:Name="LatencyStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Border>
-
-        </StackPanel>
+        </Grid>
     </ContentControl>
+
 </UserControl>
