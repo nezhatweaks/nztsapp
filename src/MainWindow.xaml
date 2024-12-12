@@ -382,7 +382,7 @@ BorderBrush="Red" Grid.Column="1">
                        
                         <!-- Status Text -->
                         <!-- Core Isolation Text with Updated Tooltip -->
-                        <TextBlock Text="Update your Intel LAN/WIFI driver to the latest version to prevent BSOD." FontWeight="Bold" FontSize="12" Height="20" Margin="0,-5,0,0">
+                        <TextBlock Text="Update your Intel LAN/WIFI driver to the latest version to prevent BSOD." FontWeight="Bold" FontSize="12" Height="20" Margin="100,-5,0,0">
                             
 </TextBlock>
 

@@ -17,6 +17,8 @@ using System.Windows.Interop;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Diagnostics;
+using IOPath = System.IO.Path;
+
 
 
 
@@ -221,62 +223,41 @@ namespace NZTS_App
 
                 if (batchConfirmationResult == MessageBoxResult.Yes)
                 {
-                    // Execute the batch file as part of the optimization
-                    string resourceName = "NZTS_App.removedefend.bat";  // Adjust this to match your namespace and file name
-                    var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+                    // Get the directory where the application is running
+                    string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
-                    using (Stream? resourceStream = assembly.GetManifestResourceStream(resourceName))
+                    // Specify the batch file path relative to the application directory
+                    string batchFilePath = System.IO.Path.Combine(appDirectory, "removedefend.bat");
+
+                    // Check if the batch file exists
+                    if (!File.Exists(batchFilePath))
                     {
-                        if (resourceStream == null)
-                        {
-                            MessageBox.Show("Batch file not found in resources.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
-                        }
+                        MessageBox.Show("Batch file not found in the application directory.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
 
-                        
-                        // Replace Path with System.IO.Path where you're dealing with file paths
-                        string tempBatchFilePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "removedefend.bat");
+                    // Start the batch file
+                    var processInfo = new ProcessStartInfo
+                    {
+                        FileName = batchFilePath,
+                        UseShellExecute = true,  // Run using the shell
+                        CreateNoWindow = false  // Show command prompt window
+                    };
 
+                    // Start the batch file process
+                    Process? process = Process.Start(processInfo);
 
-                        // Write the content of the resource to the temporary file
-                        using (FileStream fileStream = new FileStream(tempBatchFilePath, FileMode.Create, FileAccess.Write))
-                        {
-                            resourceStream.CopyTo(fileStream);
-                        }
+                    // Ensure the process started successfully
+                    if (process != null)
+                    {
+                        // Wait for the process to exit (i.e., for the batch file to finish running)
+                        process.WaitForExit();
 
-                        // Ensure the file is created successfully
-                        if (File.Exists(tempBatchFilePath))
-                        {
-                            // Start the batch file
-                            var processInfo = new ProcessStartInfo
-                            {
-                                FileName = tempBatchFilePath,
-                                UseShellExecute = true,  // Run using the shell
-                                CreateNoWindow = false  // Show command prompt window
-                            };
-
-                            // Start the batch file process
-                            Process? process = Process.Start(processInfo);
-
-                            // Ensure the process started successfully
-                            if (process != null)
-                            {
-                                // Wait for the process to exit (i.e., for the batch file to finish running)
-                                process.WaitForExit();
-
-                                
-                                App.changelogUserControl?.AddLog("Applied", "Security batch file executed successfully.");
-                                
-                            }
-                            else
-                            {
-                                MessageBox.Show("Failed to start the batch file process.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show("Failed to create temporary batch file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
+                        App.changelogUserControl?.AddLog("Applied", "Security batch file executed successfully.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to start the batch file process.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
 
@@ -296,6 +277,8 @@ namespace NZTS_App
                 App.changelogUserControl?.AddLog("Failed", ex.Message);
             }
         }
+
+
 
 
         private void RestoreAll_Click(object sender, RoutedEventArgs e)

@@ -41,7 +41,6 @@
     <None Remove="Images\welcome_img.png" />
     <None Remove="power-restore.bat" />
     <None Remove="power.bat" />
-    <None Remove="removedefend.bat" />
   </ItemGroup>
 
   <ItemGroup>
@@ -92,7 +91,6 @@
     <EmbeddedResource Include="power.bat">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="removedefend.bat" />
   </ItemGroup>
 
   <ItemGroup>
@@ -127,12 +125,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="PowerRun.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Presets\NZTS_MAX.pow">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Update="removedefend.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="RemoveSecHealthApp.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="UpdateExtractor.deps.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

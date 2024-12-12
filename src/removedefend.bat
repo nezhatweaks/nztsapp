@@ -13,7 +13,7 @@ CLS
 bcdedit /set hypervisorlaunchtype off
 
 CLS
-echo Removing Windows Security UWP App...
+echo Removing Windows Security UWP App (Credits to ionuttbara)...
 Powershell -noprofile -executionpolicy bypass -file "%~dp0\RemoveSecHealthApp.ps1"
 
 CLS
