@@ -131,7 +131,7 @@ namespace NZTS_App
             using (StreamWriter writer = new StreamWriter(filePath))
             {
                 // Write the header row
-                writer.WriteLine("CPU Label, Core and Thread, Avg FPS, Max FPS, Min FPS, 1% Low, 0.1% Low, Best FPS, Runner-up FPS");
+                writer.WriteLine("CPU Label, Core/Thread, Avg FPS, Max FPS, Min FPS, 1% Low, 0.1% Low, Best FPS, Runner-up FPS");
 
                 // Get the benchmark results
                 var benchmarkResults = BenchmarkResults;

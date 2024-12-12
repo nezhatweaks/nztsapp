@@ -15,7 +15,7 @@ namespace NZTS_App.Views
         {
             InitializeComponent();
             SelectedCores = new List<int>();
-            // Position the window at specific coordinates
+            // Position the window at specific coordinates (optional)
             this.Left = 500;  // X-coordinate
             this.Top = 300;   // Y-coordinate
         }
@@ -85,6 +85,19 @@ namespace NZTS_App.Views
             // DialogResult set to true if OK is clicked
             this.DialogResult = true;
             this.Close();
+        }
+
+        // Reset button click (untick all checkboxes)
+        private void ResetButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Untick all checkboxes
+            foreach (CheckBox checkBox in CpuCoreListBox.Items)
+            {
+                checkBox.IsChecked = false;
+            }
+
+            // Clear the selected cores list
+            SelectedCores.Clear();
         }
     }
 }

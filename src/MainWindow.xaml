@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="NZTS APP"  Height="550" Width="1000"
-        WindowStyle="None" AllowsTransparency="True" ResizeMode="CanResize" Background="#202224"
+        WindowStyle="None" AllowsTransparency="True" ResizeMode="CanResize"
         Foreground="White" FontFamily="Segoe UI" FontSize="14"
         MouseMove="MainWindow_MouseMove"
         MouseDown="MainWindow_MouseDown"
@@ -10,10 +10,17 @@
         xmlns:local="clr-namespace:NZTS_App.Views"
         Closing="Window_Closing">
 
-
+    <Window.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#202224" Offset="0.0" />
+            <GradientStop Color="#1b1d1f" Offset="1.0" />
+        </LinearGradientBrush>
+    </Window.Background>
 
 
     <Window.Resources>
+
+
 
 
         <!-- Rounded Button Style with Hover/Click Animations -->
@@ -65,7 +72,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                    CornerRadius="10"
+                    CornerRadius="20"
                     BorderBrush="Transparent">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
@@ -145,7 +152,7 @@
             <Setter Property="Height" Value="10"/>
         </Style>
 
-        
+
 
         <local:BoolToColorConverter x:Key="BoolToColorConverter"/>
         <Style x:Key="iOSToggleButton" TargetType="ToggleButton">
@@ -306,7 +313,7 @@
                 <Trigger Property="Tag" Value="Active">
                     <Setter Property="Background" Value="#1d6b75"/>
                     <!-- Active tab color -->
-                    
+
                     <!-- Active tab border color -->
                 </Trigger>
             </Style.Triggers>
@@ -350,14 +357,61 @@
         Grid.Column="0"
         HorizontalAlignment="Left"
         Click="ToggleSidebar" 
-        Margin="5,0,0,0" />
+        Margin="5,0,0,0">
+
+
+
+                    <!-- Apply glow effect -->
+                    <Button.Effect>
+                        <DropShadowEffect Color="Red" BlurRadius="80" Direction="270" ShadowDepth="0" Opacity="0.2"/>
+                    </Button.Effect>
+
+                    <!-- Tooltip if needed -->
+                    <Button.ToolTip>
+                        <ToolTip Content="Toggle Sidebar" />
+                    </Button.ToolTip>
+                </Button>
+
+                <Border BorderThickness="1" Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="79,4,86,4" 
+BorderBrush="Red" Grid.Column="1">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Red" BlurRadius="80" Direction="270" ShadowDepth="0" Opacity="0.2"/>
+                    </Border.Effect>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,93,0">
+                       
+                        <!-- Status Text -->
+                        <!-- Core Isolation Text with Updated Tooltip -->
+                        <TextBlock Text="Update your Intel LAN/WIFI driver to the latest version to prevent BSOD." FontWeight="Bold" FontSize="12" Height="20" Margin="0,-5,0,0">
+                            
+</TextBlock>
+
+                        
+                    </StackPanel>
+
+                    <!-- ToolTip for Disabled State -->
+                    <Border.ToolTip>
+                        <ToolTip>
+                            <TextBlock>
+        Tweak any memory related tweaks here will lead you to BSOD 
+        <LineBreak/>
+        if you are using an Intel LAN/WIFI adapter.
+        <LineBreak/>
+        <Run Foreground="Green">
+            To prevent this error, update to the latest driver.
+        </Run>
+                            </TextBlock>
+                        </ToolTip>
+                    </Border.ToolTip>
+                </Border>
 
 
 
 
 
 
-                
+
+
 
                 <Button Content="_" Width="30" Height="30" Grid.Column="2" Background="Transparent" 
                     Foreground="White" BorderThickness="0" Click="Minimize_Click"/>
@@ -411,6 +465,8 @@
                         <!-- Header -->
                         <TextBlock Text="" FontWeight="Bold" FontSize="16" Foreground="White" Margin="0,0,0,10"/>
 
+
+
                         <!-- Tab Buttons (Basic and Advanced) -->
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0, 10, 0, 20">
                             <Button x:Name="BasicTabButton" 
@@ -435,21 +491,24 @@
                                     Tag="Inactive"/>
                         </StackPanel>
 
-                        <!-- Search Bar -->
-                        <Grid Margin="0,0,0,0" Background="Transparent">
-                            <TextBox x:Name="SearchBox" Padding="5" Width="180" Height="30" Background="#343B40" Foreground="White" BorderBrush="Gray" BorderThickness="1" TextChanged="SearchBox_TextChanged" GotFocus="SearchBox_GotFocus" LostFocus="SearchBox_LostFocus" Visibility="Collapsed"/>
-                            <Button x:Name="CancelButton" Content="✖" Width="30" Height="30" Background="Transparent" Foreground="Gray" BorderThickness="0" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="Collapsed"/>
-                        </Grid>
+
 
                         <!-- Basic Content (visible by default) -->
                         <StackPanel x:Name="BasicContent" Visibility="Visible">
-                            <TextBlock Text="🚀 1-Click" VerticalAlignment="Center" Margin="10"/>
+                            <TextBlock Text="1-Click" VerticalAlignment="Center" Margin="10" Visibility="Collapsed"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <Button Content="⚡️" FontSize="20" Style="{StaticResource RoundedButtonStyle3}" Click="OptimizeAll_Click">
+                                    <!-- Apply glow effect -->
+                                    <Button.Effect>
+                                        <DropShadowEffect Color="Blue" BlurRadius="90" Direction="270" ShadowDepth="0" Opacity="0.7"/>
+                                    </Button.Effect>
+
+                                    <!-- Tooltip -->
                                     <Button.ToolTip>
                                         <ToolTip Content="Apply Recommend Settings" />
                                     </Button.ToolTip>
                                 </Button>
+
                                 <Button Content="❌" FontSize="20" Style="{StaticResource RoundedButtonStyle3}" Click="RestoreAll_Click">
                                     <Button.ToolTip>
                                         <ToolTip Content="Restore Recommend Settings" />
@@ -460,6 +519,7 @@
                             <Border Background="Transparent" Margin="0,20,0,10" />
 
                             <Button Content="Home" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="GoToHomePageButton_Click"/>
+                            <Button Content="Restore Point" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="BackupButton_Click"/>
                             <Button Content="Logs" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Changelog_Click"/>
                             <Button Content="Hardware" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="BIOSMan_Click" Visibility="Collapsed"/>
                             <Button Content="Settings" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Settings_Click"/>
@@ -482,10 +542,10 @@
                             <Button Content="Telemetry" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Debloat_Click"/>
                             <Button Content="Storage" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Storage_Click"/>
                             <Button Content="File System" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Supercache_Click"/>
-                            
+
                         </StackPanel>
 
-                        
+
                     </StackPanel>
 
                     <Frame x:Name="MainUIApp" NavigationUIVisibility="Hidden"/>
@@ -650,90 +710,97 @@ VerticalAlignment="Center">
                         MouseDown="VerifiedContent_MouseDown" 
                         MouseMove="VerifiedContent_MouseMove" 
                         MouseUp="VerifiedContent_MouseUp">
-                            <TextBlock Text="NZTS APP" 
-                           FontWeight="Bold" 
-                           FontSize="40" 
-                           Foreground="Gray" 
-                           HorizontalAlignment="Center" 
-                           Margin="0,20,0,0"/>
-                            <TextBlock Text="Select an optimization category from the sidebar." 
-                           FontSize="12" 
-                           Foreground="LightGray" 
-                           HorizontalAlignment="Center" 
-                           Margin="0,5,0,0"/>
+
                             <Image Source="Images/welcome_img.png" 
                        Width="280" 
                        Height="200" 
                        HorizontalAlignment="Center" 
-                       Margin="0,0,0,0"/>
+                       Margin="0,50,0,0"/>
+                            <TextBlock Text="NZTS APP" 
+FontWeight="Bold" 
+FontSize="30" 
+Foreground="Gray" 
+HorizontalAlignment="Center" 
+Margin="0,-30,0,0" Visibility="Collapsed"/>
+                            <TextBlock Text="Select an optimization category from the sidebar." 
+FontSize="12" 
+Foreground="LightGray" 
+HorizontalAlignment="Center" 
+Margin="0,0,0,0"/>
                         </StackPanel>
 
                         <StackPanel x:Name="ExperimentalContent" Visibility="Collapsed" Margin="20"
             MouseDown="ExperimentalContent_MouseDown" 
             MouseMove="ExperimentalContent_MouseMove" 
             MouseUp="ExperimentalContent_MouseUp">
-                            <TextBlock Text="What’s New in V0.6.0?" 
+                            <TextBlock x:Name="VersionTextBlock" Text="V0.7.0" 
                FontWeight="Bold" 
                FontSize="24" 
                Foreground="Gray" 
                HorizontalAlignment="Left" 
                Margin="0,20,0,0"/>
 
-                            
 
 
 
-                            <TextBlock Text="➕ Added HackFlags Tweaks in Misc and Process" 
+
+                            <TextBlock Text="➕ Added Multimedia Tweaks in Gaming" 
                FontSize="14" 
                Foreground="LightGray" 
                HorizontalAlignment="Left" 
                Margin="0,5,0,0"/>
 
-                            <TextBlock Text="➕ Added IO Priority and Fixed CPU Priority Bugs in Process" 
+                            <TextBlock Text="➕ Changed Intel/AMD Power Management Toggle Buttons" 
 FontSize="14" 
 Foreground="LightGray" 
 HorizontalAlignment="Left" 
 Margin="0,5,0,0"/>
 
 
-                            <TextBlock Text="➕ Updated the window style for Logs and Affinity Pages" 
+                            <TextBlock Text="➕ Added LargePageSizeInBytes in Memory" 
 FontSize="14" 
 Foreground="LightGray" 
 HorizontalAlignment="Left" 
 Margin="0,5,0,0"/>
 
 
-                            <TextBlock Text="➕ Added System Cache Dirty Page Threshold in Memory" 
+                            <TextBlock Text="➕ Added LargePageSizeInBytes And Include More Games in Process" 
 FontSize="14" 
 Foreground="LightGray" 
 HorizontalAlignment="Left" 
 Margin="0,5,0,0"/>
-                            <TextBlock Text="➕ Added Optimize Power Settings in Power" 
+
+                            <TextBlock FontSize="14" 
+           Foreground="LightGray" 
+           HorizontalAlignment="Left" 
+           Margin="0,5,0,0">
+    ➕ Enhanced Benchmark Logic and Fixed Major Bugs that cause  
+    <LineBreak />
+    benchmark to complete instantly in Affinity
+                            </TextBlock>
+
+                            <TextBlock Text="➕ Added Remove Windows Defender and Security Mitigations in Security" 
 FontSize="14" 
 Foreground="LightGray" 
 HorizontalAlignment="Left" 
 Margin="0,5,0,0"/>
-                            <TextBlock Text="➕ Reworked Win32PrioritySeperation Page" 
-FontSize="14" 
-Foreground="LightGray" 
-HorizontalAlignment="Left" 
-Margin="0,5,0,0"/>
+
+
 
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
 
-                                <Button Content="#misc" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="Monitor_Click" />
+                                <Button Content="#gaming" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="Windows_Click" />
                                 <Button Content="#process" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="CPUPriority_Click" />
-                                <Button Content="#affinity" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="MSI_Click" />
                                 <Button Content="#memory" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="MemoryMan_Click" />
-                                <Button Content="#power" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="PowerPlan_Click" />
-                                <Button Content="#winpriority" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="Win32PrioritySeparation_Click" />
+                                <Button Content="#affinity" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="MSI_Click" />
+                                <Button Content="#security" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="Security_Click" />
 
                             </StackPanel>
 
                         </StackPanel>
-                        
-                        
-                        
+
+
+
 
 
 

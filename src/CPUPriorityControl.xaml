@@ -202,16 +202,16 @@
 
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="border" Property="Background" Value="Blue"/>
-                                                        <Setter TargetName="border" Property="BorderBrush" Value="Blue"/>
+                                                        <Setter TargetName="border" Property="Background" Value="White"/>
+                                                        <Setter TargetName="border" Property="BorderBrush" Value="White"/>
                                                         <Setter TargetName="border" Property="Effect">
                                                             <Setter.Value>
-                                                                <DropShadowEffect Color="Blue" ShadowDepth="5" BlurRadius="20" Opacity="1" />
+                                                                <DropShadowEffect Color="White" ShadowDepth="8" BlurRadius="20" Opacity="1" />
                                                             </Setter.Value>
                                                         </Setter>
                                                     </Trigger>
                                                     <Trigger Property="IsPressed" Value="True">
-                                                        <Setter TargetName="border" Property="Background" Value="Blue"/>
+                                                        <Setter TargetName="border" Property="Background" Value="Gray"/>
                                                     </Trigger>
                                                 </ControlTemplate.Triggers>
                                             </ControlTemplate>
@@ -256,11 +256,11 @@
                 <ScrollViewer.Resources>
                     <Style TargetType="ScrollBar">
                         <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="Width" Value="20"/>
+                        <Setter Property="Width" Value="0"/>
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="ScrollBar" >
-                                    <Grid Background="Transparent" Margin="-20,20,0,0" >
+                                    <Grid Background="Transparent" Margin="-10,30,0,0" >
                                         <Track Name="PART_Track" IsDirectionReversed="true">
                                             <Track.DecreaseRepeatButton>
                                                 <RepeatButton Name="PART_DecreaseButton"
@@ -306,9 +306,9 @@ MinHeight="200"/>
                             </ListView>
 
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                                <Button Content="Add Active Process" Width="130" Margin="2" Click="AddActiveProcessButton_Click" Background="#7289DA" Foreground="White" />
-                                <Button Content="Add By Name" Width="110" Margin="2" Click="AddGameButton_Click" Background="#7289DA" Foreground="White" />
-                                <Button Content="Remove" Width="120" Margin="2" Click="RemoveGameButton_Click" Background="#7289DA" Foreground="White" />
+                                <Button Content="Add Active Process" Width="130" Margin="2" Click="AddActiveProcessButton_Click" Background="#272f38" Foreground="White" />
+                                <Button Content="Add By Name" Width="110" Margin="2" Click="AddGameButton_Click" Background="#272f38" Foreground="White" />
+                                <Button Content="Remove" Width="120" Margin="2" Click="RemoveGameButton_Click" Background="#272f38" Foreground="White" />
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -333,7 +333,16 @@ MinHeight="200"/>
                                 <ToggleButton x:Name="UseLargePagesToggle"
                                               Style="{StaticResource iOSToggleButton}"
                                               Click="UseLargePagesToggle_Click" Width="50"/>
-                                
+                                <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Margin="14,0,10,0">
+                                    <Ellipse Width="20" Height="20" Fill="Red"/>
+                                    <TextBlock Text="!" Foreground="White" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <Grid.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock>This tweak might break some games when enabled.</TextBlock>
+                                        </ToolTip>
+                                    </Grid.ToolTip>
+                                </Grid>
+
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,20,0,0">
@@ -345,16 +354,23 @@ MinHeight="200"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,20,0,0">
-                                <TextBlock  Text="Max Perf" FontWeight="Bold" Margin="0,0,20,0" ToolTip="Enable or disable Maximum Performance for the application."/>
+                                <TextBlock  Text="Flag Optimization" FontWeight="Bold" Margin="0,0,20,0" ToolTip="Enable or disable Maximum Performance for the application."/>
                                 <ToggleButton x:Name="HackFlagsToggle"
                   Style="{StaticResource iOSToggleButton}"
                   Click="HackFlagsToggle_Click" Width="50"/>
                             </StackPanel>
 
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,20,0,0">
+                                <TextBlock  Text="LargePageSizeInBytes (16)" FontWeight="Bold" Margin="0,0,20,0" ToolTip="Enable or disable LargePageSizeInBytes for the application."/>
+                                <ToggleButton x:Name="LargePageSizeInBytesToggle"
+Style="{StaticResource iOSToggleButton}"
+Click="LargePageSizeInBytesToggle_Click" Width="50"/>
+                            </StackPanel>
+
 
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-                                <Button Content="Save" Width="100" Margin="5" Click="SavePriorityButton_Click" Background="#7289DA" Foreground="White"/>
-                                <Button Content="Reset" Width="100" Margin="5" Click="ResetPriorityButton_Click" Background="#7289DA" Foreground="White"/>
+                                <Button Content="Save" Width="100" Margin="5" Click="SavePriorityButton_Click" Background="#272f38" Foreground="White"/>
+                                <Button Content="Reset" Width="100" Margin="5" Click="ResetPriorityButton_Click" Background="#272f38" Foreground="White" Visibility="Collapsed"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -364,13 +380,13 @@ MinHeight="200"/>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Margin="0,20,0,-50">
             <Button x:Name="VerifiedButton" 
-                    Content="Core" 
+                    Content="Game Lists" 
                     Click="SwitchToVerifiedTab" 
                     Style="{StaticResource TabButtonStyle}" 
                     Tag="Active" 
                     Width="175" Height="25"/>
             <Button x:Name="ExperimentalButton" 
-                    Content="Extended" 
+                    Content="Advanced" 
                     Click="SwitchToExperimentalTab" 
                     Style="{StaticResource TabButtonStyle}" 
                     Tag="Inactive" 

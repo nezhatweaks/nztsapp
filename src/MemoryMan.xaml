@@ -98,7 +98,7 @@
                     <!-- Button area -->
                 </Grid.RowDefinitions>
 
-                <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0" Height="300">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0" Height="275" >
                     <ScrollViewer.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="Transparent"/>
@@ -106,7 +106,7 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="ScrollBar" >
-                                        <Grid Background="Transparent" Margin="-78,20,23,0" >
+                                        <Grid Background="Transparent"  >
                                             <Track Name="PART_Track" IsDirectionReversed="true">
                                                 <Track.DecreaseRepeatButton>
                                                     <RepeatButton Name="PART_DecreaseButton"
@@ -138,91 +138,282 @@ MinHeight="200"/>
                     </ScrollViewer.Resources>
                     <StackPanel x:Name="VerifiedContent" Visibility="Visible">
                         <!-- DisablePagingExecutive -->
-                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,50,0">
+                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="Disable Paging Executive" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disabling paging can improve performance."/>
+                                <TextBlock Text="Disable Paging Executive" FontWeight="Bold" Margin="0,0,10,0">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock>
+                The Paging Executive controls whether system processes are swapped in and out of physical memory 
+                to virtual memory (paging). 
+                <LineBreak/>
+                Disabling paging can improve performance by keeping critical system processes in physical memory, 
+                <LineBreak/>
+                but may increase memory usage and could impact system stability in certain cases.
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+</TextBlock>
+
                                 <ToggleButton x:Name="DisablePagingExecutiveToggle" Style="{StaticResource iOSToggleButton}" Click="DisablePagingExecutiveToggle_Click" Width="50"/>
                                 <TextBlock x:Name="PagingStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
 
                         <!-- ContextSwitchDeadband -->
-                        <Border Background="Green" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,50,0">
+                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="Green" Offset="0" />
+                                    <GradientStop Color="#2F3136" Offset="1" />
+                                </LinearGradientBrush>
+                            </Border.Background>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="Context Switch Deadband" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Set to 1 for better responsiveness or delete to reset."/>
+                                <TextBlock Text="Context Switch Deadband" FontWeight="Bold" Margin="0,0,10,0">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock>
+                The Context Switch Deadband controls the frequency at which the system switches between tasks or threads. 
+                <LineBreak/>
+                Setting this value to 1 reduces the deadband, allowing for quicker context switches and better system responsiveness. 
+                <LineBreak/>
+                Deleting or resetting the value will restore the default switching behavior.
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+</TextBlock>
+
                                 <ToggleButton x:Name="ContextSwitchDeadbandToggle" Style="{StaticResource iOSToggleButton}" Click="ContextSwitchDeadbandToggle_Click" Width="50"/>
                                 <TextBlock x:Name="ContextSwitchStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
 
                         <!-- LatencySensitivityHint -->
-                        <Border Background="Green" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,50,0">
+                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="Green" Offset="0" />
+                                    <GradientStop Color="#2F3136" Offset="1" />
+                                </LinearGradientBrush>
+                            </Border.Background>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="Latency Sensitivity Hint" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Set to 1 for improved latency or delete to reset."/>
+                                <TextBlock Text="Latency Sensitivity Hint" FontWeight="Bold" Margin="0,0,10,0">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock>
+                The Latency Sensitivity Hint adjusts the priority of system resources for applications that are sensitive 
+                to latency, such as real-time applications or high-performance workloads.
+                <LineBreak/>
+                Set this value to 1 to give those applications higher priority for lower latency. 
+                <LineBreak/>
+                Toggle off will restore the default system behavior.
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+</TextBlock>
+
                                 <ToggleButton x:Name="LatencySensitivityHintToggle" Style="{StaticResource iOSToggleButton}" Click="LatencySensitivityHintToggle_Click" Width="50"/>
                                 <TextBlock x:Name="LatencyStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
 
-                        <!-- DisableHeapCoalesceOnFree -->
-                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,50,0">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="Disable Heap Coalesce on Free" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disabling heap coalesce can improve performance."/>
-                                <ToggleButton x:Name="DisableHeapCoalesceOnFreeToggle" Style="{StaticResource iOSToggleButton}" Click="DisableHeapCoalesceOnFreeToggle_Click" Width="50"/>
-                                <TextBlock x:Name="HeapCoalesceStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-
-                        
-
                         <!-- Disable Mitigations -->
-                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,50,0">
+                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="Green" Offset="0" />
+                                    <GradientStop Color="#2F3136" Offset="1" />
+                                </LinearGradientBrush>
+                            </Border.Background>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="Disable OS Mitigations" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Disable OS Mitigations to increase PC performance."/>
+                                <TextBlock Text="Disable OS Mitigations" FontWeight="Bold" Margin="0,0,10,0">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock>
+                Disabling OS mitigations can improve PC performance by removing certain security features 
+                that may cause overhead, especially on older or lower-performance hardware. 
+                <LineBreak/>
+                However, this may reduce protection against certain security vulnerabilities. 
+                <LineBreak/>
+                Only disable if you are aware of the potential risks.
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+</TextBlock>
+
                                 <ToggleButton x:Name="DisableOSMitigationsToggle" Style="{StaticResource iOSToggleButton}" Click="DisableOSMitigationsToggle_Click" Width="50"/>
                                 <TextBlock x:Name="DisableOSMitigationsStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
 
                         <!-- SystemCacheDirtyPageThreshold -->
-                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,50,0">
+                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="Green" Offset="0" />
+                                    <GradientStop Color="#2F3136" Offset="1" />
+                                </LinearGradientBrush>
+                            </Border.Background>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="System Cache Dirty Page" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Set to 3 for better performance or delete to reset."/>
+                                <TextBlock Text="System Cache Dirty Page (3)" FontWeight="Bold" Margin="0,0,10,0">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock>
+                The SystemCacheDirtyPageThreshold controls the amount of memory allocated for dirty pages. 
+                <LineBreak/>
+                Set this value to 3 for better performance, especially under heavy memory load, 
+                <LineBreak/>
+                or delete to reset the threshold and clear the cache.
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+</TextBlock>
+
                                 <ToggleButton x:Name="SystemCacheDirtyPageThresholdToggle" Style="{StaticResource iOSToggleButton}" Click="SystemCacheDirtyPageThresholdToggle_Click" Width="50"/>
                                 <TextBlock x:Name="SystemCacheDirtyPageThresholdStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
+
+                        <!-- LargePageSizeInBytes -->
+                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="Green" Offset="0" />
+                                    <GradientStop Color="#2F3136" Offset="1" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="LargePageSizeInBytes (3)" FontWeight="Bold" Margin="0,0,10,0">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock>
+                Set this value to 3 to enable optimal large page sizes for improved performance, 
+                especially for memory-intensive workloads. 
+                <LineBreak/>
+                This value may reduce memory overhead and increase access speed. 
+                <LineBreak/>
+                Toggle off if you wish to revert to the default memory settings.
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+</TextBlock>
+
+                                <ToggleButton x:Name="LargePageSizeInBytesToggle" Style="{StaticResource iOSToggleButton}" Click="LargePageSizeInBytesToggle_Click" Width="50"/>
+                                
+                            </StackPanel>
+                        </Border>
+
+
 
                     </StackPanel>
                 </ScrollViewer>
 
                 <StackPanel x:Name="ExperimentalContent" Visibility="Collapsed" Grid.Row="0" Margin="0,0,0,0">
                     <!-- Experimental settings -->
-                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Large Page Minimum" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Set to 0xFFFFFFFF for maximum performance."/>
+                            <TextBlock Text="Large Page Minimum" FontWeight="Bold" Margin="0,0,10,0">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                Set this value to 0xFFFFFFFF to maximize performance by enabling large pages, which can improve 
+                <LineBreak/>
+                memory access and reduce overhead for certain workloads. 
+                <LineBreak/>
+                <Run Foreground="Red">
+                    Warning: This setting is experimental and may not work as expected for all users. 
+                    Use at your own risk.
+                </Run>
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+</TextBlock>
+
                             <ToggleButton x:Name="LargePageMinimumToggle" Style="{StaticResource iOSToggleButton}" Width="50"/>
                         </StackPanel>
                     </Border>
 
                     <!-- SecondLevelDataCache -->
-                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Second Level Data Cache" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Adjusts the second level data cache settings."/>
+                            <TextBlock Text="Second Level Data Cache" FontWeight="Bold" Margin="0,0,10,0">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                Adjusts the second level data cache settings to optimize cache behavior. 
+                <LineBreak/>
+                This can affect the performance of certain workloads by tuning how the system manages the cache.
+                <LineBreak/>
+                Windows may ignore this setting [PLACEBO]
+<LineBreak/>
+                <Run Foreground="Red">
+                    Warning: This setting is experimental and may not produce optimal results for all users. 
+                    Use with caution.
+                </Run>
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+</TextBlock>
+
                             <ToggleButton x:Name="SecondLevelDataCacheToggle" Style="{StaticResource iOSToggleButton}" Click="SecondLevelDataCacheToggle_Click" Width="50"/>
                             <TextBlock x:Name="SecondLevelDataCacheStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
 
                     <!-- ThirdLevelDataCache -->
-                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Third Level Data Cache" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Adjusts the third level data cache settings."/>
+                            <TextBlock Text="Third Level Data Cache" FontWeight="Bold" Margin="0,0,10,0">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                Adjusts the third level data cache settings to optimize cache performance. 
+                <LineBreak/>
+                This setting can improve overall system performance by tuning how the processor handles cache for large datasets.
+                <LineBreak/>
+                <Run Foreground="Red">
+                    Warning: This setting is experimental and may not produce optimal results for all users. 
+                    Use with caution.
+                </Run>
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+</TextBlock>
+
                             <ToggleButton x:Name="ThirdLevelDataCacheToggle" Style="{StaticResource iOSToggleButton}" Click="ThirdLevelDataCacheToggle_Click" Width="50"/>
                             <TextBlock x:Name="ThirdLevelDataCacheStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
+
+                    <!-- DisableHeapCoalesceOnFree -->
+                    <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Disable Heap Coalesce on Free" FontWeight="Bold" Margin="0,0,10,0">
+                                <TextBlock.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                Disabling heap coalescing can improve performance by reducing the overhead of memory management, 
+                <LineBreak/>
+                particularly in memory-intensive applications where frequent allocations and deallocations occur. 
+                <LineBreak/>
+                <Run Foreground="Red">
+                    Warning: This setting is experimental and may not provide optimal results for all systems. 
+                    Use with caution.
+                </Run>
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+</TextBlock>
+
+                            <ToggleButton x:Name="DisableHeapCoalesceOnFreeToggle" Style="{StaticResource iOSToggleButton}" Click="DisableHeapCoalesceOnFreeToggle_Click" Width="50"/>
+                            <TextBlock x:Name="HeapCoalesceStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
+                
+                
+                
+                
 
                 <!-- Tab Buttons Positioned Below Content -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Margin="0,30,0,0">

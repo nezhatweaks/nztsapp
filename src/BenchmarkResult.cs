@@ -23,7 +23,7 @@
         public string Lows0_1PercentFormatted => Lows0_1Percent.ToString("F2");
         public string StandardDeviationFormatted => StandardDeviation.ToString("F2");
 
-        // Optional: constructor to initialize more specifically if needed
+        // Optional constructor to initialize more specifically if needed
         public BenchmarkResult(string cpuLabel, string coreName, double fps, double avgFps, double maxFps, double minFps, double lows1Percent, double lows0_1Percent, double standardDeviation)
         {
             CpuLabel = cpuLabel;

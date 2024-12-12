@@ -46,6 +46,7 @@ namespace NZTS_App.Views
             ThirdLevelDataCacheToggle.Click += ThirdLevelDataCacheToggle_Click;
             DisableOSMitigationsToggle.Click += DisableOSMitigationsToggle_Click;
             SystemCacheDirtyPageThresholdToggle.Click += SystemCacheDirtyPageThresholdToggle_Click;
+            LargePageSizeInBytesToggle.Click += LargePageSizeInBytesToggle_Click;
         }
 
 
@@ -88,6 +89,10 @@ namespace NZTS_App.Views
                         // ThirdLevelDataCache
                         var thirdLevelCacheValue = key.GetValue("ThirdLevelDataCache");
                         ThirdLevelDataCacheToggle.IsChecked = thirdLevelCacheValue != null;
+
+                        // LargePageSizeInBytes
+                        var LargePageSizeInByteseValue = key.GetValue("LargePageSizeInBytes");
+                        LargePageSizeInBytesToggle.IsChecked = LargePageSizeInByteseValue != null;
 
                         // Mitigations
                         var DisableOSMitigationsValue = key.GetValue("FeatureSettingsOverride");
@@ -238,6 +243,18 @@ namespace NZTS_App.Views
                 // Set to default values (default value for FeatureSettingsOverride is 0x00000048, FeatureSettingsOverrideMask is 0x00000003)
                 UpdateRegistryValue("FeatureSettingsOverride", 0x00000048);  // Default value for FeatureSettingsOverride
                 UpdateRegistryValue("FeatureSettingsOverrideMask", 0x00000003);  // Default value for FeatureSettingsOverrideMask
+            }
+        }
+
+        private void LargePageSizeInBytesToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (LargePageSizeInBytesToggle.IsChecked == true)
+            {
+                UpdateRegistryValue("LargePageSizeInBytes", 3);
+            }
+            else
+            {
+                DeleteRegistryValue("LargePageSizeInBytes");
             }
         }
 

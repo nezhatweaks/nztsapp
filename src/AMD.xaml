@@ -92,7 +92,7 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="ScrollBar" >
-                                    <Grid Background="Transparent" Margin="-110,20,0,0" >
+                                    <Grid Background="Transparent" Margin="-110,10,-10,0" >
                                         <Track Name="PART_Track" IsDirectionReversed="true">
                                             <Track.DecreaseRepeatButton>
                                                 <RepeatButton Name="PART_DecreaseButton"
@@ -204,7 +204,7 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="ScrollBar" >
-                                    <Grid Background="Transparent" Margin="-100,20,0,0" >
+                                    <Grid Background="Transparent" Margin="-100,11,0,0" >
                                         <Track Name="PART_Track" IsDirectionReversed="true">
                                             <Track.DecreaseRepeatButton>
                                                 <RepeatButton Name="PART_DecreaseButton"

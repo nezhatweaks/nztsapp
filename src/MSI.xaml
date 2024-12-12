@@ -97,11 +97,7 @@
         <!-- Title -->
         <StackPanel Width="700" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-10,0,0,0" Grid.Row="0">
             <!-- Backup Button -->
-            <Button Content="Restore Point" 
-                    Style="{StaticResource RoundedButtonStyle}" 
-                    Click="BackupButton_Click" 
-                    Margin="10,0,0,0" 
-                    HorizontalAlignment="Left" Width="100" />
+           
             <Button x:Name="StartBenchmarkButton" Content="Benchmark" Click="StartBenchmarkButton_Click" Width="100" Style="{StaticResource RoundedButtonStyle}" />
             <TextBlock x:Name="CpuStatusTextBlock" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,10,10" Width="600" />
         </StackPanel>

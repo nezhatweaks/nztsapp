@@ -50,85 +50,227 @@
         <!-- Reset Button Style (Matches Discord Style) -->
         <Style x:Key="ResetButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#2F3136"/>
-            <!-- Dark Background -->
             <Setter Property="BorderBrush" Value="#BDBDBD"/>
-            <!-- Light Border for contrast -->
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Foreground" Value="White"/>
-            <!-- White text color -->
             <Setter Property="FontWeight" Value="Bold"/>
-            <!-- Bold text -->
             <Setter Property="Padding" Value="8,4"/>
-            
-            <!-- Rounded corners -->
             <Setter Property="Height" Value="30"/>
-            <!-- Height for consistency -->
         </Style>
 
     </UserControl.Resources>
 
-    <ContentControl x:Name="ContentWindows" Background="#2C2F33" Width="400" Height="400" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,60,0,0" Grid.RowSpan="2">
-        <StackPanel>
-            <!-- Enable Game Mode -->
-            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="Enable Game Mode" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Enabling Game Mode can optimize performance for gaming."/>
-                    <ToggleButton x:Name="GameModeToggle"
-                                  Style="{StaticResource iOSToggleButton}"
-                                  Click="GameModeToggle_Click" Width="50">
-                        <ToggleButton.Content>
+    <ContentControl x:Name="ContentWindows" Background="#2C2F33" Width="400" Height="400" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0" Grid.RowSpan="2">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <ScrollViewer.Resources>
+                <Style TargetType="ScrollBar">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Width" Value="23"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ScrollBar" >
+                                <Grid Background="Transparent" Margin="-78,20,23,0" >
+                                    <Track Name="PART_Track" IsDirectionReversed="true">
+                                        <Track.DecreaseRepeatButton>
+                                            <RepeatButton Name="PART_DecreaseButton"
+       Content="▲"
+       Command="ScrollBar.LineUpCommand"
+       Background="Transparent"
+       Width="0" Height="0"/>
+                                        </Track.DecreaseRepeatButton>
+                                        <Track.Thumb>
+                                            <Thumb Name="Thumb" 
+Background="Black" 
+Opacity="0.7" 
+Width="3" 
+MinHeight="200"/>
+                                        </Track.Thumb>
+                                        <Track.IncreaseRepeatButton>
+                                            <RepeatButton Name="PART_IncreaseButton"
+       Content="▼"
+       Command="ScrollBar.LineDownCommand"
+       Background="Transparent"
+       Width="0" Height="0"/>
+                                        </Track.IncreaseRepeatButton>
+                                    </Track>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ScrollViewer.Resources>
+            <StackPanel>
+                <!-- Enable Game Mode -->
+                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Enable Game Mode" FontWeight="Bold" Margin="0,0,10,0">
+                            <TextBlock.ToolTip>
+                                <ToolTip>
+                                    <TextBlock>
+                Enabling Game Mode disables notifications to minimize distractions during gaming. 
+                <LineBreak/>
+                However, it may not provide significant performance improvements, 
+                <LineBreak/>
+                so it is recommended to disable it unless you prefer uninterrupted gameplay.
+                                    </TextBlock>
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+</TextBlock>
+
+
+                        <ToggleButton x:Name="GameModeToggle"
+                                      Style="{StaticResource iOSToggleButton}"
+                                      Click="GameModeToggle_Click" 
+                                      Width="50">
                             <TextBlock Text="{Binding GameModeState}" Foreground="White" />
-                        </ToggleButton.Content>
-                    </ToggleButton>
-                </StackPanel>
-            </Border>
+                        </ToggleButton>
+                    </StackPanel>
+                </Border>
 
-            <!-- Enable Game Bar -->
-            <Border BorderBrush="Yellow" BorderThickness="1" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="Enable Game Bar" FontWeight="Bold" Margin="0,0,10,0" ToolTip="Enabling the Game Bar allows quick access to gaming features."/>
-                    <ToggleButton x:Name="GameBarToggle"
-                                  Style="{StaticResource iOSToggleButton}"
-                                  Click="GameBarToggle_Click" Width="50">
-                        <ToggleButton.Content>
+                <Border BorderThickness="1" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" 
+        BorderBrush="Orange">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Orange" BlurRadius="10" Direction="270" ShadowDepth="0" Opacity="0.7"/>
+                    </Border.Effect>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Enable Game Bar" FontWeight="Bold" Margin="0,0,10,0">
+                            <TextBlock.ToolTip>
+                                <ToolTip>
+                                    <TextBlock>
+                        Enabling the Game Bar allows quick access to gaming features such as screen recording, 
+                        <LineBreak/>
+                        performance tracking, and social interaction. 
+                        <LineBreak/>
+                        <Run Foreground="Orange">
+                            Caution: Disabling this feature may interfere with other system functionalities or cause unexpected behavior. 
+                            Use with care.
+                        </Run>
+                                    </TextBlock>
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+        </TextBlock>
+
+                        <ToggleButton x:Name="GameBarToggle"
+                      Style="{StaticResource iOSToggleButton}" 
+                      Click="GameBarToggle_Click" 
+                      Width="50">
                             <TextBlock Text="{Binding GameBarState}" Foreground="White" />
-                        </ToggleButton.Content>
-                    </ToggleButton>
-                </StackPanel>
-            </Border>
+                        </ToggleButton>
 
-            <!-- Intel Processor Tweak -->
-            <Border Background="Green" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="Tweak Intel Processor" FontWeight="Bold" Margin="0,5,10,0" ToolTip="Maximize Intel CPU Frequency."/>
-                    <ToggleButton x:Name="IntelToggle"
-                      Style="{StaticResource iOSToggleButton}"
-                      Click="IntelToggle_Click" Width="50">
-                        <ToggleButton.Content>
-                            <TextBlock Text="{Binding IntelState}" Foreground="White" />
-                        </ToggleButton.Content>
-                    </ToggleButton>
-                    <!-- Apply ResetButtonStyle to Reset Button -->
-                    <Button Content="Reset" Width="60" Style="{StaticResource ResetButtonStyle}" Click="IntelReset_Click" Margin="5,0,0,0" />
-                </StackPanel>
-            </Border>
+                        <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Margin="14,0,10,0">
+                            <Ellipse Width="20" Height="20" Fill="Orange"/>
+                            <TextBlock Text="!" Foreground="White" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Grid.ToolTip>
+                                <ToolTip>
+                                    <TextBlock>Feature-Breaking Tweak when disabled.</TextBlock>
+                                </ToolTip>
+                            </Grid.ToolTip>
+                        </Grid>
+                    </StackPanel>
+                </Border>
 
-            <!-- AMD Processor Tweak -->
-            <Border Background="Green" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="Tweak AMD Processor" FontWeight="Bold" Margin="0,5,10,0" ToolTip="Maximize AMD CPU Frequency."/>
-                    <ToggleButton x:Name="AmdToggle"
-                      Style="{StaticResource iOSToggleButton}"
-                      Click="AmdToggle_Click" Width="50">
-                        <ToggleButton.Content>
-                            <TextBlock Text="{Binding AmdState}" Foreground="White" />
-                        </ToggleButton.Content>
-                    </ToggleButton>
-                    <!-- Apply ResetButtonStyle to Reset Button -->
-                    <Button Content="Reset" Width="60" Style="{StaticResource ResetButtonStyle}" Click="AmdReset_Click" Margin="5,0,0,0" />
-                </StackPanel>
-            </Border>
 
-        </StackPanel>
+
+                <!-- Toggle for Multimedia Tweaks -->
+                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="Green" Offset="0" />
+                            <GradientStop Color="#2F3136" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Multimedia Tweaks" FontWeight="Bold" Margin="0,5,10,0">
+                            <TextBlock.ToolTip>
+                                <ToolTip>
+                                    <TextBlock>
+                Toggle this setting to apply multimedia tweaks that optimize system resources 
+                <LineBreak/>
+                for gaming performance, such as prioritizing multimedia applications and reducing background processes.
+                                    </TextBlock>
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+</TextBlock>
+
+                        <ToggleButton x:Name="MultimediaTweaksToggle" 
+                                      Style="{StaticResource iOSToggleButton}" 
+                                      Width="50" 
+                                      Height="25" 
+                                      Click="MultimediaTweaksToggle_Click" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Intel Processor Tweak -->
+                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="Green" Offset="0" />
+                            <GradientStop Color="#2F3136" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                        <TextBlock Text="Intel Processor" FontWeight="Bold" Margin="0,5,10,0">
+                            <TextBlock.ToolTip>
+                                <ToolTip>
+                                    <TextBlock>
+                This setting controls the Intel CPU Frequency scaling. 
+                <LineBreak/>
+                - Setting 4 (Disabled): No boost speed, may reduce performance. 
+                <LineBreak/>
+                - Setting 3 (Default): Enables boost speed for all cores, providing balanced performance. 
+                <LineBreak/>
+                - Setting 1 (Enhanced): Boosts CPU frequency even further, but may result in some cores running at base speed.
+                <LineBreak/>
+                <Run Foreground="Green">
+                    Recommendation: Set to 3 (Default) for optimal performance and stable boost speeds.
+                </Run>
+                                    </TextBlock>
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+</TextBlock>
+
+                        <Button x:Name="Intel1Button" Content="1" Width="60" Style="{StaticResource ResetButtonStyle}" Click="Intel1_Click" Margin="5,0,0,0" />
+                        <Button x:Name="Intel3Button" Content="3" Width="60" Style="{StaticResource ResetButtonStyle}" Click="IntelReset_Click" Margin="5,0,0,0" />
+                        <Button x:Name="Intel4Button" Content="4" Width="60" Style="{StaticResource ResetButtonStyle}" Click="Intel4_Click" Margin="5,0,0,0" />
+                    </StackPanel>
+                </Border>
+
+                <!-- AMD Processor Tweak -->
+                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="Green" Offset="0" />
+                            <GradientStop Color="#2F3136" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="AMD Processor" FontWeight="Bold" Margin="0,5,10,0">
+                            <TextBlock.ToolTip>
+                                <ToolTip>
+                                    <TextBlock>
+                This setting controls the AMD CPU Frequency scaling. 
+                <LineBreak/>
+                - Setting 4 (Disabled): No boost speed, may result in reduced performance. 
+                <LineBreak/>
+                - Setting 3 (Default): Enables boost speed for all cores, providing balanced performance. 
+                <LineBreak/>
+                - Setting 1 (Enhanced): Enhances CPU frequency boost, but some cores may run at base speed.
+                <LineBreak/>
+                <Run Foreground="Green">
+                    Recommendation: Set to 3 (Default) for optimal performance and stable boost speeds.
+                </Run>
+                                    </TextBlock>
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+</TextBlock>
+
+                        <Button x:Name="Amd1Button" Content="1" Width="60" Style="{StaticResource ResetButtonStyle}" Click="Amd1_Click" Margin="5,0,0,0" />
+                        <Button x:Name="Amd3Button" Content="3" Width="60" Style="{StaticResource ResetButtonStyle}" Click="AmdReset_Click" Margin="5,0,0,0" />
+                        <Button x:Name="Amd4Button" Content="4" Width="60" Style="{StaticResource ResetButtonStyle}" Click="Amd4_Click" Margin="5,0,0,0" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
     </ContentControl>
 </UserControl>

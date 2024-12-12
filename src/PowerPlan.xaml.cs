@@ -73,11 +73,16 @@ namespace NZTS_App
             }
             else
             {
-                string errorMsg = "Failed to open registry key.";
+                // If the registry key does not exist, handle appropriately
+                string errorMsg = "Registry key not found. The toggle will be turned off.";
                 MessageBox.Show(errorMsg);
+                PlatformAoAcToggleButton.IsChecked = false;  // Turn off the toggle
+                BrowseButton.IsEnabled = false;  // Disable Browse button
+                ImportPresetPlanButton.IsEnabled = false; // Disable the import preset button
                 App.changelogUserControl?.AddLog("Failed", errorMsg);
             }
         }
+
 
 
         private void BrowseButton_Click(object sender, RoutedEventArgs e)

@@ -74,7 +74,7 @@
                     <TextBlock Text="System Responsiveness (0-100):" Foreground="White"/>
                     <TextBox x:Name="SystemResponsivenessInput" Width="200" Margin="0,5,0,0" Background="#2C2F33" Foreground="White" BorderBrush="#4F545C" />
                     <Button Content="Apply" Width="200" Height="25" Click="ApplySystemResponsiveness_Click"
-                            Background="#7289DA" Foreground="White" BorderThickness="0" Margin="0,5,0,0"/>
+                            Background="#272f38" Foreground="White" BorderThickness="0" Margin="0,5,0,0"/>
                 </StackPanel>
 
                 <!-- Lazy Mode Switch -->
@@ -90,7 +90,7 @@
                     <TextBlock Text="Lazy Mode Timeout (ms):" Foreground="White"/>
                     <TextBox x:Name="LazyModeTimeoutInput" Width="200" Margin="0,5,0,0" Background="#2C2F33" Foreground="White" BorderBrush="#4F545C"/>
                     <Button Content="Apply" Width="200" Height="23" Click="ApplyLazyModeTimeout_Click"
-                            Background="#7289DA" Foreground="White" BorderThickness="0" Margin="0,5,0,0"/>
+                            Background="#272f38" Foreground="White" BorderThickness="0" Margin="0,5,0,0"/>
                 </StackPanel>
 
                 <!-- Reset Button -->

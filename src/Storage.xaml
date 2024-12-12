@@ -86,7 +86,7 @@
                 </Border>
 
                 <!-- Windows Temp Toggle -->
-                <Border Background="#99971d" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0"  BorderThickness="3">
+                <Border Background="#12110f" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0"  BorderThickness="3">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Delete Windows Temp Files" FontWeight="Bold" Margin="0,0,10,0"/>
                         <ToggleButton x:Name="WindowsTempToggle" Style="{StaticResource iOSToggleButton}" Width="50" Click="WindowsTempToggle_Click"/>
@@ -94,15 +94,15 @@
                 </Border>
 
                 <!-- Delete Temp Files Button -->
-                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10"  Margin="50,10,0,0">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="40,10,0,0">
                         <Button x:Name="DeleteTempFilesButton" 
                             Content="Delete Temp Files" 
                             Width="150" Height="28"
                             Style="{StaticResource DiscordButtonStyle}" 
                             Click="DeleteTempFilesButton_Click"/>
                     </StackPanel>
-                </Border>
+                
 
                 
 

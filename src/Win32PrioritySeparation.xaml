@@ -18,9 +18,7 @@
 
         <!-- Discord-like Button Style -->
         <Style TargetType="Button" BasedOn="{StaticResource BaseButton}" x:Key="DiscordButton">
-            <Setter Property="Background" Value="#7289DA"/>
-            <Setter Property="BorderBrush" Value="#5B6E9D"/>
-            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="#272f38"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -54,31 +52,59 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" 
-                        BorderBrush="{TemplateBinding BorderBrush}" 
-                        BorderThickness="{TemplateBinding BorderThickness}" 
-                        CornerRadius="5">
-                            <ContentPresenter HorizontalAlignment="Center" 
-                                      VerticalAlignment="Center"/>
-                        </Border>
+                        <Grid>
+                            <!-- Main button area -->
+                            <Border x:Name="ButtonBorder" 
+                            Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            CornerRadius="10">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+
+                            <!-- Underline effect for active state -->
+                            <Border x:Name="GlowUnderline" 
+                            Height="3" 
+                            VerticalAlignment="Bottom" 
+                            Background="Transparent" 
+                            BorderBrush="Transparent" 
+                            BorderThickness="0,0,0,1" 
+                            Margin="35,0,35,-10" />
+                        </Grid>
+
+                        <!-- Visual States for active and inactive states -->
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#3D4147"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#5A5C60"/>
+                            </Trigger>
+                            <Trigger Property="Tag" Value="Active">
+                                <Setter Property="Background" Value="#4875e8"/>
+                                <!-- Active tab background color -->
+                                <Setter Property="Foreground" Value="White"/>
+                                <!-- Glow underline color when the tab is active -->
+                                <Setter TargetName="GlowUnderline" Property="Background" Value="#4A90E2"/>
+                                <!-- Glow color -->
+                                <Setter TargetName="GlowUnderline" Property="BorderBrush" Value="#4A90E2"/>
+                                <!-- Border color for glow -->
+                                <Setter TargetName="GlowUnderline" Property="BorderThickness" Value="0,0,0,3"/>
+                                <!-- Thickness for the glow underline -->
+                            </Trigger>
+                            <Trigger Property="Tag" Value="Inactive">
+                                <!-- Default state when inactive -->
+                                <Setter TargetName="GlowUnderline" Property="Background" Value="Transparent"/>
+                                <Setter TargetName="GlowUnderline" Property="BorderBrush" Value="Transparent"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#3D4147"/>
-                </Trigger>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#5A5C60"/>
-                </Trigger>
-                <Trigger Property="Tag" Value="Active">
-                    <Setter Property="Background" Value="#4875e8"/>
-                    <!-- Active tab color -->
-
-                    <!-- Active tab border color -->
-                </Trigger>
-            </Style.Triggers>
         </Style>
+
+
+
         <Style TargetType="Button" x:Key="BestButton">
             <Setter Property="Background">
                 <Setter.Value>

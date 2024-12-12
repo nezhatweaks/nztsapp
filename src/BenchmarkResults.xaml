@@ -19,9 +19,9 @@
                 <DataGridTextColumn Header="Average FPS" Binding="{Binding AverageFpsFormatted}" />
                 <DataGridTextColumn Header="Max FPS" Binding="{Binding MaxFpsFormatted}" />
                 <DataGridTextColumn Header="Min FPS" Binding="{Binding MinFpsFormatted}" />
-                <DataGridTextColumn Header="1% Low" Binding="{Binding Lows1PercentFormatted}" Visibility="Collapsed" />
-                <DataGridTextColumn Header="0.1% Low" Binding="{Binding Lows0_1PercentFormatted}" Visibility="Collapsed"  />
-                <DataGridTextColumn Header="Std. Dev." Binding="{Binding StandardDeviationFormatted}" Visibility="Collapsed"  />
+                <DataGridTextColumn Header="1% Low" Binding="{Binding Lows1PercentFormatted}"/>
+                <DataGridTextColumn Header="0.1% Low" Binding="{Binding Lows0_1PercentFormatted}"  />
+                <DataGridTextColumn Header="Std. Dev." Binding="{Binding StandardDeviationFormatted}" />
             </DataGrid.Columns>
 
         </DataGrid>

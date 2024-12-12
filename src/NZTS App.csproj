@@ -8,8 +8,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <AssemblyVersion>0.6.0.0</AssemblyVersion>
-    <FileVersion>0.6.0.0</FileVersion>
+    <AssemblyVersion>0.7.0.0</AssemblyVersion>
+    <FileVersion>0.7.0.0</FileVersion>
     <PackageIcon>nezhalogo12.2.jpg</PackageIcon>
     <ApplicationIcon>nezhalogo12.2.3.ico</ApplicationIcon>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
@@ -21,17 +21,27 @@
     <None Remove="Images\apex.png" />
     <None Remove="Images\bo6.png" />
     <None Remove="Images\cs2.png" />
+    <None Remove="Images\dbd.png" />
+    <None Remove="Images\eft.png" />
     <None Remove="Images\fivem.png" />
+    <None Remove="Images\fortnite.png" />
+    <None Remove="Images\gtav.png" />
     <None Remove="Images\minecraft.png" />
     <None Remove="Images\mw3.png" />
+    <None Remove="Images\nrkbp.png" />
+    <None Remove="Images\osu.png" />
+    <None Remove="Images\pb.png" />
     <None Remove="Images\pubg.png" />
     <None Remove="Images\r6s.png" />
     <None Remove="Images\roblox.png" />
+    <None Remove="Images\scum.png" />
+    <None Remove="Images\tfn.png" />
     <None Remove="Images\valorant.png" />
     <None Remove="Images\welcome_img.jpg" />
     <None Remove="Images\welcome_img.png" />
     <None Remove="power-restore.bat" />
     <None Remove="power.bat" />
+    <None Remove="removedefend.bat" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,10 +51,31 @@
     <Resource Include="Images\bo6.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\dbd.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\eft.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\fortnite.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\gtav.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Images\minecraft.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\nrkbp.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\osu.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\pb.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\pubg.png">
@@ -61,6 +92,7 @@
     <EmbeddedResource Include="power.bat">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="removedefend.bat" />
   </ItemGroup>
 
   <ItemGroup>
@@ -95,12 +127,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Presets\Bitsum-Highest-Performance.pow">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Presets\nezha.pow">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Presets\NZTS_MAX.pow">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -154,6 +180,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\roblox.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\scum.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\tfn.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\valorant.png">

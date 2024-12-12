@@ -94,14 +94,10 @@
     </UserControl.Resources>
 
     <Grid>
-        <!-- Title -->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10">
-            <Button Content="Clear" Width="125" Style="{StaticResource RoundedButtonStyle}" Click="ClearLogs_Click" Margin="-5,0,0,0" />
-            <Button Content="Export" Width="125" Style="{StaticResource RoundedButtonStyle}" Click="ExportLogs_Click" Margin="5,0,0,0" />
-        </StackPanel>
+        
 
         <!-- Changelog List -->
-        <ListView Name="ChangeLogListView" Style="{StaticResource DiscordListViewStyle}" Margin="0,60,-200,-20">
+        <ListView Name="ChangeLogListView" Style="{StaticResource DiscordListViewStyle}" Margin="0,10,-200,-20">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Timestamp" DisplayMemberBinding="{Binding Timestamp}" Width="170" HeaderContainerStyle="{StaticResource DiscordGridViewHeaderStyle}"/>
@@ -110,6 +106,11 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <!-- Title -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,-80">
+            <Button Content="Clear" Width="125" Style="{StaticResource RoundedButtonStyle}" Click="ClearLogs_Click" Margin="-5,0,0,0" />
+            <Button Content="Export" Width="125" Style="{StaticResource RoundedButtonStyle}" Click="ExportLogs_Click" Margin="5,0,0,0" />
+        </StackPanel>
 
     </Grid>
 </UserControl>

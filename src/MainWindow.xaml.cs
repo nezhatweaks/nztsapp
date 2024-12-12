@@ -164,11 +164,6 @@ namespace NZTS_App
 };
 
 
-
-
-
-
-
         private TranslateTransform translateTransform;
 
 
@@ -201,101 +196,91 @@ namespace NZTS_App
 
             
             var welcomeControl = new WelcomeUserControl(this);
-            welcomeControl.OptimizeAllClicked += WelcomeControl_OptimizeAllClicked;
-            welcomeControl.RestoreAllClicked += WelcomeControl_RestoreAllClicked;
-
-        }
-
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        private void WelcomeControl_OptimizeAllClicked(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                foreach (var tweak in registryTweaks.Keys)
-                {
-                    ApplyTweak(tweak);
-                }
-
-                MessageBox.Show("All optimizations have been applied successfully!");
-                
-
-                // Prompt the user to restart the computer
-                var result = MessageBox.Show("Changes have been applied. Would you like to restart your computer now?", "Restart Required", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.Yes)
-                {
-                    // Restart the computer
-                    System.Diagnostics.Process.Start("shutdown", "/r /t 0");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error during optimization: {ex.Message}");
-                
-            }
-        }
-
-        private void WelcomeControl_RestoreAllClicked(object sender, RoutedEventArgs e)
-        {
-            Console.WriteLine("RestoreAll_Click started.");
-
-            foreach (var key in registryTweaks.Keys)
-            {
-                RestoreDefault(key);
-                Console.WriteLine($"Processed {key}");
-            }
-
-            Console.WriteLine("RestoreAll_Click completed.");
-            MessageBox.Show("All settings have been restored to default.");
             
 
-            // Prompt the user to restart the computer
-            var result = MessageBox.Show("Settings have been restored to default. Would you like to restart your computer now?", "Restart Required", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (result == MessageBoxResult.Yes)
-            {
-                // Restart the computer
-                System.Diagnostics.Process.Start("shutdown", "/r /t 0");
-            }
         }
+
+
 
         private void OptimizeAll_Click(object sender, RoutedEventArgs e)
         {
             try
             {
+                // Apply registry tweaks first
                 foreach (var tweak in registryTweaks.Keys)
                 {
                     ApplyTweak(tweak);
                 }
 
+                // Ask user if they want to apply the batch file after registry tweaks
+                var batchConfirmationResult = MessageBox.Show(
+                    "The system optimizations have been successfully applied. Additionally, you have the option to implement further optimizations through a security batch file. Would you like to proceed with executing the batch file?",
+                    "Disable Windows Defender and Security Mitigations",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Information);
+
+                if (batchConfirmationResult == MessageBoxResult.Yes)
+                {
+                    // Execute the batch file as part of the optimization
+                    string resourceName = "NZTS_App.removedefend.bat";  // Adjust this to match your namespace and file name
+                    var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+
+                    using (Stream? resourceStream = assembly.GetManifestResourceStream(resourceName))
+                    {
+                        if (resourceStream == null)
+                        {
+                            MessageBox.Show("Batch file not found in resources.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
+
+                        
+                        // Replace Path with System.IO.Path where you're dealing with file paths
+                        string tempBatchFilePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "removedefend.bat");
+
+
+                        // Write the content of the resource to the temporary file
+                        using (FileStream fileStream = new FileStream(tempBatchFilePath, FileMode.Create, FileAccess.Write))
+                        {
+                            resourceStream.CopyTo(fileStream);
+                        }
+
+                        // Ensure the file is created successfully
+                        if (File.Exists(tempBatchFilePath))
+                        {
+                            // Start the batch file
+                            var processInfo = new ProcessStartInfo
+                            {
+                                FileName = tempBatchFilePath,
+                                UseShellExecute = true,  // Run using the shell
+                                CreateNoWindow = false  // Show command prompt window
+                            };
+
+                            // Start the batch file process
+                            Process? process = Process.Start(processInfo);
+
+                            // Ensure the process started successfully
+                            if (process != null)
+                            {
+                                // Wait for the process to exit (i.e., for the batch file to finish running)
+                                process.WaitForExit();
+
+                                
+                                App.changelogUserControl?.AddLog("Applied", "Security batch file executed successfully.");
+                                
+                            }
+                            else
+                            {
+                                MessageBox.Show("Failed to start the batch file process.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Failed to create temporary batch file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                }
+
                 MessageBox.Show("All optimizations have been applied successfully!");
-                
 
                 // Prompt the user to restart the computer
                 var result = MessageBox.Show("Changes have been applied. Would you like to restart your computer now?", "Restart Required", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -308,10 +293,10 @@ namespace NZTS_App
             catch (Exception ex)
             {
                 MessageBox.Show($"Error during optimization: {ex.Message}");
-                
-
+                App.changelogUserControl?.AddLog("Failed", ex.Message);
             }
         }
+
 
         private void RestoreAll_Click(object sender, RoutedEventArgs e)
         {
@@ -335,10 +320,6 @@ namespace NZTS_App
                 System.Diagnostics.Process.Start("shutdown", "/r /t 0");
             }
         }
-
-
-
-
 
 
         public void ApplyTweak(string key)
@@ -388,10 +369,6 @@ namespace NZTS_App
                 RestoreDefault(tweak);
             }
         }
-
-
-
-
 
 
         public void RestoreDefault(string key)
@@ -467,87 +444,6 @@ namespace NZTS_App
         }
 
 
-
-
-        private void DeleteRegistryKey(string path, string key, bool shouldDelete)
-        {
-            if (shouldDelete)
-            {
-                using (var regKey = Registry.LocalMachine.OpenSubKey(path, true))
-                {
-                    if (regKey != null)
-                    {
-                        // Log existing values
-                        MessageBox.Show($"Existing values in {path}:");
-                        foreach (var valueName in regKey.GetValueNames())
-                        {
-                            Console.WriteLine($" - {valueName}: {regKey.GetValue(valueName)}");
-                        }
-
-                        // Retrieve the value and check if it exists
-                        var value = regKey.GetValue(key);
-                        if (value is bool boolValue && !boolValue)
-                        {
-                            MessageBox.Show($"Key {key} is false in the registry; nothing to delete.");
-                            App.changelogUserControl?.AddLog("Failed", $"Unable to change the {key} setting.");
-                        }
-                        else
-                        {
-                            if (value != null)
-                            {
-                                regKey.DeleteValue(key, false);
-                                MessageBox.Show($"Successfully deleted {key} from {path}.");
-                                App.changelogUserControl?.AddLog("Deleted", $"Deleted the {key} setting.");
-                            }
-                            else
-                            {
-                                MessageBox.Show($"Key {key} does not exist; nothing to delete.");
-                                App.changelogUserControl?.AddLog("Failed", $"Unable to change the {key} setting.");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show($"Error: Registry path not found: {path}");
-                        App.changelogUserControl?.AddLog("Failed", $"Unable to change the {key} setting.");
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("Deletion not performed as the condition was false.");
-                App.changelogUserControl?.AddLog("Failed", $"Unable to change the {key} setting.");
-            }
-        }
-
-
-
-
-        private void RestoreRegistryValue(string path, string key, string defaultValue, ValueType valueType)
-        {
-            try
-            {
-                if (valueType == ValueType.DWord)
-                {
-                    uint uintDefaultValue = Convert.ToUInt32(defaultValue, 16);
-                    Registry.SetValue(path, key, uintDefaultValue, RegistryValueKind.DWord);
-                    Console.WriteLine($"Successfully restored {key} to {defaultValue} at {path}.");
-                    App.changelogUserControl?.AddLog("Restored", $"Restored the {key} to {defaultValue} setting.");
-                }
-                else if (valueType == ValueType.String)
-                {
-                    Registry.SetValue(path, key, defaultValue, RegistryValueKind.String);
-                    Console.WriteLine($"Successfully restored {key} to {defaultValue} at {path}.");
-                    App.changelogUserControl?.AddLog("Restored", $"Restored the {key} to {defaultValue} setting.");
-                }
-            }
-            catch (FormatException)
-            {
-                Console.WriteLine($"Error: Default value '{defaultValue}' is not in the correct format for {valueType}.");
-                App.changelogUserControl?.AddLog("Failed", $"Unable to restore the {key} to {defaultValue} setting.");
-            }
-        }
-
         private void Button_Loaded(object sender, RoutedEventArgs e)
         {
             if (sender is not Button button) return; // Use pattern matching for safety
@@ -619,11 +515,6 @@ namespace NZTS_App
         }
 
 
-
-
-
-
-
         public void RestoreAllDefaults()
         {
             foreach (var key in registryTweaks.Keys)
@@ -631,66 +522,6 @@ namespace NZTS_App
                 RestoreDefault(key);
             }
         }
-
-
-
-
-
-        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            string searchText = SearchBox.Text.ToLower(); // Convert search text to lowercase.
-
-            // Iterate through each child in the Sidebar
-            foreach (var child in Sidebar.Children)
-            {
-                if (child is Button button)
-                {
-                    // Use 'as' to safely cast Content to a string
-                    var buttonContent = button.Content as string ?? string.Empty;
-
-                    // Set button visibility based on search text
-                    button.Visibility = buttonContent.ToLower().Contains(searchText)
-                        ? Visibility.Visible
-                        : Visibility.Collapsed;
-                }
-                else if (child is Separator separator)
-                {
-                    // Hide or show the separator based on the search text
-                    // Show separators only if search text is empty
-                    separator.Visibility = string.IsNullOrEmpty(searchText) ? Visibility.Visible : Visibility.Collapsed;
-                }
-            }
-
-            // Optionally, show/hide the Cancel button based on search text
-            CancelButton.Visibility = !string.IsNullOrEmpty(searchText) ? Visibility.Visible : Visibility.Collapsed;
-        }
-
-
-
-
-        // Event handler for when the SearchBox gains focus
-        private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            // If the SearchBox has placeholder text ("Search..."), clear it when the user focuses on the box
-            if (SearchBox.Text == "Search..." && SearchBox.Foreground == new SolidColorBrush(Colors.Gray))
-            {
-                SearchBox.Text = "";  // Clear the placeholder text
-                SearchBox.Foreground = new SolidColorBrush(Colors.White);  // Change text color to white
-            }
-        }
-
-        // Event handler for when the SearchBox loses focus
-        private void SearchBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            // If the SearchBox is empty when it loses focus, display the placeholder text
-            if (string.IsNullOrEmpty(SearchBox.Text))
-            {
-                SearchBox.Text = "Search...";  // Set placeholder text
-                SearchBox.Foreground = new SolidColorBrush(Colors.Gray);  // Change text color to gray (indicating placeholder)
-            }
-        }
-
-
 
 
         // Switch to the Basic Tab
@@ -1184,6 +1015,24 @@ namespace NZTS_App
             
         }
 
+        private void BackupButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenCreateRestorePointDialog();
+        }
+
+        private void OpenCreateRestorePointDialog()
+        {
+            try
+            {
+                // Open the System Properties dialog for creating a restore point
+                System.Diagnostics.Process.Start("SystemPropertiesProtection.exe");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to open the restore point dialog. Exception: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void Storage_Click(object sender, RoutedEventArgs e)
         {
             var storageControl = new Views.Storage(this);
@@ -1289,8 +1138,7 @@ namespace NZTS_App
             // Show the welcome page
             var welcomeControl = new WelcomeUserControl(this); // Create a new instance of the Welcome UserControl
             ShowContentWithAnimation(welcomeControl); // Call the method to show the content
-            welcomeControl.OptimizeAllClicked += WelcomeControl_OptimizeAllClicked;
-            welcomeControl.RestoreAllClicked += WelcomeControl_RestoreAllClicked;
+            
             ContentArea.Visibility = Visibility.Visible;
             ContentOther.Visibility = Visibility.Collapsed;
         }

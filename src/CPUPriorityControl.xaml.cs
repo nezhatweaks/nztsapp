@@ -51,12 +51,13 @@ namespace NZTS_App
 
         private void InitializeIOPriorityOptions()
         {
-            IOPriorityComboBox.Items.Add(new ComboBoxItem { Content = "Very Low" });
-            IOPriorityComboBox.Items.Add(new ComboBoxItem { Content = "Low" });
-            IOPriorityComboBox.Items.Add(new ComboBoxItem { Content = "Normal" });
-            IOPriorityComboBox.Items.Add(new ComboBoxItem { Content = "High" });
             IOPriorityComboBox.Items.Add(new ComboBoxItem { Content = "Critical" });
+            IOPriorityComboBox.Items.Add(new ComboBoxItem { Content = "High" });
+            IOPriorityComboBox.Items.Add(new ComboBoxItem { Content = "Normal" });
+            IOPriorityComboBox.Items.Add(new ComboBoxItem { Content = "Low" });
+            IOPriorityComboBox.Items.Add(new ComboBoxItem { Content = "Very Low" });
         }
+
 
 
 
@@ -234,7 +235,7 @@ namespace NZTS_App
             }
             else
             {
-                MessageBox.Show("Please enter a valid executable name ending with .exe.", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Console.Write("Please enter a valid executable name ending with .exe.", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -254,6 +255,8 @@ namespace NZTS_App
             DisableHeapCoalesceToggle.IsChecked = false;
 
             HackFlagsToggle.IsChecked = false;
+
+            LargePageSizeInBytesToggle.IsChecked = false;
 
             PriorityComboBox.SelectedIndex = -1;
             GPUSchedulingComboBox.SelectedIndex = -1;
@@ -297,6 +300,7 @@ namespace NZTS_App
             InitializeUseLargePagesToggle(selectedGame);
             InitializeDisableHeapCoalesceToggle(selectedGame);
             InitializeHackFlagsToggle(selectedGame);
+            InitializeLargePageSizeInBytesToggle(selectedGame);
             UpdateGPUSchedulingComboBoxForSelectedGame(selectedGame); // Update GPU scheduling UI
             UpdateIOPriorityComboBoxForSelectedGame(selectedGame); // Update GPU scheduling UI
         }
@@ -424,7 +428,16 @@ namespace NZTS_App
         new Card { Title = "CS2", ExecutableName = "cs2.exe", Description = "", ImageSource = "pack://application:,,,/Images/cs2.png" },
         new Card { Title = "Valorant", ExecutableName = "VALORANT-Win64-Shipping.exe", Description = "", ImageSource = "pack://application:,,,/Images/valorant.png" },
         new Card { Title = "R6S (Vulkan)", ExecutableName = "RainbowSix_BE.exe", Description = "", ImageSource = "pack://application:,,,/Images/r6s.png" },
+        new Card { Title = "GTAV", ExecutableName = "GTA5.exe", Description = "", ImageSource = "pack://application:,,,/Images/gtav.png" },
         new Card { Title = "FiveM", ExecutableName = "fivem.exe", Description = "", ImageSource = "pack://application:,,,/Images/fivem.png" },
+        new Card { Title = "PB", ExecutableName = "PointBlank.exe", Description = "", ImageSource = "pack://application:,,,/Images/pb.png" },
+        new Card { Title = "SCUM", ExecutableName = "SCUM.exe", Description = "", ImageSource = "pack://application:,,,/Images/scum.png" },
+        new Card { Title = "EFT", ExecutableName = "EscapeFromTarkov.exe", Description = "", ImageSource = "pack://application:,,,/Images/eft.png" },
+        new Card { Title = "The Finals", ExecutableName = "Discovery.exe", Description = "", ImageSource = "pack://application:,,,/Images/tfn.png" },
+        new Card { Title = "NarakaBP", ExecutableName = "NarakaBladepoint.exe", Description = "", ImageSource = "pack://application:,,,/Images/nrkbp.png" },
+        new Card { Title = "ดบดล", ExecutableName = "DeadByDaylight-Win64-Shipping.exe", Description = "", ImageSource = "pack://application:,,,/Images/dbd.png" },
+        new Card { Title = "Fortnite", ExecutableName = "FortniteClient-Win64-Shipping.exe", Description = "", ImageSource = "pack://application:,,,/Images/fortnite.png" },
+        new Card { Title = "Osu!", ExecutableName = "osu!.exe", Description = "", ImageSource = "pack://application:,,,/Images/osu.png" },
         new Card { Title = "MW3", ExecutableName = "cod23-cod.exe", Description = "", ImageSource = "pack://application:,,,/Images/mw3.png" },
         new Card { Title = "BO6", ExecutableName = "mp24-cod.exe", Description = "", ImageSource = "pack://application:,,,/Images/bo6.png" },
         new Card { Title = "Apex Legends", ExecutableName = "r5apex.exe", Description = "", ImageSource = "pack://application:,,,/Images/apex.png" },
@@ -478,12 +491,14 @@ namespace NZTS_App
                 {
                     if (perfKey != null)
                     {
+                        perfKey.DeleteValue("UseLargePages", false);
                         perfKey.SetValue("CpuPriorityClass", 6);
                         perfKey.SetValue("IOPriority", 3);
                         perfKey.SetValue("DisableHeapCoalesceOnFree", 1);
                         perfKey.SetValue("GPUScheduling", 1);
-                        perfKey.SetValue("UseLargePages", 1);
                         perfKey.SetValue("HackFlags", 1);
+                        perfKey.SetValue("LargePageSizeInBytes", 16);
+
 
                     }
                 }
@@ -494,10 +509,11 @@ namespace NZTS_App
                 {
                     if (mainKey != null)
                     {
+                        mainKey.DeleteValue("UseLargePages", false);
                         mainKey.SetValue("DisableHeapCoalesceOnFree", 1);
                         mainKey.SetValue("GPUScheduling", 1);
-                        mainKey.SetValue("UseLargePages", 1);
                         mainKey.SetValue("HackFlags", 1);
+                        mainKey.SetValue("LargePageSizeInBytes", 16);
                     }
                 }
             }
@@ -541,6 +557,7 @@ namespace NZTS_App
                         perfKey.DeleteValue("GPUScheduling", false);
                         perfKey.DeleteValue("UseLargePages", false);
                         perfKey.DeleteValue("HackFlags", false);
+                        perfKey.DeleteValue("LargePageSizeInBytes", false);
 
 
                     }
@@ -555,6 +572,7 @@ namespace NZTS_App
                         mainKey.DeleteValue("GPUScheduling", false);
                         mainKey.DeleteValue("UseLargePages", false);
                         mainKey.DeleteValue("HackFlags", false);
+                        mainKey.DeleteValue("LargePageSizeInBytes", false);
 
 
                     }
@@ -599,10 +617,12 @@ namespace NZTS_App
 
 
 
-            // Set default UseLargePages value
+            // Set default value
             SetUseLargePagesForNewGame(newGame, false); // Default to false, change as needed
             SetDisableHeapCoalesceForNewGame(newGame, false); // Default to false
             SetHackFlagsForNewGame(newGame, false); // Default to false
+            SetLargePageSizeInBytesForNewGame(newGame, false); // Default to false
+
 
 
             // Automatically select the newly added game
@@ -612,8 +632,29 @@ namespace NZTS_App
             // Initialize Use Large Pages toggle
             InitializeUseLargePagesToggle(newGame);
             InitializeDisableHeapCoalesceToggle(newGame);
+            InitializeLargePageSizeInBytesToggle(newGame);
+
         }
 
+
+        private void SetLargePageSizeInBytesForNewGame(Game game, bool LargePageSizeInBytesEnabled)
+        {
+            string registryPath = $@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{game.Name}";
+            using (var gameKey = Registry.LocalMachine.CreateSubKey(registryPath, true))
+            {
+                if (gameKey != null)
+                {
+                    if (LargePageSizeInBytesEnabled)
+                    {
+                        gameKey.SetValue("LargePageSizeInBytes", 16, RegistryValueKind.DWord);
+                    }
+                    else
+                    {
+                        gameKey.DeleteValue("HackFlags", false); // Remove LargePageSizeInBytes if disabled
+                    }
+                }
+            }
+        }
 
         private void SetDisableHeapCoalesceForNewGame(Game game, bool disableHeapCoalesce)
         {
@@ -686,10 +727,25 @@ namespace NZTS_App
             try
             {
                 bool useLargePages = UseLargePagesToggle.IsChecked == true;
-                
+
+                // Display a warning if large pages are enabled
+                if (useLargePages)
+                {
+                    var result = MessageBox.Show("Enabling 'Use Large Pages' may cause some games to not run properly or show errors. Do you still want to continue?",
+                                                 "Warning",
+                                                 MessageBoxButton.YesNo,
+                                                 MessageBoxImage.Warning);
+                    if (result == MessageBoxResult.No)
+                    {
+                        // If user selects No, reset the toggle and exit
+                        UseLargePagesToggle.IsChecked = false;
+                        return;
+                    }
+                }
 
                 // Set the value in the registry
                 string registryPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\";
+
                 foreach (var game in games)
                 {
                     using (var gameKey = Registry.LocalMachine.CreateSubKey(registryPath + game.Name, true))
@@ -720,20 +776,6 @@ namespace NZTS_App
         }
 
 
-        private void SetUseLargePages(bool useLargePages)
-        {
-            string registryPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\";
-            foreach (var game in games)
-            {
-                using (var gameKey = Registry.LocalMachine.CreateSubKey(registryPath + game.Name, true))
-                {
-                    if (gameKey != null)
-                    {
-                        gameKey.SetValue("UseLargePages", useLargePages ? 1 : 0, RegistryValueKind.DWord);
-                    }
-                }
-            }
-        }
 
         private void HackFlagsToggle_Click(object sender, RoutedEventArgs e)
         {
@@ -766,6 +808,41 @@ namespace NZTS_App
                 {
                     MessageBox.Show($"Error updating HackFlags: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     App.changelogUserControl?.AddLog("Failed", $"Error updating HackFlags: {ex.Message}");
+                }
+            }
+        }
+
+        private void LargePageSizeInBytesToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (GameListView.SelectedItem is Game selectedGame)
+            {
+                string registryPath = $@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{selectedGame.Name}";
+
+                try
+                {
+                    using (var gameKey = Registry.LocalMachine.CreateSubKey(registryPath, true))
+                    {
+                        if (gameKey != null)
+                        {
+                            if (LargePageSizeInBytesToggle.IsChecked == true)
+                            {
+                                // Set the LargePageSizeInBytes DWORD to 16
+                                gameKey.SetValue("LargePageSizeInBytes", 16, RegistryValueKind.DWord);
+                                App.changelogUserControl?.AddLog("Applied", $"LargePageSizeInBytes for {selectedGame.Name} enabled.");
+                            }
+                            else
+                            {
+                                // Delete the LargePageSizeInBytes DWORD
+                                gameKey.DeleteValue("LargePageSizeInBytes", false);
+                                App.changelogUserControl?.AddLog("Applied", $"LargePageSizeInBytes for {selectedGame.Name} disabled.");
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error updating LargePageSizeInBytes: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    App.changelogUserControl?.AddLog("Failed", $"Error updating LargePageSizeInBytes: {ex.Message}");
                 }
             }
         }
@@ -929,6 +1006,44 @@ namespace NZTS_App
             }
         }
 
+        private void InitializeLargePageSizeInBytesToggle(Game selectedGame)
+        {
+            string registryPath = $@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\{selectedGame.Name}";
+
+            try
+            {
+                using (var gameKey = Registry.LocalMachine.OpenSubKey(registryPath))
+                {
+                    if (gameKey != null)
+                    {
+                        object? value = gameKey.GetValue("LargePageSizeInBytes");
+
+                        // Check if the value is an integer and set the toggle accordingly
+                        if (value is int intValue)
+                        {
+                            LargePageSizeInBytesToggle.IsChecked = intValue == 16; // Set toggle based on registry value
+                        }
+                        else
+                        {
+                            LargePageSizeInBytesToggle.IsChecked = false; // Default if value is not set
+                        }
+                    }
+                    else
+                    {
+                        LargePageSizeInBytesToggle.IsChecked = false; // No key found
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                MessageBox.Show("You do not have permission to access the registry. Please run the application as an administrator.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while reading the registry: {ex.Message}");
+            }
+        }
+
 
 
 
@@ -945,6 +1060,7 @@ namespace NZTS_App
                 UseLargePagesToggle.IsChecked = false;
                 DisableHeapCoalesceToggle.IsChecked = false;
                 HackFlagsToggle.IsChecked = false;
+                LargePageSizeInBytesToggle.IsChecked = false;
 
                 GameListView.Items.Refresh();
 
@@ -1032,11 +1148,26 @@ namespace NZTS_App
                                         App.changelogUserControl?.AddLog("Applied", $"HackFlags for {game.Name} set to disabled.");
                                     }
 
+                                    // Save LargePageSizeInBytes setting
+                                    bool LargePageSizeInBytesEnabled = LargePageSizeInBytesToggle.IsChecked == true;
+                                    string LargePageSizeInBytesMessage = LargePageSizeInBytesEnabled ? "enabled" : "disabled";
+                                    if (hackFlagsEnabled)
+                                    {
+                                        perfOptionsKey.SetValue("LargePageSizeInBytes", 16, RegistryValueKind.DWord);
+                                        App.changelogUserControl?.AddLog("Applied", $"LargePageSizeInBytes for {game.Name} set to enabled.");
+                                    }
+                                    else
+                                    {
+                                        perfOptionsKey.DeleteValue("LargePageSizeInBytes", false);
+                                        App.changelogUserControl?.AddLog("Applied", $"LargePageSizeInBytes for {game.Name} set to disabled.");
+                                    }
+
                                     // Concatenate all the messages into one string for display
                                     string message = $"Disable Heap Coalesce on Free for {game.Name} has been {(disableHeapCoalesce ? "enabled" : "disabled")}.\n" +
                                                      $"GPU Scheduling for {game.Name} set to {(gpuSchedulingValue == 1 ? "High Performance" : "Default")}.\n" +
                                                      $"CPU Priority for {game.Name} set to {game.Priority}.\n" +
                                                      $"IO Priority for {game.Name} set to {game.IOPriority}.\n" +
+                                                     $"LargePageSizeInBytes for {game.Name} set to {LargePageSizeInBytesMessage}.\n" +
                                                      $"Use Large Pages for {game.Name} has been {largePagesMessage}.";
 
                                     // Show all messages in one message box

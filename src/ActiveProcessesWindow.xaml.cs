@@ -1,20 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing; // Ensure you have the right reference to System.Drawing.Common
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Drawing;
 
 namespace NZTS_App
 {
     public partial class ActiveProcessesWindow : Window
     {
         private CPUPriorityControl mainControl;
+        private List<ProcessInfo> allProcesses;
 
         public ActiveProcessesWindow(CPUPriorityControl control)
         {
             InitializeComponent();
             mainControl = control;
+            allProcesses = new List<ProcessInfo>(); // Store all processes for searching
             LoadActiveProcesses();
         }
 
@@ -22,6 +26,7 @@ namespace NZTS_App
         {
             // Clear existing items
             ProcessesListView.Items.Clear();
+            allProcesses.Clear();
 
             // Get all processes
             var processes = Process.GetProcesses();
@@ -36,17 +41,12 @@ namespace NZTS_App
                     // Check if the process has a MainModule
                     if (process.MainModule != null)
                     {
-                        // Log the process name for debugging
-                        Console.WriteLine($"Found process: {process.ProcessName}");
-
                         var processInfo = new ProcessInfo
                         {
                             Name = Path.GetFileName(process.MainModule.FileName),
                             FileName = process.MainModule.FileName,
                             Icon = GetProcessIcon(process.MainModule.FileName)
                         };
-
-                        
 
                         processList.Add(processInfo);
                     }
@@ -57,42 +57,34 @@ namespace NZTS_App
                 }
             }
 
-            // Sort and display processes as before
-            var sortedProcesses = processList
-                .OrderBy(p => GetProcessPriority(p.FileName))
-                .ThenBy(p => p.Name)
+            // Save all processes for future filtering
+            allProcesses = processList;
+
+            // Display all processes initially
+            FilterProcesses(); // Display all initially
+        }
+
+        // Helper method to filter and display processes based on search text
+        private void FilterProcesses()
+        {
+            var searchQuery = SearchTextBox.Text.ToLower();
+            var filteredProcesses = allProcesses
+                .Where(p => p.Name.ToLower().Contains(searchQuery))
+                .OrderBy(p => p.Name)
                 .ToList();
 
-            foreach (var processInfo in sortedProcesses)
+            ProcessesListView.Items.Clear();
+            foreach (var processInfo in filteredProcesses)
             {
                 ProcessesListView.Items.Add(processInfo);
             }
         }
 
-
-        // Helper method to determine process priority
-        private ProcessPriorityClass GetProcessPriority(string fileName)
+        // Event handler for the search box
+        private void SearchTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            try
-            {
-                using (var process = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(fileName)).FirstOrDefault())
-                {
-                    if (process != null)
-                    {
-                        return process.PriorityClass;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error retrieving priority for {fileName}: {ex.Message}");
-            }
-
-            // Default to Normal priority if unable to determine
-            return ProcessPriorityClass.Normal;
+            FilterProcesses();
         }
-
-
 
         // Method to get the icon from the executable file
         private Icon? GetProcessIcon(string filePath)
@@ -105,7 +97,7 @@ namespace NZTS_App
             try
             {
                 // Extract the icon from the executable file
-                return System.Drawing.Icon.ExtractAssociatedIcon(filePath); // Use the full namespace to avoid confusion
+                return System.Drawing.Icon.ExtractAssociatedIcon(filePath);
             }
             catch (Exception ex)
             {
@@ -121,7 +113,7 @@ namespace NZTS_App
             if (selectedProcess != null)
             {
                 // Use only the Name property for adding the game
-                mainControl.AddGame(selectedProcess.Name); // Pass the application name, e.g., cs2.exe
+                mainControl.AddGame(selectedProcess.Name);
                 Close();
             }
             else
@@ -133,28 +125,27 @@ namespace NZTS_App
 
     public class ProcessInfo
     {
-        public string Name { get; set; } = string.Empty; // Initialize to avoid null warnings
-        public string FileName { get; set; } = string.Empty; // Initialize to avoid null warnings
+        public string Name { get; set; } = string.Empty;
+        public string FileName { get; set; } = string.Empty;
 
-        private Icon? _icon; // Make _icon nullable
+        private Icon? _icon;
 
-        public BitmapSource? IconImage // Make IconImage nullable
+        public BitmapSource? IconImage
         {
             get
             {
                 if (_icon != null)
                 {
-                    // Create BitmapSource from Icon
                     return System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(
                         _icon.Handle,
-                        Int32Rect.Empty,
-                        BitmapSizeOptions.FromEmptyOptions());
+                        System.Windows.Int32Rect.Empty,
+                        System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
                 }
                 return null;
             }
         }
 
-        public Icon? Icon // Make Icon nullable
+        public Icon? Icon
         {
             get => _icon;
             set => _icon = value;

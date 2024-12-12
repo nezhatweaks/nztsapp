@@ -7,75 +7,69 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Management;
+using System.Threading;
 
 namespace NZTS_App
 {
+
+    
     public class CpuBenchmark
     {
         private BenchmarkMetrics _metrics;
         private CpuStatusWindow _cpuStatusWindow;
+        private CancellationTokenSource _cancellationTokenSource;
 
         public event Action<string> ProgressChanged;
         public event Action BenchmarkCompleted;
+        private SemaphoreSlim _semaphore;  // Global semaphore to limit concurrency based on available CPUs
+
+
+        private int _benchmarkDurationSeconds = 60;  // Default benchmark duration, can be adjusted
 
         public CpuBenchmark(BenchmarkMetrics metrics, CpuStatusWindow cpuStatusWindow)
         {
             _metrics = metrics;
             _cpuStatusWindow = cpuStatusWindow;
-
-            // Initialize the events to avoid nullability warnings
             ProgressChanged = delegate { };
             BenchmarkCompleted = delegate { };
+            _cancellationTokenSource = new CancellationTokenSource();
+            _semaphore = new SemaphoreSlim(Environment.ProcessorCount); // Limit to logical cores count
         }
 
-        // Method to get core and thread description based on logical CPU id
         public string GetCoreAndThreadDescription(int cpuId)
         {
             int physicalCoreCount = GetPhysicalCoreCount();
             int logicalCoreCount = GetLogicalCoreCount();
-            bool isHTEnabled = logicalCoreCount > physicalCoreCount;
 
-            if (!isHTEnabled)
-            {
-                // HT is off, show only the core number
-                return $"Core {cpuId + 1}";  // Just the core number
-            }
+            if (logicalCoreCount <= physicalCoreCount)
+                return $"Core {cpuId + 1}";  // No hyper-threading, just core
             else
             {
-                // HT is on, show both core and thread
-                int coreNumber = (cpuId / 2) + 1;  // Divide logical CPUs into physical cores
-                int threadNumber = (cpuId % 2) + 1; // 1 or 2 thread per core
-                return $"Core {coreNumber}, Thread {threadNumber}";  // Show both core and thread
+                int coreNumber = (cpuId / 2) + 1;
+                int threadNumber = (cpuId % 2) + 1;
+                return $"Core {coreNumber}, Thread {threadNumber}";
             }
         }
 
-
-
-        // Execute WMIC command and return output as string
         private static string ExecuteWmicCommand(string command)
         {
-            var processStartInfo = new ProcessStartInfo
-            {
-                FileName = "wmic",
-                Arguments = command,
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
-
             try
             {
+                var processStartInfo = new ProcessStartInfo
+                {
+                    FileName = "wmic",
+                    Arguments = command,
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+
                 using (var process = Process.Start(processStartInfo))
                 {
-                    if (process == null)
-                        throw new InvalidOperationException("Failed to start WMIC process.");
+                    if (process == null) throw new InvalidOperationException("Failed to start WMIC process.");
 
                     using (var reader = process.StandardOutput)
                     {
-                        // Ensure that StandardOutput is not null
-                        if (reader == null)
-                            throw new InvalidOperationException("StandardOutput is null.");
-
                         return reader.ReadToEnd().Trim();
                     }
                 }
@@ -87,19 +81,33 @@ namespace NZTS_App
             }
         }
 
-
-        // Method to get the number of physical cores using WMIC
         public static int GetPhysicalCoreCount()
         {
             try
             {
-                string output = ExecuteWmicCommand("cpu get NumberOfCores");
+                var query = new ObjectQuery("SELECT * FROM Win32_Processor");
+                var searcher = new ManagementObjectSearcher(query);
 
-                string[] lines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-
-                if (lines.Length > 1)
+                foreach (ManagementObject obj in searcher.Get())
                 {
-                    return int.Parse(lines[1].Trim());
+                    // Check if the "NumberOfCores" property exists and is not null
+                    if (obj["NumberOfCores"] != null)
+                    {
+                        int coreCount;
+                        // Try parsing the value to an integer
+                        if (int.TryParse(obj["NumberOfCores"].ToString(), out coreCount))
+                        {
+                            return coreCount;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Error: Failed to parse the NumberOfCores value.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error: NumberOfCores property is null.");
+                    }
                 }
             }
             catch (Exception ex)
@@ -107,59 +115,65 @@ namespace NZTS_App
                 Console.WriteLine($"Error getting physical core count: {ex.Message}");
             }
 
-            return 0;
+            // Fallback to Environment.ProcessorCount if retrieval fails
+            return Environment.ProcessorCount;
         }
 
-        // Method to get the number of logical cores (including HT cores) using WMIC
+
         public static int GetLogicalCoreCount()
         {
-            try
-            {
-                string output = ExecuteWmicCommand("cpu get NumberOfLogicalProcessors");
-
-                string[] lines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-
-                if (lines.Length > 1)
-                {
-                    return int.Parse(lines[1].Trim());
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error getting logical core count: {ex.Message}");
-            }
-
-            return 0;
+            return Environment.ProcessorCount;  // Returns the number of logical cores directly
         }
 
-        // Main method to run the benchmark asynchronously
-        public async Task RunBenchmarkAsync()
-        {
-            ProgressChanged?.Invoke("Benchmarking started...");
-            int totalCpus = GetLogicalCoreCount();  // Use logical core count for HT systems
 
+
+
+        public async Task RunBenchmarkAsync(int durationSeconds = 60)
+        {
+            _benchmarkDurationSeconds = durationSeconds; // Allow custom benchmark duration
+            ProgressChanged?.Invoke("Benchmarking started...");
+            int totalCpus = GetLogicalCoreCount();  // Use logical cores for benchmarking
+            var tasks = new List<Task>();
+
+            // Semaphore for concurrency limit (using logical cores count)
             for (int cpuId = 0; cpuId < totalCpus; cpuId++)
             {
-                int localCpuId = cpuId;  // Local copy to avoid closure issues
-                await Task.Run(() => RunBenchmark(localCpuId));
+                if (_cancellationTokenSource.Token.IsCancellationRequested)
+                    break;
+
+                int localCpuId = cpuId;
+                await _semaphore.WaitAsync();  // Wait until a slot is available
+                tasks.Add(Task.Run(() =>
+                {
+                    try
+                    {
+                        RunBenchmark(localCpuId, _benchmarkDurationSeconds, _cancellationTokenSource.Token);
+                    }
+                    finally
+                    {
+                        _semaphore.Release();  // Release the slot after benchmarking
+                    }
+                }));
             }
 
+            // Wait for all tasks to complete
+            await Task.WhenAll(tasks);
+
             ProgressChanged?.Invoke("Benchmarking completed.");
-            BenchmarkCompleted?.Invoke();
+            BenchmarkCompleted?.Invoke();  // This will trigger showing the results window and other actions.
 
             var resultsWindow = new BenchmarkResults(_metrics);
-            resultsWindow.Show();
+            resultsWindow.Show();  // Show results after all tasks are done
 
-            SaveBenchmarkResults();
+            SaveBenchmarkResults();  // Save the benchmark results after showing them
         }
 
-        // Run the benchmark for a specific CPU core
-        public void RunBenchmark(int cpuId)
+
+        public void RunBenchmark(int cpuId, int durationSeconds, CancellationToken cancellationToken)
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            // Set CPU affinity to ensure benchmarking is done on the correct CPU
             SetCpuAffinity(cpuId);
 
             ProgressChanged?.Invoke($"Benchmarking CPU {cpuId}...");
@@ -170,21 +184,19 @@ namespace NZTS_App
             double minFps = double.MaxValue;
             double totalFps = 0;
 
-            // Benchmark for 60 seconds
-            while (stopwatch.Elapsed.TotalSeconds < 60)
+            while (stopwatch.Elapsed.TotalSeconds < durationSeconds && !cancellationToken.IsCancellationRequested)
             {
                 frameCount++;
-                StressCpuWorkload(cpuId);  // Simulate CPU load
+                StressCpuWorkload(cpuId);
 
                 double elapsedTime = stopwatch.Elapsed.TotalSeconds;
-                double fps = frameCount / elapsedTime;  // Calculate FPS based on elapsed time
+                double fps = frameCount / elapsedTime;
                 fpsValues.Add(fps);
 
                 maxFps = Math.Max(maxFps, fps);
                 minFps = Math.Min(minFps, fps);
                 totalFps += fps;
 
-                // Update progress window every 5 seconds
                 if (stopwatch.Elapsed.TotalSeconds % 5 < 1)
                 {
                     _cpuStatusWindow.Dispatcher.Invoke(() =>
@@ -196,58 +208,64 @@ namespace NZTS_App
 
             stopwatch.Stop();
 
-            // Calculate statistics
             double avgFps = totalFps / frameCount;
             double standardDeviation = CalculateStandardDeviation(fpsValues, avgFps);
-            double lowPercentile1 = CalculatePercentileLow(fpsValues, 1);
-            double lowPercentile0_1 = CalculatePercentileLow(fpsValues, 0.1);
+            double lows1Percent = CalculatePercentileLow(fpsValues, 1);
+            double lows0_1Percent = CalculatePercentileLow(fpsValues, 0.1);
 
-            // Create the benchmark result using the updated values
             BenchmarkResult result = new BenchmarkResult(
-                cpuLabel: $"CPU {cpuId}",  // "CPU 0", "CPU 1", etc.
-                coreName: GetCoreAndThreadDescription(cpuId),  // "Core 1, Thread 1", "Core 2, Thread 1", etc.
-                fps: avgFps,  // Using avgFps for FPS value
+                cpuLabel: $"CPU {cpuId}",
+                coreName: GetCoreAndThreadDescription(cpuId),
+                fps: avgFps,
                 avgFps: avgFps,
                 maxFps: maxFps,
                 minFps: minFps,
-                lows1Percent: lowPercentile1,
-                lows0_1Percent: lowPercentile0_1,
+                lows1Percent: lows1Percent,
+                lows0_1Percent: lows0_1Percent,
                 standardDeviation: standardDeviation
             );
 
-            // Add result to the metrics
-            _metrics.AddBenchmarkResult(cpuId, avgFps, maxFps, minFps, lowPercentile1, lowPercentile0_1, standardDeviation, fpsValues);
+            _metrics.AddBenchmarkResult(cpuId, avgFps, maxFps, minFps, lows1Percent, lows0_1Percent, standardDeviation, fpsValues);
 
-            // Update progress window after benchmarking is done
             _cpuStatusWindow.Dispatcher.Invoke(() =>
             {
-                ProgressChanged?.Invoke($"CPU {cpuId} done! Avg FPS: {avgFps:F2} | Max FPS: {maxFps:F2} | Min FPS: {minFps:F2} | 1% Low: {lowPercentile1:F2} | 0.1% Low: {lowPercentile0_1:F2}");
+                ProgressChanged?.Invoke($"CPU {cpuId} done! Avg FPS: {avgFps:F2} | Max FPS: {maxFps:F2} | Min FPS: {minFps:F2} | 1% Low: {lows1Percent:F2} | 0.1% Low: {lows0_1Percent:F2}");
             });
         }
 
-        // Set thread affinity to a specific CPU core
         private void SetCpuAffinity(int cpuId)
         {
-            // Setting affinity for logical cores. For example, core 0 will have affinity 0x1 (binary 0001)
-            var mask = new IntPtr(1 << cpuId);
-            IntPtr result = SetThreadAffinityMask(Thread.CurrentThread.ManagedThreadId, mask);
-
-            if (result == IntPtr.Zero)
+            try
             {
-                Console.WriteLine($"Error: Failed to set thread affinity for CPU {cpuId}");
+                var mask = new IntPtr(1 << cpuId);
+                IntPtr result = SetThreadAffinityMask(Thread.CurrentThread.ManagedThreadId, mask);
+                if (result == IntPtr.Zero)
+                {
+                    Console.WriteLine($"Warning: Failed to set thread affinity for CPU {cpuId}.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error setting thread affinity for CPU {cpuId}: {ex.Message}");
             }
         }
+
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern IntPtr SetThreadAffinityMask(int threadId, IntPtr dwThreadAffinityMask);
 
-        // Simulate a CPU-intensive workload
         private void StressCpuWorkload(int cpuId)
         {
-            long upperLimit = 100000;
+            // Simulate a more varied workload, like busy looping and memory access
+            long upperLimit = 60000;
+            double result = 0;
+
             for (long i = 2; i < upperLimit; i++)
             {
-                if (IsPrime(i)) { }
+                if (IsPrime(i))
+                {
+                    result += Math.Sqrt(i);  // Add a computational load
+                }
             }
         }
 
@@ -256,32 +274,24 @@ namespace NZTS_App
             if (number < 2) return false;
             for (long i = 2; i <= Math.Sqrt(number); i++)
             {
-                if (number % i == 0)
-                {
-                    return false;
-                }
+                if (number % i == 0) return false;
             }
             return true;
         }
 
         private double CalculateStandardDeviation(List<double> frameTimes, double mean)
         {
-            if (frameTimes.Count <= 1) return 0;
-
-            double sumOfSquares = frameTimes.Sum(frameTime => Math.Pow(1000.0 / frameTime - mean, 2));
-            double variance = sumOfSquares / frameTimes.Count;
-            return Math.Sqrt(variance);
+            double sumOfSquares = frameTimes.Sum(f => Math.Pow(f - mean, 2));
+            return Math.Sqrt(sumOfSquares / frameTimes.Count);
         }
 
         private double CalculatePercentileLow(List<double> fpsValues, double percentile)
         {
             var sortedFpsValues = fpsValues.OrderBy(f => f).ToList();
             int index = (int)(sortedFpsValues.Count * percentile / 100);
-            index = Math.Max(index, 0);
-            return sortedFpsValues[index];
+            return sortedFpsValues[Math.Max(index, 0)];
         }
 
-        // Save the benchmark results to a CSV file
         public void SaveBenchmarkResults()
         {
             try
@@ -297,30 +307,21 @@ namespace NZTS_App
                 var csvBuilder = new StringBuilder();
                 csvBuilder.AppendLine("CpuLabel,CoreName,AvgFps,MaxFps,MinFps,1% Low,0.1% Low,StandardDeviation");
 
-                var bestResult = benchmarkResults.OrderByDescending(r => r.AverageFps).First();
-                var runnerUpResult = benchmarkResults.Where(r => r != bestResult).OrderByDescending(r => r.AverageFps).First();
-
                 foreach (var result in benchmarkResults)
                 {
-                    string rowColor = result == bestResult ? "Green" : result == runnerUpResult ? "Yellow" : "None";
-                    var row = $"{result.CpuLabel},{result.CoreName},{result.AverageFpsFormatted},{result.MaxFpsFormatted},{result.MinFpsFormatted},{result.Lows1PercentFormatted},{result.Lows0_1PercentFormatted},{result.StandardDeviationFormatted},{rowColor}";
-
+                    var row = $"{result.CpuLabel},{result.CoreName},{result.AverageFps},{result.MaxFps},{result.MinFps},{result.Lows1Percent},{result.Lows0_1Percent},{result.StandardDeviation}";
                     csvBuilder.AppendLine(row);
                 }
 
-                string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                string benchmarksFolder = Path.Combine(baseDirectory, "Benchmarks");
-
-                if (!Directory.Exists(benchmarksFolder))
-                {
-                    Directory.CreateDirectory(benchmarksFolder);
-                }
-
                 string fileName = $"Benchmark_{DateTime.Now:yyyy-MM-dd_HH-mm}.csv";
-                string filePath = Path.Combine(benchmarksFolder, fileName);
+                string directoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Benchmarks");
+                if (!Directory.Exists(directoryPath))
+                    Directory.CreateDirectory(directoryPath);
+
+                string filePath = Path.Combine(directoryPath, fileName);
                 File.WriteAllText(filePath, csvBuilder.ToString());
 
-                Console.WriteLine($"Benchmark results saved to: {filePath}");
+                Console.WriteLine($"Benchmark results saved to {filePath}");
             }
             catch (Exception ex)
             {
