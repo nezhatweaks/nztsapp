@@ -1,24 +1,13 @@
-﻿using System.Text;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Media.Animation;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using NZTS_App.Views;
 using System.IO;
-using System.Drawing;
-using System.Windows.Interop;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Diagnostics;
-using IOPath = System.IO.Path;
-
 
 
 
@@ -178,7 +167,7 @@ namespace NZTS_App
             ResourcesContent.RenderTransform = translateTransform;
 
             // Set default title if needed
-            TitleTextBlock.Content = "💫";
+            TitleTextBlock.Content = "▼";
             
         }
 
@@ -427,54 +416,7 @@ namespace NZTS_App
         }
 
 
-        private void Button_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (sender is not Button button) return; // Use pattern matching for safety
-
-            Border? border = FindVisualChild<Border>(button); // Use nullable Border type
-            if (border == null) return; // Ensure border is not null
-
-            // Create a new LinearGradientBrush for the border
-            var gradientBrush = new LinearGradientBrush
-            {
-                StartPoint = new System.Windows.Point(0, 0),
-                EndPoint = new System.Windows.Point(1, 1)
-            };
-
-            // Create the color stops for the gradient
-            gradientBrush.GradientStops.Add(new GradientStop(Colors.Red, 0));
-            gradientBrush.GradientStops.Add(new GradientStop(Colors.Orange, 0.2));
-            gradientBrush.GradientStops.Add(new GradientStop(Colors.Yellow, 0.4));
-            gradientBrush.GradientStops.Add(new GradientStop(Colors.Green, 0.6));
-            gradientBrush.GradientStops.Add(new GradientStop(Colors.Blue, 0.8));
-            gradientBrush.GradientStops.Add(new GradientStop(Colors.Purple, 1));
-
-            // Set the gradient brush as the border's border brush
-            border.BorderBrush = gradientBrush;
-
-            // Create and start the color animation
-            var animation = new ColorAnimation
-            {
-                From = Colors.Red,
-                To = Colors.Purple,
-                Duration = new Duration(TimeSpan.FromSeconds(2)),
-                RepeatBehavior = RepeatBehavior.Forever,
-                AutoReverse = true
-            };
-
-            // Apply the animation to the border's background
-            if (border.Background is SolidColorBrush solidColorBrush)
-            {
-                solidColorBrush.BeginAnimation(SolidColorBrush.ColorProperty, animation);
-            }
-            else
-            {
-                // Create a new SolidColorBrush if the background is not a SolidColorBrush
-                var newBrush = new SolidColorBrush(Colors.Transparent);
-                border.Background = newBrush;
-                newBrush.BeginAnimation(SolidColorBrush.ColorProperty, animation);
-            }
-        }
+        
 
         // Helper method to find child elements
         private T? FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
@@ -1359,7 +1301,7 @@ namespace NZTS_App
             // Show the main window content
             Main.Visibility = Visibility.Visible;
 
-            TitleTextBlock.Content = "💫"; // Set the title when showing the home page
+            TitleTextBlock.Content = "▼"; // Set the title when showing the home page
         }
 
 
@@ -1376,94 +1318,7 @@ namespace NZTS_App
 
 
 
-        private void AddGameIcon(string name, string iconPath)
-        {
-            var border = new Border
-            {
-                Margin = new Thickness(10),
-                Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(61, 63, 66)), // Specify the correct Color
-                CornerRadius = new CornerRadius(8),
-                Padding = new Thickness(5)
-            };
-
-            var stackPanel = new StackPanel
-            {
-                HorizontalAlignment = HorizontalAlignment.Center
-            };
-
-            var image = new System.Windows.Controls.Image // Specify the correct Image
-            {
-                Source = GetIconBitmapSource(iconPath),
-                Width = 100,
-                Height = 100
-            };
-
-            var textBlock = new TextBlock
-            {
-                Text = name,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Foreground = System.Windows.Media.Brushes.White, // Specify the correct Brushes
-                FontWeight = FontWeights.Bold,
-                Margin = new Thickness(0, 5, 0, 0)
-            };
-
-            stackPanel.Children.Add(image);
-            stackPanel.Children.Add(textBlock);
-            border.Child = stackPanel;
-            
-        }
-
-        private bool isResizing = false;
-        private System.Windows.Point lastMousePosition; // Specify the namespace
-        private const int ResizeBorderThickness = 5; // Define thickness for resizing
-
-        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed) // Use LeftButton instead of ButtonState
-            {
-                lastMousePosition = e.GetPosition(this);
-                isResizing = true;
-                Mouse.Capture((UIElement)sender); // Capture mouse to the border
-            }
-        }
-
-        private void Border_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (isResizing)
-            {
-                System.Windows.Point currentMousePosition = e.GetPosition(this); // Specify the namespace
-                double widthChange = currentMousePosition.X - lastMousePosition.X;
-                double heightChange = currentMousePosition.Y - lastMousePosition.Y;
-
-                this.Width = Math.Max(300, this.Width + widthChange);  // Minimum width
-                this.Height = Math.Max(200, this.Height + heightChange); // Minimum height
-
-                lastMousePosition = currentMousePosition; // Update last mouse position
-            }
-            else
-            {
-                // Change cursor style based on position
-                System.Windows.Point mousePos = e.GetPosition(this); // Specify the namespace
-                if (mousePos.X < ResizeBorderThickness || mousePos.X > this.ActualWidth - ResizeBorderThickness ||
-                    mousePos.Y < ResizeBorderThickness || mousePos.Y > this.ActualHeight - ResizeBorderThickness)
-                {
-                    this.Cursor = Cursors.SizeAll; // Change cursor for resizing
-                }
-                else
-                {
-                    this.Cursor = Cursors.Arrow; // Default cursor
-                }
-            }
-        }
-
-        private void Border_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            if (isResizing)
-            {
-                isResizing = false;
-                Mouse.Capture(null); // Release mouse capture
-            }
-        }
+        
 
 
         private BitmapSource GetIconBitmapSource(string path)

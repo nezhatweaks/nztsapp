@@ -51,7 +51,6 @@ namespace NZTS_App
 
         private void InitializeIOPriorityOptions()
         {
-            IOPriorityComboBox.Items.Add(new ComboBoxItem { Content = "Critical" });
             IOPriorityComboBox.Items.Add(new ComboBoxItem { Content = "High" });
             IOPriorityComboBox.Items.Add(new ComboBoxItem { Content = "Normal" });
             IOPriorityComboBox.Items.Add(new ComboBoxItem { Content = "Low" });
@@ -126,7 +125,6 @@ namespace NZTS_App
                     1 => "Low",
                     2 => "Normal",
                     3 => "High",
-                    4 => "Critical",
                     _ => "Normal"
                 };
             }

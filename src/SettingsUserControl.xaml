@@ -127,7 +127,7 @@
             <TextBlock Text="About Us" FontWeight="Bold" FontSize="20" Margin="0,0,0,20"/>
             <TextBlock Text="NZTS App is a powerful PC optimization tool that enhances system performance through various tweaks."
                        TextWrapping="Wrap" Margin="0,0,0,30" />
-            <TextBlock Text="© 2024 NZTS APP. All rights reserved." 
+            <TextBlock Text="© 2025 NZTS APP. All rights reserved." 
            TextWrapping="Wrap" Margin="0,0,0,30" />
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,10,0,10">

@@ -59,7 +59,7 @@
 
         <!-- Rounded Button Style with Hover/Click Animations -->
         <Style x:Key="RoundedButtonStyle2"  TargetType="Button">
-            <Setter Property="Background" Value="#141414"/>
+            <Setter Property="Background" Value="#a32c48"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
@@ -72,18 +72,18 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                    CornerRadius="20"
+                    CornerRadius="15"
                     BorderBrush="Transparent">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <!-- Hover effect -->
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#121212"/>
+                                <Setter Property="Background" Value="#d60939"/>
                             </Trigger>
                             <!-- Pressed effect -->
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="#080808"/>
+                                <Setter Property="Background" Value="#6e021b"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -372,38 +372,7 @@
                     </Button.ToolTip>
                 </Button>
 
-                <Border BorderThickness="1" Style="{StaticResource DiscordBorderStyle}" Padding="10" Margin="79,4,86,4" 
-BorderBrush="Red" Grid.Column="1">
-                    <Border.Effect>
-                        <DropShadowEffect Color="Red" BlurRadius="80" Direction="270" ShadowDepth="0" Opacity="0.2"/>
-                    </Border.Effect>
-
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,93,0">
-                       
-                        <!-- Status Text -->
-                        <!-- Core Isolation Text with Updated Tooltip -->
-                        <TextBlock Text="Update your Intel LAN/WIFI driver to the latest version to prevent BSOD." FontWeight="Bold" FontSize="12" Height="20" Margin="100,-5,0,0">
-                            
-</TextBlock>
-
-                        
-                    </StackPanel>
-
-                    <!-- ToolTip for Disabled State -->
-                    <Border.ToolTip>
-                        <ToolTip>
-                            <TextBlock>
-        Tweak any memory related tweaks here will lead you to BSOD 
-        <LineBreak/>
-        if you are using an Intel LAN/WIFI adapter.
-        <LineBreak/>
-        <Run Foreground="Green">
-            To prevent this error, update to the latest driver.
-        </Run>
-                            </TextBlock>
-                        </ToolTip>
-                    </Border.ToolTip>
-                </Border>
+                
 
 
 
@@ -537,7 +506,7 @@ BorderBrush="Red" Grid.Column="1">
                         <!-- Advanced Content (hidden by default) -->
                         <StackPanel x:Name="AdvancedContent" Visibility="Collapsed">
 
-                            <Button Content="Affinity" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="MSI_Click"/>
+                            <Button Content="Affinity/MSI" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="MSI_Click"/>
                             <Button Content="Process" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="CPUPriority_Click"/>
                             <Button Content="Telemetry" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Debloat_Click"/>
                             <Button Content="Storage" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Storage_Click"/>
