@@ -47,6 +47,13 @@ namespace NZTS_App.Views
             DisableOSMitigationsToggle.Click += DisableOSMitigationsToggle_Click;
             SystemCacheDirtyPageThresholdToggle.Click += SystemCacheDirtyPageThresholdToggle_Click;
             LargePageSizeInBytesToggle.Click += LargePageSizeInBytesToggle_Click;
+            LockPagesInMemoryToggle.Click += LockPagesInMemoryToggle_Click;
+            LargePageHeapSizeThresholdToggle.Click += LargePageHeapSizeThresholdToggle_Click;
+            UseBiasedLockingToggle.Click += UseBiasedLockingToggle_Click;
+            TieredCompilationToggle.Click += TieredCompilationToggle_Click;
+            TieredStopAtLevelToggle.Click += TieredStopAtLevelToggle_Click;
+            ThreadStackSizeToggle.Click += ThreadStackSizeToggle_Click;
+
         }
 
 
@@ -93,6 +100,30 @@ namespace NZTS_App.Views
                         // LargePageSizeInBytes
                         var LargePageSizeInByteseValue = key.GetValue("LargePageSizeInBytes");
                         LargePageSizeInBytesToggle.IsChecked = LargePageSizeInByteseValue != null;
+
+                        // LockPagesInMemoryValue
+                        var LockPagesInMemoryValue = key.GetValue("LockPagesInMemory");
+                        LockPagesInMemoryToggle.IsChecked = LockPagesInMemoryValue != null;
+
+                        // LargePageHeapSizeThreshold
+                        var LargePageHeapSizeThreshold = key.GetValue("LargePageHeapSizeThreshold");
+                        LargePageHeapSizeThresholdToggle.IsChecked = LargePageHeapSizeThreshold != null;
+
+                        // UseBiasedLocking
+                        var UseBiasedLockingValue = key.GetValue("UseBiasedLocking");
+                        UseBiasedLockingToggle.IsChecked = UseBiasedLockingValue != null;
+
+                        // TieredCompilation
+                        var TieredCompilationValue = key.GetValue("TieredCompilation");
+                        TieredCompilationToggle.IsChecked = TieredCompilationValue != null;
+
+                        // TieredStopAtLevel
+                        var TieredStopAtLevelValue = key.GetValue("TieredStopAtLevel");
+                        TieredStopAtLevelToggle.IsChecked = TieredStopAtLevelValue != null;
+
+                        // ThreadStackSize
+                        var ThreadStackSizeValue = key.GetValue("ThreadStackSize");
+                        ThreadStackSizeToggle.IsChecked = ThreadStackSizeValue != null;
 
                         // Mitigations
                         var DisableOSMitigationsValue = key.GetValue("FeatureSettingsOverride");
@@ -255,6 +286,78 @@ namespace NZTS_App.Views
             else
             {
                 DeleteRegistryValue("LargePageSizeInBytes");
+            }
+        }
+
+        private void LockPagesInMemoryToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (LockPagesInMemoryToggle.IsChecked == true)
+            {
+                UpdateRegistryValue("LockPagesInMemory", 1);
+            }
+            else
+            {
+                DeleteRegistryValue("LockPagesInMemory");
+            }
+        }
+
+        private void LargePageHeapSizeThresholdToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (LargePageHeapSizeThresholdToggle.IsChecked == true)
+            {
+                UpdateRegistryValue("LargePageHeapSizeThreshold", 3);
+            }
+            else
+            {
+                DeleteRegistryValue("LargePageHeapSizeThreshold");
+            }
+        }
+
+        private void UseBiasedLockingToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (UseBiasedLockingToggle.IsChecked == true)
+            {
+                UpdateRegistryValue("UseBiasedLocking", 1);
+            }
+            else
+            {
+                DeleteRegistryValue("UseBiasedLocking");
+            }
+        }
+
+        private void TieredCompilationToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (TieredCompilationToggle.IsChecked == true)
+            {
+                UpdateRegistryValue("TieredCompilation", 16);
+            }
+            else
+            {
+                DeleteRegistryValue("TieredCompilation");
+            }
+        }
+
+        private void TieredStopAtLevelToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (TieredStopAtLevelToggle.IsChecked == true)
+            {
+                UpdateRegistryValue("TieredStopAtLevel", 1);
+            }
+            else
+            {
+                DeleteRegistryValue("TieredStopAtLevel");
+            }
+        }
+
+        private void ThreadStackSizeToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (ThreadStackSizeToggle.IsChecked == true)
+            {
+                UpdateRegistryValue("ThreadStackSize", 3);
+            }
+            else
+            {
+                DeleteRegistryValue("ThreadStackSize");
             }
         }
 

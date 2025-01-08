@@ -366,10 +366,7 @@
                         <DropShadowEffect Color="Red" BlurRadius="80" Direction="270" ShadowDepth="0" Opacity="0.2"/>
                     </Button.Effect>
 
-                    <!-- Tooltip if needed -->
-                    <Button.ToolTip>
-                        <ToolTip Content="Toggle Sidebar" />
-                    </Button.ToolTip>
+                    
                 </Button>
 
                 
@@ -702,7 +699,7 @@ Margin="0,0,0,0"/>
             MouseDown="ExperimentalContent_MouseDown" 
             MouseMove="ExperimentalContent_MouseMove" 
             MouseUp="ExperimentalContent_MouseUp">
-                            <TextBlock x:Name="VersionTextBlock" Text="V0.7.0" 
+                            <TextBlock x:Name="VersionTextBlock" Text="V0.8.0 Alpha Build" 
                FontWeight="Bold" 
                FontSize="24" 
                Foreground="Gray" 
