@@ -71,7 +71,8 @@ namespace NZTS_App.Views
                 }
                 else
                 {
-                    ShowError($"Registry key not found: {path}");
+                    Console.WriteLine($"Registry key not found: {path}");
+
                 }
             }
             catch (UnauthorizedAccessException)

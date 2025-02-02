@@ -118,11 +118,11 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="MSI Limit" Width="95">
+                        <GridViewColumn Header="MSI Limit" Width="125">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBox Width="40" MaxLength="4" Text="{Binding MessageNumberLimit, UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBox Width="60" MaxLength="9" Text="{Binding MessageNumberLimit, UpdateSourceTrigger=PropertyChanged}" />
                                         <Button Content="Apply" Click="SetLimitButton_Click" />
                                     </StackPanel>
                                 </DataTemplate>

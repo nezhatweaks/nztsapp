@@ -772,13 +772,13 @@ namespace NZTS_App.Views
             {
                 var device = button.DataContext as PciDevice;
 
-                if (device != null && int.TryParse(device.MessageNumberLimit, out int newLimit) && newLimit >= 1 && newLimit <= 2048)
+                if (device != null && int.TryParse(device.MessageNumberLimit, out int newLimit) && newLimit >= 1 && newLimit <= 900000000)
                 {
                     device.UpdateLimitInRegistry(newLimit);
                 }
                 else
                 {
-                    MessageBox.Show("Please enter a valid limit value (1 - 2048).");
+                    MessageBox.Show("Please enter a valid limit value (1 - 9000000).");
                 }
             }
         }

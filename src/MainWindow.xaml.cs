@@ -87,11 +87,15 @@ namespace NZTS_App
     }},
     {"DisablePagingExecutive", new List<Tuple<string, string, ValueType, bool, string>>()
     {
-        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "00000001", ValueType.DWord, false, "00000000")
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "00000000", ValueType.DWord, true, "00000000")
+    }},
+    {"LargePageSizeInBytes", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "00000000", ValueType.DWord, true, "00000000")
     }},
     {"DisableHeapCoalesceOnFree", new List<Tuple<string, string, ValueType, bool, string>>()
     {
-        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "00000001", ValueType.DWord, false, "00000000")
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "00000000", ValueType.DWord, true, "00000000")
     }},
     {"AllowMaxPerf", new List<Tuple<string, string, ValueType, bool, string>>()
     {

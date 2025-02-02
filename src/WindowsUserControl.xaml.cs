@@ -344,6 +344,66 @@ namespace NZTS_App.Views
             }
         }
 
+        private void Sub3_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Define your registry path
+                string registryPath = SubKeyPath; // This should be the actual path, for example: @"SOFTWARE\Intel"
+
+                // Print the registry path for debugging
+                Console.WriteLine($"Registry Path: {registryPath}");
+
+                // Define the new value as an ExpandString (for proper environment variable expansion)
+                string newValue = @"%SystemRoot%\system32\csrss.exe ObjectDirectory=\Windows SharedSection=1024,20480,768 Windows=ntoskrnl.exe SubSystemType=Windows ServerDll=basesrv,1 ServerDll=winsrv:UserServerDllInitialization,3 ServerDll=sxssrv,4 ProfileControl=Off MaxRequestThreads=9999";
+
+                // Expand environment variables (make sure %SystemRoot% is expanded)
+                string expandedValue = Environment.ExpandEnvironmentVariables(newValue);
+
+                // Print the expanded value for debugging
+                Console.WriteLine($"Expanded Value: {expandedValue}");
+
+                // Open or create the registry key with write access
+                using (var key = Registry.LocalMachine.OpenSubKey(registryPath, writable: true))
+                {
+                    if (key == null)
+                    {
+                        // If the registry key doesn't exist, create it
+                        using (var newKey = Registry.LocalMachine.CreateSubKey(registryPath))
+                        {
+                            // Set the value as REG_EXPAND_SZ to support environment variable expansion
+                            newKey?.SetValue("Windows", expandedValue, RegistryValueKind.ExpandString);
+                            Console.WriteLine("Created new registry key and set value.");
+                        }
+                    }
+                    else
+                    {
+                        // If the registry key exists, update it with the expanded value
+                        key?.SetValue("Windows", expandedValue, RegistryValueKind.ExpandString);
+                        Console.WriteLine("Updated existing registry key.");
+                    }
+
+                    // Apply the changes (call your method to indicate settings were applied)
+                    mainWindow?.MarkSettingsApplied();
+                    App.changelogUserControl?.AddLog("Applied", "Subsystem Window has been updated with the new values.");
+
+                    // Highlight the appropriate button for Intel
+                    HighlightIntelButton(1);  // Highlight Intel 1 Button
+
+                    // Show message after the button click
+                    MessageBox.Show("Subsystem Window has been updated with the new values.", "Operation Successful", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                ShowError("You do not have permission to modify the registry. Please run the application as an administrator.");
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Error resetting Subsystem Window setting: {ex.Message}");
+            }
+        }
+
 
 
 
@@ -719,7 +779,8 @@ namespace NZTS_App.Views
             string currentSubValue = GetRegistryExpandableString(SubKeyPath);
             HighlightButtonForSetting(Sub1Button, currentSubValue.Contains("Windows=winmm.dll"));
             HighlightButtonForSetting(Sub2Button, currentSubValue.Contains("Windows=On"));
-            
+            HighlightButtonForSetting(Sub3Button, currentSubValue.Contains("Windows=ntoskrnl.exe"));
+
         }
 
         // Helper function to read registry value (returns default 3 if not found)

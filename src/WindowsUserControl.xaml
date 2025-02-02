@@ -287,6 +287,8 @@ MinHeight="200"/>
                 <LineBreak/>
                 - Setting 1: Changes `MaxRequestThreads` to 256, enabling better resource handling for high-performance tasks.
                 <LineBreak/>
+                - Setting 2: Changes `MaxRequestThreads` to 9999, enabling better resource handling for extreme-performance tasks.
+<LineBreak/>
                 - Default: Keeps `MaxRequestThreads` at 16, providing balanced resource usage for most workloads.
                 <LineBreak/>
                 <Run Foreground="Green">
@@ -298,8 +300,9 @@ MinHeight="200"/>
 </TextBlock>
 
 
-                        <Button x:Name="Sub1Button" Content="1" Width="80" Style="{StaticResource ResetButtonStyle}" Click="Sub1_Click" Margin="5,0,0,0" />
-                        <Button x:Name="Sub2Button" Content="Default" Width="80" Style="{StaticResource ResetButtonStyle}" Click="SubReset_Click" Margin="5,0,0,0" />
+                        <Button x:Name="Sub1Button" Content="1" Width="40" Style="{StaticResource ResetButtonStyle}" Click="Sub1_Click" Margin="5,0,0,0" />
+                        <Button x:Name="Sub3Button" Content="2" Width="40" Style="{StaticResource ResetButtonStyle}" Click="Sub3_Click" Margin="5,0,0,0" />
+                        <Button x:Name="Sub2Button" Content="X" Width="40" Style="{StaticResource ResetButtonStyle}" Click="SubReset_Click" Margin="5,0,0,0" />
                     </StackPanel>
                 </Border>
             </StackPanel>

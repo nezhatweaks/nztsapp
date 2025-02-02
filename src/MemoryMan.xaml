@@ -277,7 +277,7 @@ MinHeight="200"/>
                         </Border>
 
                         <!-- LargePageSizeInBytes -->
-                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                        <Border Style="{StaticResource DiscordBorderStyle}" Visibility="Collapsed" Padding="10" Height="50" Margin="10,10,0,0">
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                     <GradientStop Color="Green" Offset="0" />
@@ -378,7 +378,7 @@ MinHeight="200"/>
                         </Border>
 
                         <!-- SecondLevelDataCache -->
-                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                        <Border Style="{StaticResource DiscordBorderStyle}" Visibility="Collapsed" Padding="10" Height="50" Margin="10,10,0,0">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <TextBlock Text="Second Level Data Cache" FontWeight="Bold" Margin="0,0,10,0">
                                     <TextBlock.ToolTip>
@@ -399,13 +399,13 @@ MinHeight="200"/>
                                     </TextBlock.ToolTip>
 </TextBlock>
 
-                                <ToggleButton x:Name="SecondLevelDataCacheToggle" Style="{StaticResource iOSToggleButton}" Click="SecondLevelDataCacheToggle_Click" Width="50"/>
+                                    <ToggleButton x:Name="SecondLevelDataCacheToggle"  Style="{StaticResource iOSToggleButton}" Click="SecondLevelDataCacheToggle_Click" Width="50"/>
                                 <TextBlock x:Name="SecondLevelDataCacheStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
 
                         <!-- ThirdLevelDataCache -->
-                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                            <Border Style="{StaticResource DiscordBorderStyle}" Visibility="Collapsed" Padding="10" Height="50" Margin="10,10,0,0">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <TextBlock Text="Third Level Data Cache" FontWeight="Bold" Margin="0,0,10,0">
                                     <TextBlock.ToolTip>
