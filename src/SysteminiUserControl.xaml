@@ -1,0 +1,148 @@
+﻿<UserControl x:Class="NZTS_App.Views.SysteminiUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:NZTS_App.Views"
+             Height="450" Width="400">
+
+    <UserControl.Resources>
+        <!-- iOS Toggle Button Style -->
+        <Style x:Key="iOSToggleButton" TargetType="ToggleButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Grid>
+                            <Border x:Name="Border" 
+                                    Background="{TemplateBinding Background}" 
+                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                    BorderThickness="0" 
+                                    CornerRadius="10" 
+                                    Padding="5">
+                                <Ellipse x:Name="Ellipse" 
+                                         Fill="White" 
+                                         Width="10" 
+                                         Height="10" 
+                                         HorizontalAlignment="Left" 
+                                         VerticalAlignment="Center" 
+                                         Margin="0,0,0,0" />
+                            </Border>
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center" 
+                                              Margin="35,0,0,0" Visibility="Collapsed" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#4CAF50" />
+                                <Setter TargetName="Ellipse" Property="HorizontalAlignment" Value="Right" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Background" Value="#E0E0E0"/>
+            <Setter Property="BorderBrush" Value="#BDBDBD"/>
+        </Style>
+
+        <!-- Discord Border Style -->
+        <Style TargetType="Border" x:Key="DiscordBorderStyle">
+            <Setter Property="Background" Value="#2F3136"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="BorderBrush" Value="#2F3136"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- Reset Button Style (Matches Discord Style) -->
+        <Style x:Key="ResetButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#2F3136"/>
+            <Setter Property="BorderBrush" Value="#BDBDBD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Height" Value="30"/>
+        </Style>
+
+        <!-- Tab Button Style -->
+        <Style x:Key="TabButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#2C2F33"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#2F3136"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#3D4147"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#5A5C60"/>
+                </Trigger>
+                <Trigger Property="Tag" Value="Active">
+                    <Setter Property="Background" Value="#4875e8"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <StackPanel>
+        <!-- Tab Buttons Positioned Above Content -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,10">
+            <Button x:Name="CurrentButton" 
+                    Content="Current" 
+                    Click="SwitchToCurrentTab" 
+                    Style="{StaticResource TabButtonStyle}" 
+                    Tag="Active" 
+                    Width="120" Height="25"/>
+            <Button x:Name="VerifiedButton" 
+                    Content="Default" 
+                    Click="SwitchToVerifiedTab" 
+                    Style="{StaticResource TabButtonStyle}" 
+                    Tag="Inactive" 
+                    Width="120" Height="25"/>
+            <Button x:Name="ExperimentalButton" 
+                    Content="Tweaked" 
+                    Click="SwitchToExperimentalTab" 
+                    Style="{StaticResource TabButtonStyle}" 
+                    Tag="Inactive" 
+                    Width="120" Height="25"/>
+        </StackPanel>
+
+        <!-- Tab Content -->
+        <StackPanel>
+            <!-- Current Tab Content -->
+            <StackPanel x:Name="CurrentContent" Visibility="Visible" Margin="10">
+                <TextBlock Text="Current settings from system.ini" FontSize="14" Foreground="White" HorizontalAlignment="Center"/>
+                <TextBox x:Name="CurrentTextBox" Margin="10" Width="550" Height="190" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True"/>
+            </StackPanel>
+
+            <!-- Verified Tab Content -->
+            <StackPanel x:Name="VerifiedContent" Visibility="Collapsed" Margin="10">
+                <TextBlock Text="Default Profile for system.ini" FontSize="14" Foreground="White" HorizontalAlignment="Center"/>
+                <TextBox x:Name="SystemIniTextBox" Margin="10" Width="550" Height="190" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True"/>
+            </StackPanel>
+
+            <!-- Experimental Tab Content -->
+            <StackPanel x:Name="ExperimentalContent" Visibility="Collapsed" Margin="10">
+                <TextBlock Text="Profile 1 for system.ini" FontSize="14" Foreground="White" HorizontalAlignment="Center"/>
+                <TextBox x:Name="ExperimentalTextBox" Margin="10" Width="550" Height="190" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="False"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Apply Button -->
+        <Button Content="Apply Profile" Width="200" Height="30" Click="ApplyProfile_Click" HorizontalAlignment="Center" Margin="20"/>
+    </StackPanel>
+</UserControl>

@@ -1,6 +1,6 @@
 ﻿<UserControl x:Class="NZTS_App.Views.WindowsUserControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Height="300" Width="400">
     <UserControl.Resources>
         <!-- iOS Toggle Button Style -->
         <Style x:Key="iOSToggleButton" TargetType="ToggleButton">
@@ -61,7 +61,7 @@
     </UserControl.Resources>
 
     <ContentControl x:Name="ContentWindows" Background="#2C2F33" Width="400" Height="380" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-40,0,-40" Grid.RowSpan="2">
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0" Height="265" >
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0" Height="305" >
             <ScrollViewer.Resources>
                 <Style TargetType="ScrollBar">
                     <Setter Property="Background" Value="Transparent"/>
@@ -172,35 +172,7 @@ MinHeight="200"/>
 
 
 
-                <!-- Toggle for Multimedia Tweaks -->
-                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
-                    <Border.Background>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Color="Green" Offset="0" />
-                            <GradientStop Color="#2F3136" Offset="1" />
-                        </LinearGradientBrush>
-                    </Border.Background>
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="Multimedia Tweaks" FontWeight="Bold" Margin="0,5,10,0">
-                            <TextBlock.ToolTip>
-                                <ToolTip>
-                                    <TextBlock>
-                Toggle this setting to apply multimedia tweaks that optimize system resources 
-                <LineBreak/>
-                for gaming performance, such as prioritizing multimedia applications and reducing background processes.
-                                    </TextBlock>
-                                </ToolTip>
-                            </TextBlock.ToolTip>
-</TextBlock>
-
-                        <ToggleButton x:Name="MultimediaTweaksToggle" 
-                                      Style="{StaticResource iOSToggleButton}" 
-                                      Width="50" 
-                                      Height="25" 
-                                      Click="MultimediaTweaksToggle_Click" />
-                    </StackPanel>
-                </Border>
-
+                
                 <!-- Intel Processor Tweak -->
                 <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
                     <Border.Background>
@@ -270,6 +242,37 @@ MinHeight="200"/>
                         <Button x:Name="Amd4Button" Content="4" Width="60" Style="{StaticResource ResetButtonStyle}" Click="Amd4_Click" Margin="5,0,0,0" />
                     </StackPanel>
                 </Border>
+
+                <!-- Toggle for Multimedia Tweaks -->
+                <TextBlock Text="My Custom Tweaks" Foreground="White" FontSize="20" FontWeight="Bold" Margin="50,10,0,0" />
+                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="Green" Offset="0" />
+                            <GradientStop Color="#2F3136" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Multimedia Tweaks" FontWeight="Bold" Margin="0,5,10,0">
+                            <TextBlock.ToolTip>
+                                <ToolTip>
+                                    <TextBlock>
+                Toggle this setting to apply multimedia tweaks that optimize system resources 
+                <LineBreak/>
+                for gaming performance, such as prioritizing multimedia applications and reducing background processes.
+                                    </TextBlock>
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+</TextBlock>
+
+                        <ToggleButton x:Name="MultimediaTweaksToggle" 
+                                      Style="{StaticResource iOSToggleButton}" 
+                                      Width="50" 
+                                      Height="25" 
+                                      Click="MultimediaTweaksToggle_Click" />
+                    </StackPanel>
+                </Border>
+
                 <!-- Subsystem Processor Tweak -->
                 <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
                     <Border.Background>

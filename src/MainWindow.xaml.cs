@@ -993,6 +993,12 @@ namespace NZTS_App
             ShowContentWithAnimation(superCacheControl); // Call the method to display with animation
         }
 
+        private void Systemini_Click(object sender, RoutedEventArgs e)
+        {
+            var systemINIControl = new SysteminiUserControl(this);
+            ShowContentWithAnimation(systemINIControl); // Call the method to display with animation
+        }
+
 
         private void PowerPlan_Click(object sender, RoutedEventArgs e)
         {

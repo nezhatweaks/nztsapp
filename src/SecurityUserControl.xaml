@@ -83,6 +83,7 @@
 
     <ContentControl x:Name="ContentSecurity" Background="#2C2F33" Width="400" Height="400" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,60,0,0" Grid.RowSpan="2">
         <StackPanel>
+            <TextBlock Text="Memory Integrity" Foreground="White" FontSize="20" FontWeight="Bold" Margin="50,10,0,0" />
             <Border BorderThickness="1" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" 
         BorderBrush="Green">
                 <Border.Effect>
@@ -90,12 +91,12 @@
                 </Border.Effect>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <!-- Core Isolation Text with Updated Tooltip -->
-                    <TextBlock Text="Enable Core Isolation" FontWeight="Bold" Margin="0,0,10,0">
+                    <!-- VBS Text with Updated Tooltip -->
+                    <TextBlock Text="Enable VBS" FontWeight="Bold" Margin="0,0,10,0">
                         <TextBlock.ToolTip>
                             <ToolTip>
                                 <TextBlock>
-                        Disabling Core Isolation can improve performance but reduces security.
+                        Disabling VBS can improve performance but reduces security.
                         <LineBreak/>
                         <Run Foreground="Orange">Warning: Disabling exposes your system to risks.</Run>
                                 </TextBlock>
@@ -103,7 +104,7 @@
                         </TextBlock.ToolTip>
         </TextBlock>
 
-                    <!-- Toggle Button for Core Isolation -->
+                    <!-- Toggle Button for VBS -->
                     <ToggleButton x:Name="CoreIsolationToggle"
                       Style="{StaticResource iOSToggleButton}"
                       Click="CoreIsolationToggle_Click" Width="50"/>
@@ -132,7 +133,7 @@
                 <Border.ToolTip>
                     <ToolTip>
                         <TextBlock>
-                Disabling Core Isolation can improve system performance, 
+                Disabling VBS can improve system performance, 
                 <LineBreak/>
                 but it reduces security and may leave the system vulnerable.
                 <LineBreak/>
@@ -147,6 +148,7 @@
             
 
             <!-- Remove WINDEF Tweak -->
+            <TextBlock Text="Backup is recommended" Foreground="White" FontSize="20" FontWeight="Bold" Margin="50,10,0,0" />
             <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">

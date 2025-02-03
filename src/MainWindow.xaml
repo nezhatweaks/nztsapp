@@ -497,7 +497,7 @@
                             <Button Content="MMCSS" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="MMCSS_Click"/>
                             <Button Content="NVIDIA" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Nvidia_Click"/>
                             <Button Content="Radeon" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="AMD_Click"/>
-                            <Button Content="Misc" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Monitor_Click"/>
+                            
                         </StackPanel>
 
                         <!-- Advanced Content (hidden by default) -->
@@ -508,6 +508,8 @@
                             <Button Content="Telemetry" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Debloat_Click"/>
                             <Button Content="Storage" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Storage_Click"/>
                             <Button Content="File System" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Supercache_Click"/>
+                            <Button Content="SYSTEM.INI" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Systemini_Click"/>
+                            <Button Content="Misc" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Monitor_Click"/>
 
                         </StackPanel>
 
