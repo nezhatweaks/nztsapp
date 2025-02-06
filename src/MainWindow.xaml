@@ -471,7 +471,7 @@
 
                                     <!-- Tooltip -->
                                     <Button.ToolTip>
-                                        <ToolTip Content="Apply Recommend Settings" />
+                                        <ToolTip Content="Quick Boost" />
                                     </Button.ToolTip>
                                 </Button>
 

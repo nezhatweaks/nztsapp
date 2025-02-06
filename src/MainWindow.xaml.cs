@@ -207,53 +207,6 @@ namespace NZTS_App
                     ApplyTweak(tweak);
                 }
 
-                // Ask user if they want to apply the batch file after registry tweaks
-                var batchConfirmationResult = MessageBox.Show(
-                    "The system optimizations have been successfully applied. Additionally, you have the option to implement further optimizations through a security batch file. Would you like to proceed with executing the batch file?",
-                    "Disable Windows Defender and Security Mitigations",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Information);
-
-                if (batchConfirmationResult == MessageBoxResult.Yes)
-                {
-                    // Get the directory where the application is running
-                    string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
-
-                    // Specify the batch file path relative to the application directory
-                    string batchFilePath = System.IO.Path.Combine(appDirectory, "removedefend.bat");
-
-                    // Check if the batch file exists
-                    if (!File.Exists(batchFilePath))
-                    {
-                        MessageBox.Show("Batch file not found in the application directory.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        return;
-                    }
-
-                    // Start the batch file
-                    var processInfo = new ProcessStartInfo
-                    {
-                        FileName = batchFilePath,
-                        UseShellExecute = true,  // Run using the shell
-                        CreateNoWindow = false  // Show command prompt window
-                    };
-
-                    // Start the batch file process
-                    Process? process = Process.Start(processInfo);
-
-                    // Ensure the process started successfully
-                    if (process != null)
-                    {
-                        // Wait for the process to exit (i.e., for the batch file to finish running)
-                        process.WaitForExit();
-
-                        App.changelogUserControl?.AddLog("Applied", "Security batch file executed successfully.");
-                    }
-                    else
-                    {
-                        MessageBox.Show("Failed to start the batch file process.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
-
                 MessageBox.Show("All optimizations have been applied successfully!");
 
                 // Prompt the user to restart the computer
@@ -270,6 +223,7 @@ namespace NZTS_App
                 App.changelogUserControl?.AddLog("Failed", ex.Message);
             }
         }
+
 
 
 

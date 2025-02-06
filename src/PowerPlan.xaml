@@ -150,7 +150,7 @@
         Click="BrowseButton_Click" ToolTip="Browse to import a powerplan"/>
                 
                 <Button x:Name="ImportPresetPlanButton" 
-        Content="NZTS PP" 
+        Content="Presets" 
         Style="{StaticResource DiscordButtonStyle}" 
         IsEnabled="False"
         Click="ImportPresetPlan_Click" 

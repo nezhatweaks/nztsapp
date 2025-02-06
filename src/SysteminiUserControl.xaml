@@ -126,19 +126,19 @@
             <!-- Current Tab Content -->
             <StackPanel x:Name="CurrentContent" Visibility="Visible" Margin="10">
                 <TextBlock Text="Current settings from system.ini" FontSize="14" Foreground="White" HorizontalAlignment="Center"/>
-                <TextBox x:Name="CurrentTextBox" Margin="10" Width="550" Height="190" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True"/>
+                <TextBox x:Name="CurrentTextBox" Margin="10" Width="550" Height="200" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True"/>
             </StackPanel>
 
             <!-- Verified Tab Content -->
             <StackPanel x:Name="VerifiedContent" Visibility="Collapsed" Margin="10">
                 <TextBlock Text="Default Profile for system.ini" FontSize="14" Foreground="White" HorizontalAlignment="Center"/>
-                <TextBox x:Name="SystemIniTextBox" Margin="10" Width="550" Height="190" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True"/>
+                <TextBox x:Name="SystemIniTextBox" Margin="10" Width="550" Height="200" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True"/>
             </StackPanel>
 
             <!-- Experimental Tab Content -->
             <StackPanel x:Name="ExperimentalContent" Visibility="Collapsed" Margin="10">
                 <TextBlock Text="Profile 1 for system.ini" FontSize="14" Foreground="White" HorizontalAlignment="Center"/>
-                <TextBox x:Name="ExperimentalTextBox" Margin="10" Width="550" Height="190" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="False"/>
+                <TextBox x:Name="ExperimentalTextBox" Margin="10" Width="550" Height="200" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="False"/>
             </StackPanel>
         </StackPanel>
 

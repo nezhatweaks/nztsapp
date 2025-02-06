@@ -30,6 +30,7 @@ timer=timer.drv
 ; for 16-bit app support
 [386Enh]
 MinTimeSlice=1
+WinTimeSlice=1,1
 woafont=dosapp.fon
 EGA80WOA.FON=EGA80WOA.FON
 EGA40WOA.FON=EGA40WOA.FON
@@ -114,26 +115,47 @@ timer=timer.drv
         // Method to apply the profile (write the content back to system.ini)
         private void ApplyProfile_Click(object sender, RoutedEventArgs e)
         {
+            string profileApplied = string.Empty; // Variable to hold the name of the profile applied
             try
             {
-                // Write the contents of the active TextBox to the system.ini file
+                // Determine which profile is being applied
                 if (VerifiedContent.Visibility == Visibility.Visible)
+                {
                     File.WriteAllText(SystemIniPath, SystemIniTextBox.Text); // Write to system.ini from the Verified tab
+                    profileApplied = "Default Profile";
+                }
                 else if (ExperimentalContent.Visibility == Visibility.Visible)
+                {
                     File.WriteAllText(SystemIniPath, ExperimentalTextBox.Text); // Write to system.ini from the Experimental tab
+                    profileApplied = "Tweaked Profile";
+                }
                 else
+                {
                     File.WriteAllText(SystemIniPath, CurrentTextBox.Text); // Write to system.ini from the Current tab
+                    profileApplied = "Current Profile";
+                }
 
                 MessageBox.Show("Profile applied successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                // Log the applied profile
+                App.changelogUserControl?.AddLog("Applied", $"{profileApplied} has been modified.");
+                mainWindow?.MarkSettingsApplied(); // Mark the setting as applied
             }
             catch (UnauthorizedAccessException)
             {
                 MessageBox.Show("You do not have permission to modify the System.ini file. Please run the application as an administrator.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                // Log the failure with profile name
+                App.changelogUserControl?.AddLog("Failed", $"{profileApplied} failed to be modified.");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error writing to system.ini: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                // Log the failure with profile name
+                App.changelogUserControl?.AddLog("Failed", $"{profileApplied} failed to be modified.");
             }
         }
+
     }
 }

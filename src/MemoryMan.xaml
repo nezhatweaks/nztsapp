@@ -139,6 +139,7 @@ MinHeight="200"/>
                             </Style>
                         </ScrollViewer.Resources>
                         <StackPanel>
+                            <TextBlock Text="General Memory Optimizations" Foreground="White" FontSize="20" FontWeight="Bold" Margin="15,10,0,0" />
                         <!-- DisablePagingExecutive -->
                         <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -305,6 +306,675 @@ MinHeight="200"/>
                             </StackPanel>
                         </Border>
 
+                            <TextBlock Text="Advanced Memory Optimizations" Foreground="White" FontSize="20" FontWeight="Bold" Margin="15,10,0,0" />
+
+                            <!-- MmStrictFileSharing -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Strict File Sharing" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                    Enabling strict file sharing enforces more strict policies for file system operations.
+                                    <LineBreak/>
+                                    This can help improve system security, but may result in slower performance for certain operations.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                    </TextBlock>
+                                    <ToggleButton x:Name="StrictFileSharingToggle" Style="{StaticResource iOSToggleButton}" Click="StrictFileSharingToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="StrictFileSharingStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- MmAllowPagedPoolGrow -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Allow Paged Pool Grow" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                    Allows the paged pool to grow beyond the default size to accommodate system needs.
+                                    <LineBreak/>
+                                    Enabling this feature may help improve system performance under heavy memory load.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                    </TextBlock>
+                                    <ToggleButton x:Name="AllowPagedPoolGrowToggle" Style="{StaticResource iOSToggleButton}" Click="AllowPagedPoolGrowToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="AllowPagedPoolGrowStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- MmDataClusterSize -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Data Cluster Size" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                    Defines the size of the data cluster. 
+                                    <LineBreak/>
+                                    Larger cluster sizes can improve performance for certain file system operations but may increase overhead.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                    </TextBlock>
+                                    <ToggleButton x:Name="DataClusterSizeToggle" Style="{StaticResource iOSToggleButton}" Click="DataClusterSizeToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="DataClusterSizeStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- MmMapIoSpace -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Map IO Space" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                    Enables or disables the mapping of IO space for devices in the system.
+                                    <LineBreak/>
+                                    This can improve system performance, but may reduce hardware compatibility.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                    </TextBlock>
+                                    <ToggleButton x:Name="MapIoSpaceToggle" Style="{StaticResource iOSToggleButton}" Click="MapIoSpaceToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="MapIoSpaceStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- MmSystemVaStart -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="System VA Start" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                                    Sets the starting address of the system's virtual address space.
+                                    <LineBreak/>
+                                    Changing this can affect how system memory is allocated.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                    </TextBlock>
+                                    <ToggleButton x:Name="SystemVaStartToggle" Style="{StaticResource iOSToggleButton}" Click="SystemVaStartToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="SystemVaStartStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- System VA End -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="System VA End" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                Sets the ending address of the system's virtual address space.
+                <LineBreak/>
+                Adjusting this can impact memory allocation and the system's behavior.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+</TextBlock>
+                                    <ToggleButton x:Name="SystemVaEndToggle" Style="{StaticResource iOSToggleButton}" Click="SystemVaEndToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="SystemVaEndStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Force Section Creation -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Force Section Creation" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Enables or disables the creation of memory sections.
+                        <LineBreak/>
+                        This can affect memory management and performance.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="ForceSectionCreationToggle" Style="{StaticResource iOSToggleButton}" Click="ForceSectionCreationToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="ForceSectionCreationStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Large System Cache -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Disable Large System Cache" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Enables or disables the large system cache.
+                        <LineBreak/>
+                        Disabling this might improve performance but could reduce memory efficiency.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="LargeSystemCacheToggle" Style="{StaticResource iOSToggleButton}" Click="LargeSystemCacheToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="LargeSystemCacheStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            
+
+                            <!-- Trim Threshold on Memory Pressure -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Trim Threshold on Memory Pressure" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Sets the threshold for trimming memory when under memory pressure.
+                        <LineBreak/>
+                        Adjusting this setting can help manage system performance under heavy load.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="TrimThresholdOnMemoryPressureToggle" Style="{StaticResource iOSToggleButton}" Click="TrimThresholdOnMemoryPressureToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="TrimThresholdOnMemoryPressureStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Enable Kernel Page Compression -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Disable Kernel Page Compression" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Enables or disables kernel page compression to reduce memory usage.
+                        <LineBreak/>
+                        Enabling this setting can improve memory efficiency, but might affect performance.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="EnableKernelPageCompressionToggle" Style="{StaticResource iOSToggleButton}" Click="EnableKernelPageCompressionToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="EnableKernelPageCompressionStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Cache Cluster Size -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Cache Cluster Size" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Sets the cluster size used for caching.
+                        <LineBreak/>
+                        Adjusting this can impact system performance, especially for data-heavy tasks.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="CacheClusterSizeToggle" Style="{StaticResource iOSToggleButton}" Click="CacheClusterSizeToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="CacheClusterSizeStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Page Fault Coalescing -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Page Fault Coalescing" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Enables or disables page fault coalescing.
+                        <LineBreak/>
+                        This can improve system performance by reducing the number of page faults.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="PageFaultCoalescingToggle" Style="{StaticResource iOSToggleButton}" Click="PageFaultCoalescingToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="PageFaultCoalescingStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Hard Fault Thread Priority -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Hard Fault Thread Priority" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Sets the priority of the thread handling hard page faults.
+                        <LineBreak/>
+                        Adjusting this can influence system responsiveness during page faults.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="HardFaultThreadPriorityToggle" Style="{StaticResource iOSToggleButton}" Click="HardFaultThreadPriorityToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="HardFaultThreadPriorityStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- TLB Flush Threshold -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="TLB Flush Threshold" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Sets the threshold for flushing the Translation Lookaside Buffer (TLB).
+                        <LineBreak/>
+                        Tuning this can influence the performance of memory management.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="TlbFlushThresholdToggle" Style="{StaticResource iOSToggleButton}" Click="TlbFlushThresholdToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="TlbFlushThresholdStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Enforce Cache Partitioning -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Enforce Cache Partitioning" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Enforces cache partitioning for better memory access isolation.
+                        <LineBreak/>
+                        Enabling this can improve performance but may increase overhead.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="EnforceCachePartitioningToggle" Style="{StaticResource iOSToggleButton}" Click="EnforceCachePartitioningToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="EnforceCachePartitioningStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Invalidate TLB on Fork -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Invalidate TLB on Fork" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Invalidates the TLB when a process fork occurs.
+                        <LineBreak/>
+                        This ensures that processes do not share stale memory mappings.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="InvalidateTlbOnForkToggle" Style="{StaticResource iOSToggleButton}" Click="InvalidateTlbOnForkToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="InvalidateTlbOnForkStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                            <!-- Hot Page Threshold -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Hot Page Threshold" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Sets the threshold for hot pages in memory.
+                        <LineBreak/>
+                        This setting can influence how memory is managed under heavy load.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="HotPageThresholdToggle" Style="{StaticResource iOSToggleButton}" Click="HotPageThresholdToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="HotPageThresholdStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Direct Cache Flush -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Direct Cache Flush" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Enables or disables direct cache flushing.
+                        <LineBreak/>
+                        This setting can affect cache performance, especially during memory-intensive tasks.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="DirectCacheFlushToggle" Style="{StaticResource iOSToggleButton}" Click="DirectCacheFlushToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="DirectCacheFlushStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Interrupt Driven Paging -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Interrupt Driven Paging" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Enables interrupt-driven paging to manage memory pages efficiently.
+                        <LineBreak/>
+                        This setting can optimize system performance under certain workloads.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="InterruptDrivenPagingToggle" Style="{StaticResource iOSToggleButton}" Click="InterruptDrivenPagingToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="InterruptDrivenPagingStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Compressed Store Threshold -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Compressed Store Threshold" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Defines the threshold for compressed store operations.
+                        <LineBreak/>
+                        Adjusting this setting may help manage memory more efficiently in some cases.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="CompressedStoreThresholdToggle" Style="{StaticResource iOSToggleButton}" Click="CompressedStoreThresholdToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="CompressedStoreThresholdStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Cache Line Prefetch -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Cache Line Prefetch" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Controls cache line prefetching behavior for better memory performance.
+                        <LineBreak/>
+                        Tuning this setting can optimize cache hits for specific workloads.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="CacheLinePrefetchToggle" Style="{StaticResource iOSToggleButton}" Click="CacheLinePrefetchToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="CacheLinePrefetchStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Page Color Policy -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Page Color Policy" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Defines the page color policy for memory management.
+                        <LineBreak/>
+                        Adjusting this can influence page allocation and memory behavior.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="PageColorPolicyToggle" Style="{StaticResource iOSToggleButton}" Click="PageColorPolicyToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="PageColorPolicyStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Io MMU Bypass -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Io MMU Bypass" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Enables the bypass of the Input/Output Memory Management Unit (IoMMU).
+                        <LineBreak/>
+                        This may improve performance in specific I/O-intensive scenarios.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="IoMmuBypassToggle" Style="{StaticResource iOSToggleButton}" Click="IoMmuBypassToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="IoMmuBypassStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- TLB Shootdown Coalesce -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="TLB Shootdown Coalesce" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Adjusts the threshold for TLB (Translation Lookaside Buffer) shootdown coalescing.
+                        <LineBreak/>
+                        This can help optimize memory address translation in multi-core systems.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="TlbShootdownCoalesceToggle" Style="{StaticResource iOSToggleButton}" Click="TlbShootdownCoalesceToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="TlbShootdownCoalesceStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Dynamic PTE Promotion -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Dynamic PTE Promotion" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Enables or disables dynamic promotion of page table entries (PTE).
+                        <LineBreak/>
+                        This setting can improve performance by dynamically promoting page entries when needed.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="DynamicPtePromotionToggle" Style="{StaticResource iOSToggleButton}" Click="DynamicPtePromotionToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="DynamicPtePromotionStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Hard Fault Burst Limit -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Hard Fault Burst Limit" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Sets the burst limit for hard faults during memory accesses.
+                        <LineBreak/>
+                        Adjusting this can improve memory management and responsiveness.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="HardFaultBurstLimitToggle" Style="{StaticResource iOSToggleButton}" Click="HardFaultBurstLimitToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="HardFaultBurstLimitStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Resident Available Threshold -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Resident Available Threshold" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Defines the threshold for resident available memory before triggering trimming.
+                        <LineBreak/>
+                        Fine-tuning this can help optimize memory usage and responsiveness.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="ResidentAvailableThresholdToggle" Style="{StaticResource iOSToggleButton}" Click="ResidentAvailableThresholdToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="ResidentAvailableThresholdStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Cache Alloc Alignment -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Cache Alloc Alignment" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Defines the alignment for cache allocation.
+                        <LineBreak/>
+                        Tuning this setting can affect memory access speed and system performance.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="CacheAllocAlignmentToggle" Style="{StaticResource iOSToggleButton}" Click="CacheAllocAlignmentToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="CacheAllocAlignmentStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Prefetch Distance -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Prefetch Distance" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Defines the distance at which memory is prefetched.
+                        <LineBreak/>
+                        Adjusting this can improve performance in memory-intensive applications.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="PrefetchDistanceToggle" Style="{StaticResource iOSToggleButton}" Click="PrefetchDistanceToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="PrefetchDistanceStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Stale TLB Threshold -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Stale TLB Threshold" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Sets the threshold for stale Translation Lookaside Buffers (TLB).
+                        <LineBreak/>
+                        This setting helps optimize address translation performance.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="StaleTlbThresholdToggle" Style="{StaticResource iOSToggleButton}" Click="StaleTlbThresholdToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="StaleTlbThresholdStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Gpu Aperture Size -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Gpu Aperture Size" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Defines the size of the GPU aperture in memory.
+                        <LineBreak/>
+                        Adjusting this can optimize memory usage for GPU-intensive tasks.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="GpuApertureSizeToggle" Style="{StaticResource iOSToggleButton}" Click="GpuApertureSizeToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="GpuApertureSizeStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Write Combine Granularity -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Write Combine Granularity" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Defines the granularity for write-combined memory.
+                        <LineBreak/>
+                        This can optimize memory writes for certain workloads.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="WriteCombineGranularityToggle" Style="{StaticResource iOSToggleButton}" Click="WriteCombineGranularityToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="WriteCombineGranularityStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Disable SMAP -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Disable SMAP" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Disables Supervisor Mode Access Prevention (SMAP).
+                        <LineBreak/>
+                        This can improve performance in specific applications, but may compromise security.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="DisableSmapToggle" Style="{StaticResource iOSToggleButton}" Click="DisableSmapToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="DisableSmapStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Kernel Execute Pool -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Kernel Execute Pool" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Controls kernel execute pool settings.
+                        <LineBreak/>
+                        Adjusting this can affect the system's execution of kernel code.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="KernelExecutePoolToggle" Style="{StaticResource iOSToggleButton}" Click="KernelExecutePoolToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="KernelExecutePoolStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Null Dereference Protection -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Null Dereference Protection" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        Enables protection against null pointer dereference in kernel.
+                        <LineBreak/>
+                        This setting can improve stability by preventing null dereference errors.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="NullDereferenceProtectionToggle" Style="{StaticResource iOSToggleButton}" Click="NullDereferenceProtectionToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="NullDereferenceProtectionStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+
 
                         </StackPanel>
                 </ScrollViewer>
@@ -378,7 +1048,7 @@ MinHeight="200"/>
                         </Border>
 
                         <!-- SecondLevelDataCache -->
-                        <Border Style="{StaticResource DiscordBorderStyle}" Visibility="Collapsed" Padding="10" Height="50" Margin="10,10,0,0">
+                            <Border Style="{StaticResource DiscordBorderStyle}" Visibility="Visible" Padding="10" Height="50" Margin="10,10,0,0">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <TextBlock Text="Second Level Data Cache" FontWeight="Bold" Margin="0,0,10,0">
                                     <TextBlock.ToolTip>
@@ -405,7 +1075,7 @@ MinHeight="200"/>
                         </Border>
 
                         <!-- ThirdLevelDataCache -->
-                            <Border Style="{StaticResource DiscordBorderStyle}" Visibility="Collapsed" Padding="10" Height="50" Margin="10,10,0,0">
+                            <Border Style="{StaticResource DiscordBorderStyle}" Visibility="Visible" Padding="10" Height="50" Margin="10,10,0,0">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <TextBlock Text="Third Level Data Cache" FontWeight="Bold" Margin="0,0,10,0">
                                     <TextBlock.ToolTip>
