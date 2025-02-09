@@ -74,5 +74,8 @@ reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\b000397d-9b0b-483d-98c9-692a6060cfbf\DefaultPowerSchemeValues\a1841308-3541-4fab-bc81-f71556f20b4a" /v "ACSettingIndex" /t REG_DWORD /d 0xff /f
 reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\b000397d-9b0b-483d-98c9-692a6060cfbf\DefaultPowerSchemeValues\a1841308-3541-4fab-bc81-f71556f20b4a" /v "DCSettingIndex" /t REG_DWORD /d 0xff /f
 
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\f8861c27-95e7-475c-865b-13c0cb3f9d6b\255]
+"SettingValue"=dword:32646464
+
 :: End of script
 exit /b

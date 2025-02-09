@@ -180,8 +180,7 @@
                         Background="Black" Foreground="White" FontSize="16" FontWeight="Bold">
                                         <Button.Template>
                                             <ControlTemplate TargetType="Button">
-                                                <Border x:Name="border" Background="{TemplateBinding Background}" 
-                                    BorderBrush="Black" BorderThickness="1" CornerRadius="0" Padding="3">
+                                                <Border x:Name="border" Background="{TemplateBinding Background}">
                                                     <Border.Effect>
                                                         <DropShadowEffect Color="Black" ShadowDepth="5" BlurRadius="10" Opacity="0.5" />
                                                     </Border.Effect>

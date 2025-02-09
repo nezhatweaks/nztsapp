@@ -306,7 +306,311 @@ MinHeight="200"/>
                             </StackPanel>
                         </Border>
 
-                            <TextBlock Text="Advanced Memory Optimizations" Foreground="White" FontSize="20" FontWeight="Bold" Margin="15,10,0,0" />
+                            
+
+
+
+                        </StackPanel>
+                </ScrollViewer>
+    </StackPanel>
+                
+
+                
+
+                    <StackPanel x:Name="ExperimentalContent" Visibility="Collapsed" Grid.Row="0" Margin="0,0,0,0">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0" Height="275" >
+                        <ScrollViewer.Resources>
+                            <Style TargetType="ScrollBar">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Width" Value="23"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ScrollBar" >
+                                            <Grid Background="Transparent"  >
+                                                <Track Name="PART_Track" IsDirectionReversed="true">
+                                                    <Track.DecreaseRepeatButton>
+                                                        <RepeatButton Name="PART_DecreaseButton"
+       Content="▲"
+       Command="ScrollBar.LineUpCommand"
+       Background="Transparent"
+       Width="0" Height="0"/>
+                                                    </Track.DecreaseRepeatButton>
+                                                    <Track.Thumb>
+                                                        <Thumb Name="Thumb" 
+Background="Black" 
+Opacity="0.7" 
+Width="3" 
+MinHeight="200"/>
+                                                    </Track.Thumb>
+                                                    <Track.IncreaseRepeatButton>
+                                                        <RepeatButton Name="PART_IncreaseButton"
+       Content="▼"
+       Command="ScrollBar.LineDownCommand"
+       Background="Transparent"
+       Width="0" Height="0"/>
+                                                    </Track.IncreaseRepeatButton>
+                                                </Track>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ScrollViewer.Resources>
+                        <StackPanel>
+                        <!-- Experimental settings -->
+                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="Large Page Minimum" FontWeight="Bold" Margin="0,0,10,0">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock>
+                Set this value to 0xFFFFFFFF to maximize performance by enabling large pages, which can improve 
+                <LineBreak/>
+                memory access and reduce overhead for certain workloads. 
+                <LineBreak/>
+                <Run Foreground="Red">
+                    Warning: This setting is experimental and may not work as expected for all users. 
+                    Use at your own risk.
+                </Run>
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+</TextBlock>
+
+                                <ToggleButton x:Name="LargePageMinimumToggle" Style="{StaticResource iOSToggleButton}" Width="50"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- SecondLevelDataCache -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Visibility="Visible" Padding="10" Height="50" Margin="10,10,0,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="Second Level Data Cache" FontWeight="Bold" Margin="0,0,10,0">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock>
+                Adjusts the second level data cache settings to optimize cache behavior. 
+                <LineBreak/>
+                This can affect the performance of certain workloads by tuning how the system manages the cache.
+                <LineBreak/>
+                Windows may ignore this setting [PLACEBO]
+<LineBreak/>
+                <Run Foreground="Red">
+                    Warning: This setting is experimental and may not produce optimal results for all users. 
+                    Use with caution.
+                </Run>
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+</TextBlock>
+
+                                    <ToggleButton x:Name="SecondLevelDataCacheToggle"  Style="{StaticResource iOSToggleButton}" Click="SecondLevelDataCacheToggle_Click" Width="50"/>
+                                <TextBlock x:Name="SecondLevelDataCacheStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- ThirdLevelDataCache -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Visibility="Visible" Padding="10" Height="50" Margin="10,10,0,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="Third Level Data Cache" FontWeight="Bold" Margin="0,0,10,0">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock>
+                Adjusts the third level data cache settings to optimize cache performance. 
+                <LineBreak/>
+                This setting can improve overall system performance by tuning how the processor handles cache for large datasets.
+                <LineBreak/>
+                <Run Foreground="Red">
+                    Warning: This setting is experimental and may not produce optimal results for all users. 
+                    Use with caution.
+                </Run>
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+</TextBlock>
+
+                                <ToggleButton x:Name="ThirdLevelDataCacheToggle" Style="{StaticResource iOSToggleButton}" Click="ThirdLevelDataCacheToggle_Click" Width="50"/>
+                                <TextBlock x:Name="ThirdLevelDataCacheStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- DisableHeapCoalesceOnFree -->
+                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="Disable Heap Coalesce on Free" FontWeight="Bold" Margin="0,0,10,0">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock>
+                Disabling heap coalescing can improve performance by reducing the overhead of memory management, 
+                <LineBreak/>
+                particularly in memory-intensive applications where frequent allocations and deallocations occur. 
+                <LineBreak/>
+                <Run Foreground="Red">
+                    Warning: This setting is experimental and may not provide optimal results for all systems. 
+                    Use with caution.
+                </Run>
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+</TextBlock>
+
+                                <ToggleButton x:Name="DisableHeapCoalesceOnFreeToggle" Style="{StaticResource iOSToggleButton}" Click="DisableHeapCoalesceOnFreeToggle_Click" Width="50"/>
+                                <TextBlock x:Name="HeapCoalesceStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- LockPagesInMemory -->
+                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="Lock Pages In Memory" FontWeight="Bold" Margin="0,0,10,0">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock>
+                Controls whether users are allowed to lock pages of memory in physical RAM, preventing them from being swapped to disk. 
+                <LineBreak/>
+                Enabling this can improve performance in high-demand environments but may impact overall system stability and memory usage. 
+                <LineBreak/>
+                <Run Foreground="Red">
+                    Warning: This setting is experimental and may not provide optimal results for all systems. 
+                    Use with caution.
+                </Run>
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+</TextBlock>
+
+                                <ToggleButton x:Name="LockPagesInMemoryToggle" Style="{StaticResource iOSToggleButton}" Click="LockPagesInMemoryToggle_Click" Width="50"/>
+                                <TextBlock x:Name="LockPagesInMemoryStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- LargePageHeapSizeThreshold -->
+                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="Large Page Heap Size Threshold" FontWeight="Bold" Margin="0,0,10,0">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock>
+                        Controls the size threshold above which large memory pages are used for heap allocations.
+                        <LineBreak/>
+                        Enabling this can improve memory performance but may lead to fragmentation if not managed properly.
+                        <LineBreak/>
+                        <Run Foreground="Red">
+                             Warning: This setting is experimental and may not provide optimal results for all systems. 
+ Use with caution.
+                        </Run>
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+        </TextBlock>
+
+                                <ToggleButton x:Name="LargePageHeapSizeThresholdToggle" Style="{StaticResource iOSToggleButton}" Click="LargePageHeapSizeThresholdToggle_Click" Width="50"/>
+                                <TextBlock x:Name="LargePageHeapSizeThresholdStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                            <TextBlock Text="JVM Tweaks" Foreground="White" FontSize="20" FontWeight="Bold" Margin="10,10,0,0" />
+
+                            <!-- UseBiasedLocking -->
+                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="Use Biased Locking" FontWeight="Bold" Margin="0,0,10,0">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock>
+                        Determines whether biased locking is enabled for the Java Virtual Machine (JVM).
+                        <LineBreak/>
+                        Enabling this setting can reduce the overhead of locking by optimizing the way locks are acquired.
+                        <LineBreak/>
+                        <Run Foreground="Red">
+                             Warning: This setting is experimental and may not provide optimal results for all systems. 
+ Use with caution.
+                        </Run>
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+        </TextBlock>
+
+                                <ToggleButton x:Name="UseBiasedLockingToggle" Style="{StaticResource iOSToggleButton}" Click="UseBiasedLockingToggle_Click" Width="50"/>
+                                <TextBlock x:Name="UseBiasedLockingStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- TieredCompilation -->
+                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="Tiered Compilation" FontWeight="Bold" Margin="0,0,10,0">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock>
+                        Enables tiered compilation, which allows the JVM to dynamically adjust the optimization level of methods.
+                        <LineBreak/>
+                        This setting can improve the performance of long-running applications by balancing compilation speed and execution speed.
+                        <LineBreak/>
+                        <Run Foreground="Red">
+                             Warning: This setting is experimental and may not provide optimal results for all systems. 
+ Use with caution.
+                        </Run>
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+        </TextBlock>
+
+                                <ToggleButton x:Name="TieredCompilationToggle" Style="{StaticResource iOSToggleButton}" Click="TieredCompilationToggle_Click" Width="50"/>
+                                <TextBlock x:Name="TieredCompilationStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- TieredStopAtLevel -->
+                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="Tiered Stop At Level" FontWeight="Bold" Margin="0,0,10,0">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock>
+                        Specifies the maximum optimization level to which the JVM will compile methods when using tiered compilation.
+                        <LineBreak/>
+                        Setting a higher value allows for more aggressive optimizations, but may increase compilation time.
+                        <LineBreak/>
+                        <Run Foreground="Red">
+                             Warning: This setting is experimental and may not provide optimal results for all systems. 
+ Use with caution.
+                        </Run>
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+        </TextBlock>
+
+                                <ToggleButton x:Name="TieredStopAtLevelToggle" Style="{StaticResource iOSToggleButton}" Click="TieredStopAtLevelToggle_Click" Width="50"/>
+                                <TextBlock x:Name="TieredStopAtLevelStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- ThreadStackSize -->
+                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="Thread Stack Size" FontWeight="Bold" Margin="0,0,10,0">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock>
+                        Sets the size of the stack for each thread in the application.
+                        <LineBreak/>
+                        A larger stack size can handle deeper recursion but may increase memory usage.
+                        <LineBreak/>
+                        <Run Foreground="Red">
+                             Warning: This setting is experimental and may not provide optimal results for all systems. 
+ Use with caution.
+                        </Run>
+                                            </TextBlock>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+        </TextBlock>
+
+                                <ToggleButton x:Name="ThreadStackSizeToggle" Style="{StaticResource iOSToggleButton}" Click="ThreadStackSizeToggle_Click" Width="50"/>
+                                <TextBlock x:Name="ThreadStackSizeStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                            <TextBlock Text="Misc (May Lower FPS)" Foreground="White" FontSize="20" FontWeight="Bold" Margin="15,10,0,0" />
 
                             <!-- MmStrictFileSharing -->
                             <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
@@ -460,7 +764,7 @@ MinHeight="200"/>
                                 </StackPanel>
                             </Border>
 
-                            
+
 
                             <!-- Trim Threshold on Memory Pressure -->
                             <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
@@ -974,309 +1278,7 @@ MinHeight="200"/>
                                 </StackPanel>
                             </Border>
 
-
-
                         </StackPanel>
-                </ScrollViewer>
-    </StackPanel>
-                
-
-                
-
-                    <StackPanel x:Name="ExperimentalContent" Visibility="Collapsed" Grid.Row="0" Margin="0,0,0,0">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0" Height="275" >
-                        <ScrollViewer.Resources>
-                            <Style TargetType="ScrollBar">
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="Width" Value="23"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="ScrollBar" >
-                                            <Grid Background="Transparent"  >
-                                                <Track Name="PART_Track" IsDirectionReversed="true">
-                                                    <Track.DecreaseRepeatButton>
-                                                        <RepeatButton Name="PART_DecreaseButton"
-       Content="▲"
-       Command="ScrollBar.LineUpCommand"
-       Background="Transparent"
-       Width="0" Height="0"/>
-                                                    </Track.DecreaseRepeatButton>
-                                                    <Track.Thumb>
-                                                        <Thumb Name="Thumb" 
-Background="Black" 
-Opacity="0.7" 
-Width="3" 
-MinHeight="200"/>
-                                                    </Track.Thumb>
-                                                    <Track.IncreaseRepeatButton>
-                                                        <RepeatButton Name="PART_IncreaseButton"
-       Content="▼"
-       Command="ScrollBar.LineDownCommand"
-       Background="Transparent"
-       Width="0" Height="0"/>
-                                                    </Track.IncreaseRepeatButton>
-                                                </Track>
-                                            </Grid>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </ScrollViewer.Resources>
-                        <StackPanel>
-                        <!-- Experimental settings -->
-                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="Large Page Minimum" FontWeight="Bold" Margin="0,0,10,0">
-                                    <TextBlock.ToolTip>
-                                        <ToolTip>
-                                            <TextBlock>
-                Set this value to 0xFFFFFFFF to maximize performance by enabling large pages, which can improve 
-                <LineBreak/>
-                memory access and reduce overhead for certain workloads. 
-                <LineBreak/>
-                <Run Foreground="Red">
-                    Warning: This setting is experimental and may not work as expected for all users. 
-                    Use at your own risk.
-                </Run>
-                                            </TextBlock>
-                                        </ToolTip>
-                                    </TextBlock.ToolTip>
-</TextBlock>
-
-                                <ToggleButton x:Name="LargePageMinimumToggle" Style="{StaticResource iOSToggleButton}" Width="50"/>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- SecondLevelDataCache -->
-                            <Border Style="{StaticResource DiscordBorderStyle}" Visibility="Visible" Padding="10" Height="50" Margin="10,10,0,0">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="Second Level Data Cache" FontWeight="Bold" Margin="0,0,10,0">
-                                    <TextBlock.ToolTip>
-                                        <ToolTip>
-                                            <TextBlock>
-                Adjusts the second level data cache settings to optimize cache behavior. 
-                <LineBreak/>
-                This can affect the performance of certain workloads by tuning how the system manages the cache.
-                <LineBreak/>
-                Windows may ignore this setting [PLACEBO]
-<LineBreak/>
-                <Run Foreground="Red">
-                    Warning: This setting is experimental and may not produce optimal results for all users. 
-                    Use with caution.
-                </Run>
-                                            </TextBlock>
-                                        </ToolTip>
-                                    </TextBlock.ToolTip>
-</TextBlock>
-
-                                    <ToggleButton x:Name="SecondLevelDataCacheToggle"  Style="{StaticResource iOSToggleButton}" Click="SecondLevelDataCacheToggle_Click" Width="50"/>
-                                <TextBlock x:Name="SecondLevelDataCacheStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- ThirdLevelDataCache -->
-                            <Border Style="{StaticResource DiscordBorderStyle}" Visibility="Visible" Padding="10" Height="50" Margin="10,10,0,0">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="Third Level Data Cache" FontWeight="Bold" Margin="0,0,10,0">
-                                    <TextBlock.ToolTip>
-                                        <ToolTip>
-                                            <TextBlock>
-                Adjusts the third level data cache settings to optimize cache performance. 
-                <LineBreak/>
-                This setting can improve overall system performance by tuning how the processor handles cache for large datasets.
-                <LineBreak/>
-                <Run Foreground="Red">
-                    Warning: This setting is experimental and may not produce optimal results for all users. 
-                    Use with caution.
-                </Run>
-                                            </TextBlock>
-                                        </ToolTip>
-                                    </TextBlock.ToolTip>
-</TextBlock>
-
-                                <ToggleButton x:Name="ThirdLevelDataCacheToggle" Style="{StaticResource iOSToggleButton}" Click="ThirdLevelDataCacheToggle_Click" Width="50"/>
-                                <TextBlock x:Name="ThirdLevelDataCacheStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- DisableHeapCoalesceOnFree -->
-                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="Disable Heap Coalesce on Free" FontWeight="Bold" Margin="0,0,10,0">
-                                    <TextBlock.ToolTip>
-                                        <ToolTip>
-                                            <TextBlock>
-                Disabling heap coalescing can improve performance by reducing the overhead of memory management, 
-                <LineBreak/>
-                particularly in memory-intensive applications where frequent allocations and deallocations occur. 
-                <LineBreak/>
-                <Run Foreground="Red">
-                    Warning: This setting is experimental and may not provide optimal results for all systems. 
-                    Use with caution.
-                </Run>
-                                            </TextBlock>
-                                        </ToolTip>
-                                    </TextBlock.ToolTip>
-</TextBlock>
-
-                                <ToggleButton x:Name="DisableHeapCoalesceOnFreeToggle" Style="{StaticResource iOSToggleButton}" Click="DisableHeapCoalesceOnFreeToggle_Click" Width="50"/>
-                                <TextBlock x:Name="HeapCoalesceStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- LockPagesInMemory -->
-                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="Lock Pages In Memory" FontWeight="Bold" Margin="0,0,10,0">
-                                    <TextBlock.ToolTip>
-                                        <ToolTip>
-                                            <TextBlock>
-                Controls whether users are allowed to lock pages of memory in physical RAM, preventing them from being swapped to disk. 
-                <LineBreak/>
-                Enabling this can improve performance in high-demand environments but may impact overall system stability and memory usage. 
-                <LineBreak/>
-                <Run Foreground="Red">
-                    Warning: This setting is experimental and may not provide optimal results for all systems. 
-                    Use with caution.
-                </Run>
-                                            </TextBlock>
-                                        </ToolTip>
-                                    </TextBlock.ToolTip>
-</TextBlock>
-
-                                <ToggleButton x:Name="LockPagesInMemoryToggle" Style="{StaticResource iOSToggleButton}" Click="LockPagesInMemoryToggle_Click" Width="50"/>
-                                <TextBlock x:Name="LockPagesInMemoryStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- LargePageHeapSizeThreshold -->
-                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="Large Page Heap Size Threshold" FontWeight="Bold" Margin="0,0,10,0">
-                                    <TextBlock.ToolTip>
-                                        <ToolTip>
-                                            <TextBlock>
-                        Controls the size threshold above which large memory pages are used for heap allocations.
-                        <LineBreak/>
-                        Enabling this can improve memory performance but may lead to fragmentation if not managed properly.
-                        <LineBreak/>
-                        <Run Foreground="Red">
-                             Warning: This setting is experimental and may not provide optimal results for all systems. 
- Use with caution.
-                        </Run>
-                                            </TextBlock>
-                                        </ToolTip>
-                                    </TextBlock.ToolTip>
-        </TextBlock>
-
-                                <ToggleButton x:Name="LargePageHeapSizeThresholdToggle" Style="{StaticResource iOSToggleButton}" Click="LargePageHeapSizeThresholdToggle_Click" Width="50"/>
-                                <TextBlock x:Name="LargePageHeapSizeThresholdStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-
-                            <TextBlock Text="JVM Tweaks" Foreground="White" FontSize="20" FontWeight="Bold" Margin="10,10,0,0" />
-
-                            <!-- UseBiasedLocking -->
-                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="Use Biased Locking" FontWeight="Bold" Margin="0,0,10,0">
-                                    <TextBlock.ToolTip>
-                                        <ToolTip>
-                                            <TextBlock>
-                        Determines whether biased locking is enabled for the Java Virtual Machine (JVM).
-                        <LineBreak/>
-                        Enabling this setting can reduce the overhead of locking by optimizing the way locks are acquired.
-                        <LineBreak/>
-                        <Run Foreground="Red">
-                             Warning: This setting is experimental and may not provide optimal results for all systems. 
- Use with caution.
-                        </Run>
-                                            </TextBlock>
-                                        </ToolTip>
-                                    </TextBlock.ToolTip>
-        </TextBlock>
-
-                                <ToggleButton x:Name="UseBiasedLockingToggle" Style="{StaticResource iOSToggleButton}" Click="UseBiasedLockingToggle_Click" Width="50"/>
-                                <TextBlock x:Name="UseBiasedLockingStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- TieredCompilation -->
-                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="Tiered Compilation" FontWeight="Bold" Margin="0,0,10,0">
-                                    <TextBlock.ToolTip>
-                                        <ToolTip>
-                                            <TextBlock>
-                        Enables tiered compilation, which allows the JVM to dynamically adjust the optimization level of methods.
-                        <LineBreak/>
-                        This setting can improve the performance of long-running applications by balancing compilation speed and execution speed.
-                        <LineBreak/>
-                        <Run Foreground="Red">
-                             Warning: This setting is experimental and may not provide optimal results for all systems. 
- Use with caution.
-                        </Run>
-                                            </TextBlock>
-                                        </ToolTip>
-                                    </TextBlock.ToolTip>
-        </TextBlock>
-
-                                <ToggleButton x:Name="TieredCompilationToggle" Style="{StaticResource iOSToggleButton}" Click="TieredCompilationToggle_Click" Width="50"/>
-                                <TextBlock x:Name="TieredCompilationStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- TieredStopAtLevel -->
-                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="Tiered Stop At Level" FontWeight="Bold" Margin="0,0,10,0">
-                                    <TextBlock.ToolTip>
-                                        <ToolTip>
-                                            <TextBlock>
-                        Specifies the maximum optimization level to which the JVM will compile methods when using tiered compilation.
-                        <LineBreak/>
-                        Setting a higher value allows for more aggressive optimizations, but may increase compilation time.
-                        <LineBreak/>
-                        <Run Foreground="Red">
-                             Warning: This setting is experimental and may not provide optimal results for all systems. 
- Use with caution.
-                        </Run>
-                                            </TextBlock>
-                                        </ToolTip>
-                                    </TextBlock.ToolTip>
-        </TextBlock>
-
-                                <ToggleButton x:Name="TieredStopAtLevelToggle" Style="{StaticResource iOSToggleButton}" Click="TieredStopAtLevelToggle_Click" Width="50"/>
-                                <TextBlock x:Name="TieredStopAtLevelStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- ThreadStackSize -->
-                        <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="Thread Stack Size" FontWeight="Bold" Margin="0,0,10,0">
-                                    <TextBlock.ToolTip>
-                                        <ToolTip>
-                                            <TextBlock>
-                        Sets the size of the stack for each thread in the application.
-                        <LineBreak/>
-                        A larger stack size can handle deeper recursion but may increase memory usage.
-                        <LineBreak/>
-                        <Run Foreground="Red">
-                             Warning: This setting is experimental and may not provide optimal results for all systems. 
- Use with caution.
-                        </Run>
-                                            </TextBlock>
-                                        </ToolTip>
-                                    </TextBlock.ToolTip>
-        </TextBlock>
-
-                                <ToggleButton x:Name="ThreadStackSizeToggle" Style="{StaticResource iOSToggleButton}" Click="ThreadStackSizeToggle_Click" Width="50"/>
-                                <TextBlock x:Name="ThreadStackSizeStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-
-                    </StackPanel>
                 </ScrollViewer>
     </StackPanel>
                 

@@ -83,135 +83,86 @@
 
     <ContentControl x:Name="ContentSecurity" Background="#2C2F33" Width="400" Height="400" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,60,0,0" Grid.RowSpan="2">
         <StackPanel>
-            <TextBlock Text="Memory Integrity" Foreground="White" FontSize="20" FontWeight="Bold" Margin="50,10,0,0" />
-            <Border BorderThickness="1" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0" 
-        BorderBrush="Green">
+            <!-- Memory Integrity Section -->
+            <TextBlock Text="Memory Integrity" Foreground="White" FontSize="20" FontWeight="Bold" Margin="0,10,0,0" />
+            <Border BorderThickness="1" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="0,10,0,0" BorderBrush="Green">
                 <Border.Effect>
                     <DropShadowEffect Color="Green" BlurRadius="30" Direction="270" ShadowDepth="0" Opacity="0.7"/>
                 </Border.Effect>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <!-- VBS Text with Updated Tooltip -->
                     <TextBlock Text="Enable VBS" FontWeight="Bold" Margin="0,0,10,0">
                         <TextBlock.ToolTip>
                             <ToolTip>
                                 <TextBlock>
-                        Disabling VBS can improve performance but reduces security.
-                        <LineBreak/>
-                        <Run Foreground="Orange">Warning: Disabling exposes your system to risks.</Run>
+                                    Disabling VBS can improve performance but reduces security.
+                                    <LineBreak/>
+                                    <Run Foreground="Orange">Warning: Disabling exposes your system to risks.</Run>
                                 </TextBlock>
                             </ToolTip>
                         </TextBlock.ToolTip>
-        </TextBlock>
-
-                    <!-- Toggle Button for VBS -->
-                    <ToggleButton x:Name="CoreIsolationToggle"
-                      Style="{StaticResource iOSToggleButton}"
-                      Click="CoreIsolationToggle_Click" Width="50"/>
+                    </TextBlock>
+                    <ToggleButton x:Name="CoreIsolationToggle" Style="{StaticResource iOSToggleButton}" Click="CoreIsolationToggle_Click" Width="50"/>
 
                     <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Margin="14,0,10,0">
-                        <!-- Yellow Warning Icon for Security-Related Tweak -->
                         <Ellipse Width="20" Height="20" Fill="#FFD700"/>
                         <TextBlock Text="!" Foreground="White" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
                         <Grid.ToolTip>
                             <ToolTip>
                                 <TextBlock>
-                        Security-Related Tweak when disabled.
-                        <LineBreak/>
-                        Disabling may reduce system security.
+                                    Security-Related Tweak when disabled.
+                                    <LineBreak/>
+                                    Disabling may reduce system security.
                                 </TextBlock>
                             </ToolTip>
                         </Grid.ToolTip>
                     </Grid>
 
-                    <!-- Status Text -->
                     <TextBlock x:Name="CoreIsolationStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
-
-                <!-- ToolTip for Disabled State -->
-                <Border.ToolTip>
-                    <ToolTip>
-                        <TextBlock>
-                Disabling VBS can improve system performance, 
-                <LineBreak/>
-                but it reduces security and may leave the system vulnerable.
-                <LineBreak/>
-                <Run Foreground="Orange">
-                    Caution: Disabling can expose your system to potential risks.
-                </Run>
-                        </TextBlock>
-                    </ToolTip>
-                </Border.ToolTip>
             </Border>
 
-            
-
-            <!-- Remove WINDEF Tweak -->
-            <TextBlock Text="Backup is recommended" Foreground="White" FontSize="20" FontWeight="Bold" Margin="50,10,0,0" />
-            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+            <!-- New Warning about Removing Windows Defender -->
+            <TextBlock Text="Paste this into Powershell File (Run As Admin)" Foreground="White" FontSize="15" FontWeight="Bold" Margin="0,10,0,0" />
+            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="80" Margin="0,10,0,0">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                        <GradientStop Color="Green" Offset="0" />
+                        <GradientStop Color="Red" Offset="0" />
                         <GradientStop Color="#2F3136" Offset="1" />
                     </LinearGradientBrush>
                 </Border.Background>
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
-                    <!-- TextBlock with ToolTip -->
-                    <TextBlock Text="Remove WINDEF/Mitigations" FontWeight="Bold" Margin="0,5,10,5">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="REMOVE Windows Security Center" FontWeight="Bold" Margin="0,5,10,5">
                         <TextBlock.ToolTip>
                             <ToolTip>
                                 <TextBlock>
-                This setting removes Windows Defender and certain security mitigations.
-                <LineBreak/>
-                <Run Foreground="Red">
-                    Warning: Removing these security features can leave your system vulnerable to malware, attacks, and other security risks.
-                </Run>
-                <LineBreak/>
-                - Potential advantage: You may experience improved FPS or system performance as some security features are disabled.
-                <LineBreak/>
-                <Run Foreground="Green">
-                    Recommendation: Only use this setting if you're confident in your security measures and have a backup plan.
-                </Run>
+                                    Removing Windows Defender and security features is irreversible.
+                                    <LineBreak/>
+                                    Once disabled, it is unlikely that these features can be restored unless a backup is available.
+                                    <LineBreak/>
+                                    <Run Foreground="Red">Warning: This may leave your system vulnerable to security threats.</Run>
                                 </TextBlock>
                             </ToolTip>
                         </TextBlock.ToolTip>
-</TextBlock>
+                    </TextBlock>
 
+                    <Button x:Name="DefButton" Content="Copy" Style="{StaticResource DiscordButtonStyle}" Click="DefButton_Click" Width="75" Height="30" Margin="0,0,0,0"/>
 
-                    <!-- Button with ContextMenu -->
-                    <Button x:Name="DefButton" 
-                Content="Remove"
-                Style="{StaticResource DiscordButtonStyle}"
-                Click="DefButton_Click"
-                Width="75"
-                Height="30"
-                Margin="0,0,0,0">
-                        
-                    </Button>
                     <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Margin="14,0,10,0">
-                        <!-- Yellow Warning Icon for Security-Related Tweak -->
-                        <Ellipse Width="20" Height="20" Fill="#FFD700"/>
+                        <Ellipse Width="20" Height="20" Fill="#FF0000"/>
                         <TextBlock Text="!" Foreground="White" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
                         <Grid.ToolTip>
                             <ToolTip>
                                 <TextBlock>
-    Security-Related Tweak when disabled.
-    <LineBreak/>
-    Disabling may reduce system security.
+                                    Removing Windows Defender is irreversible.
+                                    <LineBreak/>
+                                    Backup recommended before proceeding.
                                 </TextBlock>
                             </ToolTip>
                         </Grid.ToolTip>
                     </Grid>
                 </StackPanel>
             </Border>
-
-
         </StackPanel>
-        
-        
-
-
     </ContentControl>
 </UserControl>

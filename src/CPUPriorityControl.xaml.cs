@@ -425,7 +425,7 @@ namespace NZTS_App
     {
         new Card { Title = "CS2", ExecutableName = "cs2.exe", Description = "", ImageSource = "pack://application:,,,/Images/cs2.png" },
         new Card { Title = "Valorant", ExecutableName = "VALORANT-Win64-Shipping.exe", Description = "", ImageSource = "pack://application:,,,/Images/valorant.png" },
-        new Card { Title = "R6S (Vulkan)", ExecutableName = "RainbowSix_BE.exe", Description = "", ImageSource = "pack://application:,,,/Images/r6s.png" },
+        new Card { Title = "R6S (DX12)", ExecutableName = "RainbowSix_BE.exe", Description = "", ImageSource = "pack://application:,,,/Images/r6s.png" },
         new Card { Title = "GTAV", ExecutableName = "GTA5.exe", Description = "", ImageSource = "pack://application:,,,/Images/gtav.png" },
         new Card { Title = "FiveM", ExecutableName = "fivem.exe", Description = "", ImageSource = "pack://application:,,,/Images/fivem.png" },
         new Card { Title = "PB", ExecutableName = "PointBlank.exe", Description = "", ImageSource = "pack://application:,,,/Images/pb.png" },

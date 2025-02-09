@@ -2,9 +2,91 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:NZTS_App.Views"
-             Height="450" Width="400">
+             >
 
     <UserControl.Resources>
+        <!-- Rounded Button Style with Hover/Click Animations -->
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#141414"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="180"/>
+            <Setter Property="Margin" Value="10,5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="10"
+                                BorderBrush="Transparent">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- Hover effect -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#5A6FB1"/>
+                            </Trigger>
+                            <!-- Pressed effect -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#4D5D99"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Discord-style ListView -->
+        <Style x:Key="DiscordListViewStyle" TargetType="ListView">
+            <Setter Property="Background" Value="#2f3136"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <!-- Discord-style ListViewItem -->
+        <Style x:Key="DiscordListViewItemStyle" TargetType="ListViewItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Padding" Value="5,7"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Style.Triggers>
+                <!-- Hover Effect -->
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#3a3c43"/>
+                </Trigger>
+                <!-- Selected Item Effect -->
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#4e5058"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Discord-style GridView Column Headers -->
+        <Style x:Key="DiscordGridViewHeaderStyle" TargetType="GridViewColumnHeader">
+            <Setter Property="Background" Value="#202225"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="#2f3136"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
         <!-- iOS Toggle Button Style -->
         <Style x:Key="iOSToggleButton" TargetType="ToggleButton">
             <Setter Property="Template">
@@ -96,6 +178,20 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <Style x:Key="DiscordTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="#2f3136"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="3"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="BorderBrush" Value="#2f3136"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Height" Value="200"/>
+            <Setter Property="Width" Value="650"/>
+        </Style>
+
     </UserControl.Resources>
 
     <StackPanel>
@@ -124,25 +220,26 @@
         <!-- Tab Content -->
         <StackPanel>
             <!-- Current Tab Content -->
-            <StackPanel x:Name="CurrentContent" Visibility="Visible" Margin="10">
+            <StackPanel x:Name="CurrentContent" Visibility="Visible" Margin="5">
                 <TextBlock Text="Current settings from system.ini" FontSize="14" Foreground="White" HorizontalAlignment="Center"/>
-                <TextBox x:Name="CurrentTextBox" Margin="10" Width="550" Height="200" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True"/>
+                <TextBox x:Name="CurrentTextBox" Style="{StaticResource DiscordTextBoxStyle}" Margin="10" Width="550" Height="200" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True"/>
             </StackPanel>
 
             <!-- Verified Tab Content -->
-            <StackPanel x:Name="VerifiedContent" Visibility="Collapsed" Margin="10">
+            <StackPanel x:Name="VerifiedContent" Visibility="Collapsed" Margin="5">
                 <TextBlock Text="Default Profile for system.ini" FontSize="14" Foreground="White" HorizontalAlignment="Center"/>
-                <TextBox x:Name="SystemIniTextBox" Margin="10" Width="550" Height="200" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True"/>
+                <TextBox x:Name="SystemIniTextBox" Style="{StaticResource DiscordTextBoxStyle}" Margin="10" Width="550" Height="200" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True"/>
             </StackPanel>
 
             <!-- Experimental Tab Content -->
-            <StackPanel x:Name="ExperimentalContent" Visibility="Collapsed" Margin="10">
+            <StackPanel x:Name="ExperimentalContent" Visibility="Collapsed" Margin="5">
                 <TextBlock Text="Profile 1 for system.ini" FontSize="14" Foreground="White" HorizontalAlignment="Center"/>
-                <TextBox x:Name="ExperimentalTextBox" Margin="10" Width="550" Height="200" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="False"/>
+                <TextBox x:Name="ExperimentalTextBox" Style="{StaticResource DiscordTextBoxStyle}" Margin="10" Width="550" Height="200" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="False"/>
             </StackPanel>
         </StackPanel>
 
         <!-- Apply Button -->
-        <Button Content="Apply Profile" Width="200" Height="30" Click="ApplyProfile_Click" HorizontalAlignment="Center" Margin="20"/>
+        <Button x:Name="ApplyProfileButton" Content="Apply Profile" Width="200" Height="30" Click="ApplyProfile_Click" HorizontalAlignment="Center" Margin="20"/>
+
     </StackPanel>
 </UserControl>

@@ -8,8 +8,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <AssemblyVersion>0.7.0.0</AssemblyVersion>
-    <FileVersion>0.7.0.0</FileVersion>
+    <AssemblyVersion>0.8.0.0</AssemblyVersion>
+    <FileVersion>0.8.0.0</FileVersion>
     <PackageIcon>nezhalogo12.2.jpg</PackageIcon>
     <ApplicationIcon>nezhalogo12.2.3.ico</ApplicationIcon>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
@@ -125,10 +125,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="PowerRun.exe">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    <None Update="Presets\Bitsum-Highest-Performance.pow">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Presets\nezha.pow">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Presets\NZTS_HP.pow">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Presets\NZTS_MAX.pow">
@@ -157,21 +160,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="UpdateExtractor.runtimeconfig.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Updates\UpdateExtractor.deps.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Updates\UpdateExtractor.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Updates\UpdateExtractor.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Updates\UpdateExtractor.pdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Updates\UpdateExtractor.runtimeconfig.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

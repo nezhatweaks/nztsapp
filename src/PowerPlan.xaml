@@ -150,7 +150,7 @@
         Click="BrowseButton_Click" ToolTip="Browse to import a powerplan"/>
                 
                 <Button x:Name="ImportPresetPlanButton" 
-        Content="Presets" 
+        Content="NZTS-HP" 
         Style="{StaticResource DiscordButtonStyle}" 
         IsEnabled="False"
         Click="ImportPresetPlan_Click" 
@@ -163,7 +163,7 @@
 
                     <!-- Tooltip -->
                     <Button.ToolTip>
-                        <ToolTip Content="Import NZTS PowerPlan (For Maximum Performance) Preset Plan" />
+                        <ToolTip Content="Import NZTS High Performance PowerPlan (For Maximum Performance) Preset Plan" />
                     </Button.ToolTip>
                 </Button>
 

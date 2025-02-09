@@ -49,6 +49,8 @@ timer=timer.drv
             mainWindow = window;
             mainWindow.TitleTextBlock.Content = "System.ini";
             LoadSystemIniContents(); // Load the system.ini contents when the UserControl is initialized
+                                     // Set the Apply Profile button to be hidden initially if the Current tab is visible
+            ApplyProfileButton.Visibility = Visibility.Collapsed;
         }
 
         // Method to load the contents of the system.ini file
@@ -85,6 +87,10 @@ timer=timer.drv
             CurrentContent.Visibility = Visibility.Visible;
             VerifiedContent.Visibility = Visibility.Collapsed;
             ExperimentalContent.Visibility = Visibility.Collapsed;
+
+            // Hide the Apply Profile button when the Current tab is visible
+            ApplyProfileButton.Visibility = Visibility.Collapsed;
+
             LoadSystemIniContents(); // Load the actual system.ini content in the Current tab
         }
 
@@ -97,6 +103,10 @@ timer=timer.drv
             CurrentContent.Visibility = Visibility.Collapsed;
             VerifiedContent.Visibility = Visibility.Visible;
             ExperimentalContent.Visibility = Visibility.Collapsed;
+
+            // Show the Apply Profile button when the Verified tab is visible
+            ApplyProfileButton.Visibility = Visibility.Visible;
+
             SystemIniTextBox.Text = defaultProfile; // Default profile loaded in Verified tab
         }
 
@@ -109,8 +119,14 @@ timer=timer.drv
             CurrentContent.Visibility = Visibility.Collapsed;
             VerifiedContent.Visibility = Visibility.Collapsed;
             ExperimentalContent.Visibility = Visibility.Visible;
+
+            // Show the Apply Profile button when the Experimental tab is visible
+            ApplyProfileButton.Visibility = Visibility.Visible;
+
             ExperimentalTextBox.Text = profile1; // Experimental profile loaded in Experimental tab
         }
+
+
 
         // Method to apply the profile (write the content back to system.ini)
         private void ApplyProfile_Click(object sender, RoutedEventArgs e)

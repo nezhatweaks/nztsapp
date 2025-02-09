@@ -4,6 +4,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Diagnostics;
 using System.IO;
+using System.Security.AccessControl;
+using System.Security.Principal;
+using System.Windows.Forms;
+using System.Collections.ObjectModel;
+
 
 namespace NZTS_App.Views
 {
@@ -97,317 +102,62 @@ namespace NZTS_App.Views
             }
         }
 
-
-
         private void DefButton_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                // Show a warning message before proceeding with the execution
-                var result = MessageBox.Show(
-                    "This operation will make irreversible changes to your system. It is highly recommended to create a system restore point before proceeding. Do you want to continue?",
-                    "Warning",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning);
+            // PowerShell script to be copied to clipboard
+            string script = @"
+$remove_appx = @('SecHealthUI'); 
+$provisioned = get-appxprovisionedpackage -online; 
+$appxpackage = get-appxpackage -allusers; 
+$eol = @()
+$store = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore'
+$users = @('S-1-5-18'); 
+if (test-path $store) {
+    $users += $((dir $store -ea 0 |where {$_ -like '*S-1-5-21*'}).PSChildName)
+}
+foreach ($choice in $remove_appx) { 
+    if ('' -eq $choice.Trim()) {continue}
+    foreach ($appx in $($provisioned |where {$_.PackageName -like '*$choice*'})) {
+        $next = !1; 
+        foreach ($no in $skip) { 
+            if ($appx.PackageName -like '*$no*') {
+                $next = !0
+            } 
+        } 
+        if ($next) {continue}
+        $PackageName = $appx.PackageName; 
+        $PackageFamilyName = ($appxpackage |where {$_.Name -eq $appx.DisplayName}).PackageFamilyName 
+        ni '$store\Deprovisioned\$PackageFamilyName' -force >''; $PackageFamilyName  
+        foreach ($sid in $users) { 
+            ni '$store\EndOfLife\$sid\$PackageName' -force >'' 
+        } 
+        $eol += $PackageName
+        dism /online /set-nonremovableapppolicy /packagefamily:$PackageFamilyName /nonremovable:0 >''
+        remove-appxprovisionedpackage -packagename $PackageName -online -allusers >''
+    }
+    foreach ($appx in $($appxpackage |where {$_.PackageFullName -like '*$choice*'})) {
+        $next = !1; 
+        foreach ($no in $skip) { 
+            if ($appx.PackageFullName -like '*$no*') { 
+                $next = !0
+            } 
+        } 
+        if ($next) {continue}
+        $PackageFullName = $appx.PackageFullName; 
+        ni '$store\Deprovisioned\$appx.PackageFamilyName' -force >''; $PackageFullName
+        foreach ($sid in $users) { 
+            ni '$store\EndOfLife\$sid\$PackageFullName' -force >'' 
+        } 
+        $eol += $PackageFullName
+        dism /online /set-nonremovableapppolicy /packagefamily:$PackageFamilyName /nonremovable:0 >''
+        remove-appxpackage -package $PackageFullName -allusers >''
+    }
+}
+";
 
-                if (result == MessageBoxResult.No)
-                {
-                    return; // Exit if the user chooses not to proceed
-                }
-
-                // Call the method to remove Windows Defender
-                RemoveWindowsDefender();
-            }
-            catch (Exception ex)
-            {
-                // Handle any exceptions that may occur
-                string errorMsg = $"An error occurred during the process: {ex.Message}";
-                MessageBox.Show(errorMsg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            // Set the clipboard content
+            Clipboard.SetText(script);
         }
-
-        private void RemoveWindowsDefender()
-        {
-            try
-            {
-                // Disable Hypervisor (bcdedit /set hypervisorlaunchtype off equivalent)
-                DisableHypervisor();
-
-                // Remove Windows Security UWP App (Simulate PowerShell call)
-                RemoveSecHealthApp();
-
-                // Unregister Windows Defender Security Components (Using Registry manipulation)
-                UnregisterDefenderComponents();
-
-                // Delete Defender-related files and directories
-                DeleteDefenderFiles();
-
-                // Show success message
-                MessageBox.Show("Windows Defender removal completed. Please restart your computer for the changes to take effect.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception ex)
-            {
-                // Handle any exceptions that may occur
-                string errorMsg = $"An error occurred during the process: {ex.Message}";
-                MessageBox.Show(errorMsg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        // Disable Hypervisor (bcdedit)
-        private void DisableHypervisor()
-        {
-            try
-            {
-                // Registry key to disable Hypervisor (equivalent to bcdedit command)
-                Registry.SetValue(@"HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\CrashControl", "HypervisorLaunchType", 0, RegistryValueKind.DWord);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to disable Hypervisor: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        // Remove Windows Security UWP App (PowerShell script equivalent)
-        private void RemoveSecHealthApp()
-        {
-            try
-            {
-                // Windows Security UWP App removal (simulate removal without PowerShell)
-                // We will just demonstrate this with AppX cmdlet logic.
-
-                // Correct way to instantiate and use ManagementObjectSearcher to find Windows Defender-related UWP app
-                var searcher = new System.Management.ManagementObjectSearcher("SELECT * FROM Win32_Product WHERE Name = 'Windows Defender'");
-
-                // Iterate through all the products found matching "Windows Defender"
-                foreach (var pkg in searcher.Get())
-                {
-                    // Get the app's package name from the ManagementObject
-                    string? appxName = pkg["Name"].ToString();
-
-                    // You would normally call PowerShell commands like this:
-                    // System.Diagnostics.Process.Start("powershell", $"Remove-AppxPackage {appxName}");
-
-                    // Here's a more refined method to use PowerShell from C# to remove the app
-                    RemoveAppxPackage(appxName);
-                }
-
-                MessageBox.Show("Windows Defender removal completed.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception ex)
-            {
-                // Show error message if removal fails
-                MessageBox.Show($"Failed to remove Windows Security UWP app: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        // Helper method to execute a PowerShell command
-        private void RemoveAppxPackage(string appName)
-        {
-            try
-            {
-                // Define the PowerShell command to remove the app
-                string command = $"Remove-AppxPackage -Package {appName}";
-
-                // Execute PowerShell command from C#
-                ExecutePowerShellCommand(command);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error removing app: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        // Helper method to run PowerShell command
-        private void ExecutePowerShellCommand(string command)
-        {
-            try
-            {
-                // ProcessStartInfo to run PowerShell as an administrator
-                ProcessStartInfo startInfo = new ProcessStartInfo()
-                {
-                    FileName = "powershell.exe",
-                    Arguments = command,
-                    Verb = "runas", // Run as Administrator
-                    RedirectStandardOutput = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                };
-
-                // Start the PowerShell process and wait for it to complete
-                using (Process process = Process.Start(startInfo))
-                {
-                    process?.WaitForExit();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error executing PowerShell command: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-
-        // Unregister Windows Defender Security Components (Registry manipulations)
-        private void UnregisterDefenderComponents()
-        {
-            try
-            {
-                string[] defenderRegFiles = {
-            @"C:\Path\To\Remove_defender.reg", // Example registry file paths
-            @"C:\Path\To\Remove_SecurityComp.reg"
-        };
-
-                foreach (var regFile in defenderRegFiles)
-                {
-                    if (File.Exists(regFile))
-                    {
-                        ApplyRegistryFile(regFile);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to unregister Windows Defender components: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void ApplyRegistryFile(string regFilePath)
-        {
-            try
-            {
-                // Load registry entries from .reg file manually
-                string[] lines = File.ReadAllLines(regFilePath);
-
-                foreach (var line in lines)
-                {
-                    // Logic to parse and apply the registry changes
-                    if (line.StartsWith("Windows Registry Editor"))
-                        continue;
-
-                    // Implement registry changes from the file
-                    string[] keyValue = line.Split('=');
-                    if (keyValue.Length == 2)
-                    {
-                        string key = keyValue[0].Trim();
-                        string value = keyValue[1].Trim();
-
-                        Registry.SetValue(@"HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\CrashControl", "HypervisorLaunchType", 0, RegistryValueKind.DWord);
-
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to apply registry file {regFilePath}: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        // Delete Windows Defender related files and directories
-        private void DeleteDefenderFiles()
-        {
-            string[] filesToDelete = {
-        @"C:\Windows\WinSxS\FileMaps\wow64_windows-defender*.manifest",
-        @"C:\Windows\WinSxS\FileMaps\x86_windows-defender*.manifest",
-        @"C:\Windows\WinSxS\FileMaps\amd64_windows-defender*.manifest",
-        @"C:\Windows\System32\SecurityAndMaintenance_Error.png",
-        @"C:\Windows\System32\SecurityAndMaintenance.png",
-        @"C:\Windows\System32\SecurityHealthSystray.exe",
-        @"C:\Windows\System32\SecurityHealthService.exe",
-        @"C:\Windows\System32\SecurityHealthHost.exe",
-        @"C:\Windows\System32\drivers\SgrmAgent.sys",
-        @"C:\Windows\System32\drivers\WdDevFlt.sys",
-        @"C:\Windows\System32\drivers\WdBoot.sys",
-        @"C:\Windows\System32\drivers\WdFilter.sys",
-        @"C:\Windows\System32\wscsvc.dll",
-        @"C:\Windows\System32\drivers\WdNisDrv.sys",
-        @"C:\Windows\System32\wscsvc.dll",
-        @"C:\Windows\System32\wscproxystub.dll",
-        @"C:\Windows\System32\wscisvif.dll",
-        @"C:\Windows\System32\SecurityHealthProxyStub.dll",
-        @"C:\Windows\System32\smartscreen.dll",
-        @"C:\Windows\SysWOW64\smartscreen.dll",
-        @"C:\Windows\System32\smartscreen.exe",
-        @"C:\Windows\SysWOW64\smartscreen.exe",
-        @"C:\Windows\System32\DWWIN.EXE",
-        @"C:\Windows\SysWOW64\smartscreenps.dll",
-        @"C:\Windows\System32\smartscreenps.dll",
-        @"C:\Windows\System32\SecurityHealthCore.dll",
-        @"C:\Windows\System32\SecurityHealthSsoUdk.dll",
-        @"C:\Windows\System32\SecurityHealthUdk.dll",
-        @"C:\Windows\System32\SecurityHealthAgent.dll",
-        @"C:\Windows\System32\wscapi.dll",
-        @"C:\Windows\System32\wscadminui.exe",
-        @"C:\Windows\SysWOW64\GameBarPresenceWriter.exe",
-        @"C:\Windows\System32\GameBarPresenceWriter.exe",
-        @"C:\Windows\SysWOW64\DeviceCensus.exe",
-        @"C:\Windows\SysWOW64\CompatTelRunner.exe",
-        @"C:\Windows\system32\drivers\msseccore.sys",
-        @"C:\Windows\system32\drivers\MsSecFltWfp.sys",
-        @"C:\Windows\system32\drivers\MsSecFlt.sys"
-    };
-
-            foreach (var file in filesToDelete)
-            {
-                try
-                {
-                    if (File.Exists(file))
-                    {
-                        File.Delete(file);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // Log failure to delete individual files
-                    MessageBox.Show($"Failed to delete file {file}: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-
-            string[] dirsToDelete = {
-        @"C:\Windows\WinSxS\amd64_security-octagon*",
-        @"C:\Windows\WinSxS\x86_windows-defender*",
-        @"C:\Windows\WinSxS\wow64_windows-defender*",
-        @"C:\Windows\WinSxS\amd64_windows-defender*",
-        @"C:\Windows\SystemApps\Microsoft.Windows.AppRep.ChxApp_cw5n1h2txyewy",
-        @"C:\ProgramData\Microsoft\Windows Defender",
-        @"C:\ProgramData\Microsoft\Windows Defender Advanced Threat Protection",
-        @"C:\Program Files (x86)\Windows Defender Advanced Threat Protection",
-        @"C:\Program Files\Windows Defender Advanced Threat Protection",
-        @"C:\ProgramData\Microsoft\Windows Security Health",
-        @"C:\ProgramData\Microsoft\Storage Health",
-        @"C:\WINDOWS\System32\drivers\wd",
-        @"C:\Program Files (x86)\Windows Defender",
-        @"C:\Program Files\Windows Defender",
-        @"C:\Windows\System32\SecurityHealth",
-        @"C:\Windows\System32\WebThreatDefSvc",
-        @"C:\Windows\System32\Sgrm",
-        @"C:\Windows\Containers\WindowsDefenderApplicationGuard.wim",
-        @"C:\Windows\SysWOW64\WindowsPowerShell\v1.0\Modules\DefenderPerformance",
-        @"C:\Windows\System32\WindowsPowerShell\v1.0\Modules\DefenderPerformance",
-        @"C:\Windows\System32\WindowsPowerShell\v1.0\Modules\Defender",
-        @"C:\Windows\System32\Tasks_Migrated\Microsoft\Windows\Windows Defender",
-        @"C:\Windows\System32\Tasks\Microsoft\Windows\Windows Defender",
-        @"C:\Windows\SysWOW64\WindowsPowerShell\v1.0\Modules\Defender",
-        @"C:\Windows\System32\WindowsPowerShell\v1.0\Modules\Defender"
-    };
-
-            foreach (var dir in dirsToDelete)
-            {
-                try
-                {
-                    if (Directory.Exists(dir))
-                    {
-                        Directory.Delete(dir, true); // true for recursive deletion
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // Log failure to delete individual directories
-                    MessageBox.Show($"Failed to delete directory {dir}: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-        }
-
-
-
 
 
 
