@@ -131,6 +131,9 @@
     <None Update="Presets\nezha.pow">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Presets\nztsxp.pow">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Presets\NZTS_HP.pow">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
