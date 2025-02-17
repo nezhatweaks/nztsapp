@@ -27,7 +27,7 @@ namespace NZTS_App
             games = new ObservableCollection<Game>();
             GameListView.ItemsSource = games;
             mainWindow = window;
-            mainWindow.TitleTextBlock.Content = "Process";
+            mainWindow.TitleTextBlock.Content = "EXE";
             InitializePriorityOptions(); // Add this line to initialize priority options
             InitializeGPUSchedulingOptions(); // Add this line to initialize GPU scheduling options
             InitializeIOPriorityOptions(); // Initialize I/O priority options

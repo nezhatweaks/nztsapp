@@ -242,6 +242,41 @@ MinHeight="200"/>
                         <Button x:Name="Amd4Button" Content="4" Width="60" Style="{StaticResource ResetButtonStyle}" Click="Amd4_Click" Margin="5,0,0,0" />
                     </StackPanel>
                 </Border>
+                <!-- Toggle for FullScreen Optimizations -->
+                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="Green" Offset="0" />
+                            <GradientStop Color="#2F3136" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Disable FullScreen Optimizations" FontWeight="Bold" Margin="0,5,10,0">
+                            <TextBlock.ToolTip>
+                                <ToolTip>
+                                    <StackPanel>
+                                        <TextBlock>
+                            Toggle this setting to disable FullScreen Optimizations which could 
+                            <LineBreak/>
+                            affect gaming performance by allowing the system to prioritize full-screen applications.
+                                        </TextBlock>
+                                        <TextBlock Foreground="Red" FontWeight="Bold">
+                            Disabling FullScreen Optimizations will not affect Vulkan or DirectX 12 APIs.
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ToolTip>
+                            </TextBlock.ToolTip>
+        </TextBlock>
+
+                        <ToggleButton x:Name="FullScreenOptimizationsToggle" 
+                      Style="{StaticResource iOSToggleButton}" 
+                      Width="50" 
+                      Height="20" 
+                      Click="FullScreenOptimizationsToggle_Click" />
+                    </StackPanel>
+                </Border>
+
+
 
                 <!-- Toggle for Multimedia Tweaks -->
                 <TextBlock Text="My Custom Tweaks" Foreground="White" FontSize="20" FontWeight="Bold" Margin="50,10,0,0" />
@@ -268,7 +303,7 @@ MinHeight="200"/>
                         <ToggleButton x:Name="MultimediaTweaksToggle" 
                                       Style="{StaticResource iOSToggleButton}" 
                                       Width="50" 
-                                      Height="25" 
+                                      Height="20" 
                                       Click="MultimediaTweaksToggle_Click" />
                     </StackPanel>
                 </Border>

@@ -27,10 +27,17 @@ timer=timer.drv
 [mci]";
 
         private string profile1 = @"
+
 ; for 16-bit app support
 [386Enh]
 MinTimeSlice=1
 WinTimeSlice=1,1
+TimeSliceUpdateTickCount=1
+TimeWindowMinutes=0
+Auto-Detect-CPU=TRUE
+CpuSnooze=0
+MaxBiosPipes=32
+MinBiosPipes=32
 woafont=dosapp.fon
 EGA80WOA.FON=EGA80WOA.FON
 EGA40WOA.FON=EGA40WOA.FON
@@ -41,7 +48,11 @@ CGA40WOA.FON=CGA40WOA.FON
 wave=mmdrv.dll
 timer=timer.drv
 
-[mci]";
+[mci]
+mciwave=mmsystem.dll
+
+[timer]
+TimeSliceUpdateTickCount=1";
 
         public SysteminiUserControl(MainWindow window)
         {

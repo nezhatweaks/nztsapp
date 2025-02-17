@@ -16,6 +16,14 @@ namespace NZTS_App.Views
         private const string AmdKeyPath = @"SYSTEM\CurrentControlSet\Services\amdppm";
         private const string SubKeyPath = @"SYSTEM\CurrentControlSet\Control\Session Manager\SubSystems";
         private const string GamesKeyPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games";
+        private const string FSOPath1 = @"SYSTEM\GameConfigStore";
+        private const string FSOPath2 = @"SYSTEM\CurrentControlSet\Control\Session Manager\Environment";
+        private const string FSOPath3 = @"SYSTEM\GameBar";
+        private const string FSOPath4 = @"SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Gaming.GameBar.PresenceServer.Internal.PresenceWriter";
+        private const string FSOPath5 = @"SOFTWARE\Policies\Microsoft\Windows\GameDVR";
+        private const string FSOPath6 = @"SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR";
+        private const string FSOPath7 = @"System\GameConfigStore";
+        private const string FSOPath8 = @"SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR";
 
         private MainWindow mainWindow;
 
@@ -30,6 +38,7 @@ namespace NZTS_App.Views
             GameModeToggle.Click -= GameModeToggle_Click;
             GameBarToggle.Click -= GameBarToggle_Click;
             MultimediaTweaksToggle.Click -= MultimediaTweaksToggle_Click;
+            FullScreenOptimizationsToggle.Click -= FullScreenOptimizationsToggle_Click;
 
 
 
@@ -39,6 +48,7 @@ namespace NZTS_App.Views
             GameModeToggle.Click += GameModeToggle_Click;
             GameBarToggle.Click += GameBarToggle_Click;
             MultimediaTweaksToggle.Click += MultimediaTweaksToggle_Click;
+            FullScreenOptimizationsToggle.Click += FullScreenOptimizationsToggle_Click;
 
         }
 
@@ -87,20 +97,17 @@ namespace NZTS_App.Views
                 {
                     if (key != null)
                     {
-
-                        ulong clockRate = GetRegistryValueAsUInt64(key, "Clock Rate", 4294967295);  
-                        ulong gpuPriority = GetRegistryValueAsUInt64(key, "GPU Priority", 16);              
-                        ulong priority = GetRegistryValueAsUInt64(key, "Priority", 597);                    
+                        ulong clockRate = GetRegistryValueAsUInt64(key, "Clock Rate", 4294967295);
+                        ulong gpuPriority = GetRegistryValueAsUInt64(key, "GPU Priority", 16);
+                        ulong priority = GetRegistryValueAsUInt64(key, "Priority", 597);
 
                         // Apply Multimedia Tweaks Toggle based on current values
                         if (clockRate == 4294967295)
                         {
-                            
                             MultimediaTweaksToggle.IsChecked = true;
                         }
                         else
                         {
-                            
                             MultimediaTweaksToggle.IsChecked = false;
                         }
 
@@ -117,7 +124,53 @@ namespace NZTS_App.Views
                     }
                 }
 
-    }
+                // Load FullScreen Optimizations related settings
+                using (var key = Registry.CurrentUser.OpenSubKey(@"HKCU\System\GameConfigStore", writable: true))
+                {
+                    if (key != null)
+                    {
+                        // Check for FullScreen Optimizations registry values
+                        var fseBehavior = key.GetValue("GameDVR_FSEBehavior", -1);  // Default value of -1 if not found
+                        var fseBehaviorMode = key.GetValue("GameDVR_FSEBehaviorMode", -1);  // Default value of -1 if not found
+                        var fseFeatureFlags = key.GetValue("GameDVR_EFSEFeatureFlags", -1);  // Default value of -1 if not found
+                        var dxgiHonorFSE = key.GetValue("GameDVR_DXGIHonorFSEWindowsCompatible", -1);  // Default value of -1 if not found
+                        var dseBehavior = key.GetValue("GameDVR_DSEBehavior", -1);  // Default value of -1 if not found
+                        var honorUserFSEBehaviorMode = key.GetValue("GameDVR_HonorUserFSEBehaviorMode", -1);  // Default value of -1 if not found
+
+                        // Safely cast values and apply FullScreen Optimizations Toggle based on these values
+                        if (fseBehavior is int && fseBehaviorMode is int && fseFeatureFlags is int &&
+                            dxgiHonorFSE is int && dseBehavior is int && honorUserFSEBehaviorMode is int)
+                        {
+                            // Compare the registry values and set the toggle accordingly
+                            if ((int)fseBehavior == 2 &&
+                                (int)fseBehaviorMode == 2 &&
+                                (int)fseFeatureFlags == 0 &&
+                                (int)dxgiHonorFSE == 1 &&
+                                (int)dseBehavior == 2 &&
+                                (int)honorUserFSEBehaviorMode == 1)
+                            {
+                                FullScreenOptimizationsToggle.IsChecked = true;
+                            }
+                            else
+                            {
+                                FullScreenOptimizationsToggle.IsChecked = false;
+                            }
+                        }
+                        else
+                        {
+                            // If any value is invalid, default to disabled
+                            FullScreenOptimizationsToggle.IsChecked = false;
+                        }
+                    }
+                    else
+                    {
+                        // If the registry key is not found, disable FullScreen Optimizations by default
+                        FullScreenOptimizationsToggle.IsChecked = false;
+                    }
+                }
+
+
+            }
             catch (UnauthorizedAccessException)
             {
                 MessageBox.Show("You do not have permission to access the registry key. Please run the application as an administrator.");
@@ -127,6 +180,7 @@ namespace NZTS_App.Views
                 ShowError($"Error loading current settings: {ex.Message}");
             }
         }
+
 
         // Helper function to get registry values safely as UInt64
         private static ulong GetRegistryValueAsUInt64(RegistryKey key, string valueName, ulong defaultValue)
@@ -186,6 +240,7 @@ namespace NZTS_App.Views
             }
         }
 
+
         private void GameBarToggle_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -218,6 +273,104 @@ namespace NZTS_App.Views
                 ShowError($"Error updating Game Bar setting: {ex.Message}");
             }
         }
+
+        private void FullScreenOptimizationsToggle_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Open the registry key for FullScreen Optimizations (creating it if it doesn't exist)
+                using (var key = Registry.CurrentUser.OpenSubKey(@"HKCU\System\GameConfigStore", writable: true))
+                {
+                    if (key == null)
+                    {
+                        // Create the key if it doesn't exist
+                        using (var newKey = Registry.CurrentUser.CreateSubKey(@"HKCU\System\GameConfigStore"))
+                        {
+                            // Set default values for FullScreen Optimizations
+                            newKey?.SetValue("GameDVR_DSEBehavior", 2, RegistryValueKind.DWord);
+                            newKey?.SetValue("GameDVR_DXGIHonorFSEWindowsCompatible", 1, RegistryValueKind.DWord);
+                            newKey?.SetValue("GameDVR_EFSEFeatureFlags", 0, RegistryValueKind.DWord);
+                            newKey?.SetValue("GameDVR_FSEBehavior", 2, RegistryValueKind.DWord);
+                            newKey?.SetValue("GameDVR_FSEBehaviorMode", 2, RegistryValueKind.DWord);
+                            newKey?.SetValue("GameDVR_HonorUserFSEBehaviorMode", 1, RegistryValueKind.DWord);
+                            newKey?.SetValue("GameDVR_Enabled", 0, RegistryValueKind.DWord);
+                            newKey?.SetValue("AppCaptureEnabled", 0, RegistryValueKind.DWord);
+                        }
+                    }
+                    else
+                    {
+                        // Set FullScreen Optimizations registry values directly
+                        key?.SetValue("GameDVR_DSEBehavior", 2, RegistryValueKind.DWord);
+                        key?.SetValue("GameDVR_DXGIHonorFSEWindowsCompatible", 1, RegistryValueKind.DWord);
+                        key?.SetValue("GameDVR_EFSEFeatureFlags", 0, RegistryValueKind.DWord);
+                        key?.SetValue("GameDVR_FSEBehavior", 2, RegistryValueKind.DWord);
+                        key?.SetValue("GameDVR_FSEBehaviorMode", 2, RegistryValueKind.DWord);
+                        key?.SetValue("GameDVR_HonorUserFSEBehaviorMode", 1, RegistryValueKind.DWord);
+                        key?.SetValue("GameDVR_Enabled", 0, RegistryValueKind.DWord);
+                        key?.SetValue("AppCaptureEnabled", 0, RegistryValueKind.DWord);
+                    }
+
+                    // Update windowed fullscreen compatibility setting
+                    using (var sessionKey = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Session Manager\Environment", writable: true))
+                    {
+                        sessionKey?.SetValue("__COMPAT_LAYER", "~ DISABLEDXMAXIMIZEDWINDOWEDMODE", RegistryValueKind.String);
+                    }
+
+                    // Update Game Bar settings (disable Game Bar and related features)
+                    using (var gameBarKey = Registry.CurrentUser.OpenSubKey(@"HKCU\System\GameBar", writable: true))
+                    {
+                        if (gameBarKey == null)
+                        {
+                            // Create the key if it doesn't exist
+                            using (var newGameBarKey = Registry.CurrentUser.CreateSubKey(@"HKCU\System\GameBar"))
+                            {
+                                newGameBarKey?.SetValue("GamePanelStartupTipIndex", 3, RegistryValueKind.DWord);
+                                newGameBarKey?.SetValue("ShowStartupPanel", 0, RegistryValueKind.DWord);
+                                newGameBarKey?.SetValue("UseNexusForGameBarEnabled", 0, RegistryValueKind.DWord);
+                            }
+                        }
+                        else
+                        {
+                            // Update the Game Bar settings directly
+                            gameBarKey?.SetValue("GamePanelStartupTipIndex", 3, RegistryValueKind.DWord);
+                            gameBarKey?.SetValue("ShowStartupPanel", 0, RegistryValueKind.DWord);
+                            gameBarKey?.SetValue("UseNexusForGameBarEnabled", 0, RegistryValueKind.DWord);
+                        }
+                    }
+
+                    // Disable Game DVR capture
+                    using (var policyKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Policies\Microsoft\Windows\GameDVR", writable: true))
+                    {
+                        policyKey?.SetValue("AllowGameDVR", 0, RegistryValueKind.DWord);
+                    }
+
+                    using (var policyManagerKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR", writable: true))
+                    {
+                        policyManagerKey?.SetValue("value", 0, RegistryValueKind.DWord);
+                    }
+
+                    // Disable AppCapture on GameDVR
+                    using (var gameDvrKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR", writable: true))
+                    {
+                        gameDvrKey?.SetValue("AppCaptureEnabled", 0, RegistryValueKind.DWord);
+                    }
+
+                    // Mark the settings as applied and log the status
+                    mainWindow?.MarkSettingsApplied();
+                    App.changelogUserControl?.AddLog("Applied", "FullScreen Optimizations and related GameBar/GameDVR settings have been toggled.");
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                ShowError("You do not have permission to modify the registry. Please run the application as an administrator.");
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Error updating FullScreen Optimizations settings: {ex.Message}");
+            }
+        }
+
+
 
         private void MultimediaTweaksToggle_Click(object sender, RoutedEventArgs e)
         {

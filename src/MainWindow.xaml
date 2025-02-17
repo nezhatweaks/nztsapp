@@ -697,7 +697,7 @@ Margin="0,0,0,0"/>
             MouseDown="ExperimentalContent_MouseDown" 
             MouseMove="ExperimentalContent_MouseMove" 
             MouseUp="ExperimentalContent_MouseUp">
-                            <TextBlock x:Name="VersionTextBlock" Text="V0.8" 
+                            <TextBlock x:Name="VersionTextBlock" Text="V0.9" 
                FontWeight="Bold" 
                FontSize="24" 
                Foreground="Gray" 
@@ -708,7 +708,7 @@ Margin="0,0,0,0"/>
 
 
 
-                            <TextBlock Text="➕ Added Subsystem Tweaks in Gaming" 
+                            <TextBlock Text="➕ Added Disable FullScreen Optimizations Tweak in Gaming" 
                FontSize="14" 
                Foreground="LightGray" 
                HorizontalAlignment="Left" 
