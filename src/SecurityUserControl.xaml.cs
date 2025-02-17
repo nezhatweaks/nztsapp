@@ -1,13 +1,6 @@
-﻿using System;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Controls;
-using System.Diagnostics;
-using System.IO;
-using System.Security.AccessControl;
-using System.Security.Principal;
-using System.Windows.Forms;
-using System.Collections.ObjectModel;
 
 
 namespace NZTS_App.Views

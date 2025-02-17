@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -42,7 +41,7 @@ namespace NZTS_App.Views
             AggregatorHostToggle.Click -= AggregatorHostToggle_Click;
 
             // Detach event handlers for additional processes
-           
+
             PhoneExperienceHostToggle.Click -= PhoneExperienceHostToggle_Click;
             CrossDeviceServiceToggle.Click -= CrossDeviceServiceToggle_Click;
             BackgroundTaskHostToggle.Click -= BackgroundTaskHostToggle_Click;
@@ -51,7 +50,7 @@ namespace NZTS_App.Views
             // Detach new events for the additional processes
             WMIRegistrationServiceToggle.Click -= WMIRegistrationServiceToggle_Click;
             JhiServiceToggle.Click -= JhiServiceToggle_Click;
-            
+
             IpfsvcToggle.Click -= IpfsvcToggle_Click;
             IpfHelperToggle.Click -= IpfHelperToggle_Click;
 
@@ -130,7 +129,7 @@ namespace NZTS_App.Views
                 AggregatorHostToggle.IsChecked = CheckProcessEnabled("AggregatorHost.exe");
 
                 // Set IsChecked property based on process status
-                
+
                 PhoneExperienceHostToggle.IsChecked = CheckProcessEnabled("PhoneExperienceHost.exe");
                 CrossDeviceServiceToggle.IsChecked = CheckProcessEnabled("CrossDeviceService.exe");
                 BackgroundTaskHostToggle.IsChecked = CheckProcessEnabled("backgroundTaskHost.exe");
@@ -140,7 +139,7 @@ namespace NZTS_App.Views
                 // New settings for additional processes
                 WMIRegistrationServiceToggle.IsChecked = CheckProcessEnabled("WMIRegistrationService.exe");
                 JhiServiceToggle.IsChecked = CheckProcessEnabled("jhi_service.exe");
-                
+
                 IpfsvcToggle.IsChecked = CheckProcessEnabled("ipfsvc.exe");
                 IpfHelperToggle.IsChecked = CheckProcessEnabled("ipf_helper.exe");
 
@@ -179,13 +178,13 @@ namespace NZTS_App.Views
             ToggleProcess("mspmsnsv.exe", MspmsnsvToggle.IsChecked == true);
         }
 
-        
 
-        
 
-        
 
-        
+
+
+
+
 
         private void WMIADAPToggle_Click(object sender, RoutedEventArgs e)
         {
@@ -230,7 +229,7 @@ namespace NZTS_App.Views
             ToggleProcess("wwahost.exe", WwahostToggle.IsChecked == true);
         }
 
-        
+
 
         private void SecurityHealthToggle_Click(object sender, RoutedEventArgs e)
         {
@@ -242,7 +241,7 @@ namespace NZTS_App.Views
             ToggleProcess("NisSrv.exe", NisSrvToggle.IsChecked == true);
         }
 
-       
+
 
         private void WscSvcToggle_Click(object sender, RoutedEventArgs e)
         {
@@ -254,7 +253,7 @@ namespace NZTS_App.Views
             ToggleProcess("MsAntiMalwareService.exe", MsAntiMalwareServiceToggle.IsChecked == true);
         }
 
-        
+
 
         private void CscServiceToggle_Click(object sender, RoutedEventArgs e)
         {
@@ -297,7 +296,7 @@ namespace NZTS_App.Views
             ToggleProcess("AggregatorHost.exe", AggregatorHostToggle.IsChecked == true);
         }
 
-        
+
 
         private void PhoneExperienceHostToggle_Click(object sender, RoutedEventArgs e)
         {
@@ -334,7 +333,7 @@ namespace NZTS_App.Views
             ToggleProcess("jhi_service.exe", JhiServiceToggle.IsChecked == true);
         }
 
-        
+
 
         private void IpfsvcToggle_Click(object sender, RoutedEventArgs e)
         {
@@ -346,7 +345,7 @@ namespace NZTS_App.Views
             ToggleProcess("ipf_helper.exe", IpfHelperToggle.IsChecked == true);
         }
 
-        
+
 
 
 

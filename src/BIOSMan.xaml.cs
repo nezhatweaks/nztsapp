@@ -1,8 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Hardware.Info;
 using System.Windows;
 using System.Windows.Controls;
-using Hardware.Info;
 
 namespace NZTS_App.Views
 {

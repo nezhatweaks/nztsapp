@@ -1,13 +1,12 @@
 ﻿using Microsoft.Win32;
+using NZTS_App.Views;
+using System.IO;
 using System.Windows;
-using System.Windows.Media.Animation;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using NZTS_App.Views;
-using System.IO;
-using System.Diagnostics;
 
 
 
@@ -17,13 +16,13 @@ using System.Diagnostics;
 namespace NZTS_App
 {
 
-    
+
 
     public partial class MainWindow : Window
     {
         private bool settingsApplied = false; // Existing flag for settings
         private bool isClosing = false; // New flag to prevent re-entrance
-        
+
         public enum ValueType
         {
             DWord,
@@ -172,7 +171,7 @@ namespace NZTS_App
 
             // Set default title if needed
             TitleTextBlock.Content = "▼";
-            
+
         }
 
 
@@ -189,9 +188,9 @@ namespace NZTS_App
             this.SizeChanged += MainWindow_SizeChanged; // Subscribe to size changed event
             this.Closing += Window_Closing;
 
-            
+
             var welcomeControl = new WelcomeUserControl(this);
-            
+
 
         }
 
@@ -240,7 +239,7 @@ namespace NZTS_App
 
             Console.WriteLine("RestoreAll_Click completed.");
             MessageBox.Show("All settings have been restored to default.");
-            
+
 
             // Prompt the user to restart the computer
             var result = MessageBox.Show("Settings have been restored to default. Would you like to restart your computer now?", "Restart Required", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -374,7 +373,7 @@ namespace NZTS_App
         }
 
 
-        
+
 
         // Helper method to find child elements
         private T? FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
@@ -470,7 +469,7 @@ namespace NZTS_App
             if (!settingsApplied) // Check if settings have not been applied yet
             {
                 settingsApplied = true;
-                
+
             }
         }
 
@@ -478,7 +477,7 @@ namespace NZTS_App
         private System.Windows.Point startPoint;
         private double initialOffsetX;
         private const double swipeThreshold = 50; // Threshold for switching content
-        
+
 
 
         private void VerifiedContent_MouseDown(object sender, MouseButtonEventArgs e)
@@ -895,7 +894,7 @@ namespace NZTS_App
         {
             var win32Control = new Views.Win32PrioritySeparation(this);
             ShowContentWithAnimation(win32Control); // Call the method without animation
-            
+
         }
 
         private void BackupButton_Click(object sender, RoutedEventArgs e)
@@ -952,6 +951,73 @@ namespace NZTS_App
             var systemINIControl = new SysteminiUserControl(this);
             ShowContentWithAnimation(systemINIControl); // Call the method to display with animation
         }
+
+        private void Winini_Click(object sender, RoutedEventArgs e)
+        {
+            var winINIControl = new WininiUserControl(this);
+            ShowContentWithAnimation(winINIControl); // Call the method to display with animation
+        }
+
+        private void MSFT_Click(object sender, RoutedEventArgs e)
+        {
+            var msftControl = new MSFTUserControl(this);
+            ShowContentWithAnimation(msftControl); // Call the method to display with animation
+        }
+
+        private void Absolute_Click(object sender, RoutedEventArgs e)
+        {
+            var absoluteControl = new AbsoluteUserControl(this);
+            ShowContentWithAnimation(absoluteControl); // Call the method to display with animation
+        }
+
+
+        private void INI_Click(object sender, RoutedEventArgs e)
+        {
+            // Toggle the visibility of the System.ini button
+            if (SystemIniButton.Visibility == Visibility.Visible)
+            {
+                SystemIniButton.Visibility = Visibility.Collapsed;  // Hide the System.ini button
+            }
+            else
+            {
+                SystemIniButton.Visibility = Visibility.Visible;  // Show the System.ini button
+            }
+
+            // Toggle the visibility of the Win.ini button
+            if (WinIniButton.Visibility == Visibility.Visible)
+            {
+                WinIniButton.Visibility = Visibility.Collapsed;  // Hide the Win.ini button
+            }
+            else
+            {
+                WinIniButton.Visibility = Visibility.Visible;  // Show the Win.ini button
+            }
+        }
+
+        private void CSP_Click(object sender, RoutedEventArgs e)
+        {
+            // Toggle the visibility of the MSFT button
+            if (MSFTButton.Visibility == Visibility.Visible)
+            {
+                MSFTButton.Visibility = Visibility.Collapsed;  // Hide the System.ini button
+            }
+            else
+            {
+                MSFTButton.Visibility = Visibility.Visible;  // Show the System.ini button
+            }
+
+            // Toggle the visibility of the Absolute button
+            if (AbsoluteButton.Visibility == Visibility.Visible)
+            {
+                AbsoluteButton.Visibility = Visibility.Collapsed;  // Hide the System.ini button
+            }
+            else
+            {
+                AbsoluteButton.Visibility = Visibility.Visible;  // Show the System.ini button
+            }
+
+        }
+
 
 
         private void PowerPlan_Click(object sender, RoutedEventArgs e)
@@ -1027,12 +1093,12 @@ namespace NZTS_App
             // Show the welcome page
             var welcomeControl = new WelcomeUserControl(this); // Create a new instance of the Welcome UserControl
             ShowContentWithAnimation(welcomeControl); // Call the method to show the content
-            
+
             ContentArea.Visibility = Visibility.Visible;
             ContentOther.Visibility = Visibility.Collapsed;
         }
 
-        
+
         private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             // Adjust the height of the horizontal thumb based on window size
@@ -1135,7 +1201,7 @@ namespace NZTS_App
 
 
 
-        
+
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -1169,12 +1235,12 @@ namespace NZTS_App
             if (Sidebar.Visibility == Visibility.Collapsed)
             {
                 Sidebar.Visibility = Visibility.Visible;
-                
+
             }
             else
             {
                 Sidebar.Visibility = Visibility.Collapsed;
-                
+
             }
         }
 
@@ -1282,7 +1348,7 @@ namespace NZTS_App
 
 
 
-        
+
 
 
         private BitmapSource GetIconBitmapSource(string path)
@@ -1336,7 +1402,7 @@ namespace NZTS_App
                 BitmapSizeOptions.FromEmptyOptions());
         }
 
-        
+
 
 
 
@@ -1355,5 +1421,5 @@ namespace NZTS_App
 
 
 
- 
+
 

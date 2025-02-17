@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace NZTS_App.Views
@@ -34,7 +33,7 @@ namespace NZTS_App.Views
             }
             else
             {
-                
+
             }
         }
 

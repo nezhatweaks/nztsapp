@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -39,12 +38,12 @@ namespace NZTS_App.Views
                             // Set the ToggleButton state based on the registry value (1 means disabled, 0 means enabled)
                             DynamicPstateSwitch.IsChecked = currentValue == 1;
 
-                            
+
                         }
                         else
                         {
                             // Log if the value is not an integer or null
-                            
+
                         }
                     }
                     else

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Win32;
-using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -30,7 +29,7 @@ namespace NZTS_App.Views
                 {
                     key.SetValue("Start", isMMCSSEnabled ? 2 : 4, RegistryValueKind.DWord);
                     App.changelogUserControl?.AddLog("Applied", isMMCSSEnabled ? "MMCSS enabled." : "MMCSS disabled.");
-                    
+
                 }
                 else
                 {
@@ -58,7 +57,7 @@ namespace NZTS_App.Views
                         LazyModeToggle.IsEnabled = isMMCSSEnabled;
                         LazyModeTimeoutInput.IsEnabled = isMMCSSEnabled;
 
-                        
+
                     }
                     else
                     {
@@ -81,7 +80,7 @@ namespace NZTS_App.Views
                         int lazyModeTimeout = (int)(systemProfileKey.GetValue("LazyModeTimeout", 5000) ?? 5000);
                         LazyModeTimeoutInput.Text = lazyModeTimeout.ToString();
 
-                        
+
                     }
                     else
                     {

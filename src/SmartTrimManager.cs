@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System.Diagnostics;
 using System.Windows.Threading;
-using System.Windows;
 
 namespace NZTS_App
 {
-    
+
 
     public class SmartTrimManager
     {
@@ -34,13 +26,13 @@ namespace NZTS_App
         public void Start()
         {
             smartTrimTimer.Start();
-            
+
         }
 
         public void Stop()
         {
             smartTrimTimer.Stop();
-            
+
         }
 
 

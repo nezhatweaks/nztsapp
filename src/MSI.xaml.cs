@@ -1,16 +1,12 @@
-﻿using System;
+﻿using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
+using System.Management;
 using System.Windows;
 using System.Windows.Controls;
-using Microsoft.Win32;
-using System.Threading.Tasks;
-using System.Globalization;
 using System.Windows.Data;
-using System.Runtime.InteropServices;
-using System.Diagnostics;
 using System.Windows.Input;
-using System.Management;
 
 namespace NZTS_App.Views
 {
@@ -116,7 +112,7 @@ namespace NZTS_App.Views
         }
 
 
-        
+
 
 
 
@@ -187,7 +183,7 @@ namespace NZTS_App.Views
         }
 
 
-       
+
 
 
 
@@ -268,7 +264,7 @@ namespace NZTS_App.Views
         }
 
 
-        
+
 
 
 
@@ -1080,7 +1076,7 @@ namespace NZTS_App.Views
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        
+
     }
 }
 

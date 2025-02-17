@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -212,7 +211,7 @@ namespace NZTS_App.Views
                     // For other DWORD values that follow the same behavior
                     case "DisableDMACopy":
                     case "DisableDrmdmaPowerGating":
-                    
+
                         // These values are inverted (1 = enabled, 0 = disabled)
                         key.SetValue(valueName, enable ? 1 : 0, RegistryValueKind.DWord);
                         break;
@@ -300,7 +299,7 @@ namespace NZTS_App.Views
             ToggleRegistryValue("PP_ThermalAutoThrottlingEnable", ThermalThrottlingSwitch.IsChecked == true);
         }
 
-        
+
 
         private void DisableBlockWriteSwitch_Click(object sender, RoutedEventArgs e)
         {
@@ -312,9 +311,9 @@ namespace NZTS_App.Views
             ToggleRegistryValue("StutterMode", StutterModeSwitch.IsChecked == true);
         }
 
-        
 
-        
+
+
 
         private void DisableFBCForFullscreenSwitch_Click(object sender, RoutedEventArgs e)
         {
@@ -386,7 +385,7 @@ namespace NZTS_App.Views
             ToggleRegistryValue("Main3D_DEF", Main3DDefSwitch.IsChecked == true, UMDRegistryKeyPath);
         }
 
-        
+
 
         private void CatalystAIDefSwitch_Click(object sender, RoutedEventArgs e)
         {

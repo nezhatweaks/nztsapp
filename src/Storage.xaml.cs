@@ -1,10 +1,8 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using NZTS_App.Properties;
 
 namespace NZTS_App.Views
 {
@@ -24,11 +22,11 @@ namespace NZTS_App.Views
             AppDataTempToggle.IsChecked = Properties.Settings.Default.AppDataTempToggle;
             WindowsTempToggle.IsChecked = Properties.Settings.Default.WindowsTempToggle;
 
-            
-            
+
+
         }
 
-        
+
 
         private void InitializeSmartTrimTimer()
         {
@@ -39,9 +37,9 @@ namespace NZTS_App.Views
 
         private float cpuUsageThreshold = 50;
 
-        
 
-        
+
+
 
         private void SmartTrimTimer_Tick(object? sender, EventArgs e)
         {
@@ -83,17 +81,17 @@ namespace NZTS_App.Views
             }
         }
 
-        
+
 
         private void AppDataTempToggle_Click(object sender, RoutedEventArgs e)
         {
-            
+
             SaveToggleStates(); // Save toggle states when changed
         }
 
         private void WindowsTempToggle_Click(object sender, RoutedEventArgs e)
         {
-            
+
             SaveToggleStates(); // Save toggle states when changed
         }
 
@@ -172,7 +170,7 @@ namespace NZTS_App.Views
                 }
             }
 
-            
+
         }
 
 

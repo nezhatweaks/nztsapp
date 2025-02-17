@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Windows;
+﻿using System.Collections.ObjectModel;
 using System.IO; // Add this line for file operations
 using System.Text.Json; // For JSON serialization
+using System.Windows;
 using static NZTS_App.ChangelogUserControl;
 
 namespace NZTS_App
@@ -34,8 +33,8 @@ namespace NZTS_App
             // Set the content of the main window
             mainWindow.Content = changelogUserControl;
 
-           
-            
+
+
         }
 
 

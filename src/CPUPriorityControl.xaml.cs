@@ -1,13 +1,8 @@
 ﻿using Microsoft.Win32;
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
-using static NZTS_App.CPUPriorityControl;
-using static NZTS_App.CPUPriorityControl.Game;
 
 namespace NZTS_App
 {
@@ -16,7 +11,7 @@ namespace NZTS_App
         private ObservableCollection<Game> games;
         private MainWindow mainWindow;
         private ObservableCollection<Card> cards; // Define the collection
-        
+
 
         public CPUPriorityControl(MainWindow window)
         {
@@ -249,7 +244,7 @@ namespace NZTS_App
         private void ResetGameUI()
         {
             UseLargePagesToggle.IsChecked = false;
-            
+
             DisableHeapCoalesceToggle.IsChecked = false;
 
             HackFlagsToggle.IsChecked = false;
@@ -405,7 +400,7 @@ namespace NZTS_App
             };
         }
 
-        
+
 
 
 
@@ -442,12 +437,12 @@ namespace NZTS_App
         new Card { Title = "PUBG", ExecutableName = "TslGame.exe", Description = "", ImageSource = "pack://application:,,,/Images/pubg.png" },
         new Card { Title = "MC (Java)", ExecutableName = "javaw.exe", Description = "", ImageSource = "pack://application:,,,/Images/minecraft.png" },
         new Card { Title = "Roblox", ExecutableName = "RobloxPlayerBeta.exe", Description = "", ImageSource = "pack://application:,,,/Images/roblox.png" },
-        
-        
+
+
 
             };
 
-            
+
         }
         public ObservableCollection<Card> Cards => cards; // Property to access the cards collection
 
@@ -584,7 +579,7 @@ namespace NZTS_App
 
 
 
-        
+
 
         private void AddActiveProcessButton_Click(object sender, RoutedEventArgs e)
         {
@@ -863,18 +858,18 @@ namespace NZTS_App
                         if (value is int intValue)
                         {
                             UseLargePagesToggle.IsChecked = intValue == 1; // Set toggle based on registry value
-                            
+
                         }
                         else
                         {
                             UseLargePagesToggle.IsChecked = false; // Default if value is not set
-                            
+
                         }
                     }
                     else
                     {
                         UseLargePagesToggle.IsChecked = false; // No key found
-                        
+
                     }
                 }
             }
@@ -904,18 +899,18 @@ namespace NZTS_App
                         if (value is int intValue)
                         {
                             DisableHeapCoalesceToggle.IsChecked = intValue == 1; // Set toggle based on registry value
-                            
+
                         }
                         else
                         {
                             DisableHeapCoalesceToggle.IsChecked = false; // Default if value is not set
-                            
+
                         }
                     }
                     else
                     {
                         DisableHeapCoalesceToggle.IsChecked = false; // No key found
-                        
+
                     }
                 }
             }
@@ -934,7 +929,7 @@ namespace NZTS_App
             try
             {
                 bool disableHeapCoalesce = DisableHeapCoalesceToggle.IsChecked == true;
-                
+
 
                 string registryPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\";
                 foreach (var game in games)
@@ -1069,7 +1064,7 @@ namespace NZTS_App
                 // Update ComboBox selection to reflect the reset
                 UpdateComboBoxForSelectedGame(selectedGame);
 
-                
+
 
             }
         }

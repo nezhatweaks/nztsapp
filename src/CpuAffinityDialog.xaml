@@ -1,19 +1,121 @@
 ﻿<Window x:Class="NZTS_App.Views.CpuAffinityDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Select CPU Affinity" Height="450" Width="500">
+        Title="Select CPU Affinity" Height="450" Width="500" Background="#2f3136">
+    <Window.Resources>
+        <!-- Discord-style Button Style -->
+        <Style x:Key="DiscordButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#3c3f47"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- Hover effect -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#5a6fb1"/>
+                            </Trigger>
+                            <!-- Pressed effect -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#4D5D99"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Discord-style ListBox -->
+        <Style x:Key="DiscordListBoxStyle" TargetType="ListBox">
+            <Setter Property="Background" Value="#2f3136"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="BorderBrush" Value="#2f3136"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- Discord-style ListBoxItem -->
+        <Style x:Key="DiscordListBoxItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Style.Triggers>
+                <!-- Hover Effect -->
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#3a3c43"/>
+                </Trigger>
+                <!-- Selected Item Effect -->
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#4e5058"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Custom Checkbox Style -->
+        <Style x:Key="CustomCheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Horizontal">
+                            <!-- Border for styling -->
+                            <Border Background="{TemplateBinding Background}" BorderBrush="Transparent" BorderThickness="2" CornerRadius="5">
+                                <!-- Checkbox itself, with ContentTemplate applied directly to CheckBox -->
+                                <CheckBox Content="{Binding}" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                                          Foreground="White" VerticalContentAlignment="Center" />
+                            </Border>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <Grid>
         <!-- ListBox to display the list of CPU cores -->
-        <ListBox x:Name="CpuCoreListBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,10,10,80">
+        <ListBox x:Name="CpuCoreListBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,10,10,80" Style="{StaticResource DiscordListBoxStyle}">
             <!-- The CPU cores will be populated here -->
         </ListBox>
 
         <!-- StackPanel to hold the OK and Reset buttons, aligned at the bottom -->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10">
             <!-- OK Button -->
-            <Button x:Name="OkButton" Content="OK" Width="75" Margin="5" Click="OkButton_Click"/>
+            <Button x:Name="OkButton" Content="OK" Style="{StaticResource DiscordButtonStyle}" Click="OkButton_Click"/>
             <!-- Reset Button -->
-            <Button x:Name="ResetButton" Content="Reset" Width="75" Margin="5" Click="ResetButton_Click"/>
+            <Button x:Name="ResetButton" Content="Reset" Style="{StaticResource DiscordButtonStyle}" Click="ResetButton_Click"/>
         </StackPanel>
     </Grid>
 </Window>

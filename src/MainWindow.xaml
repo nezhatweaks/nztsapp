@@ -103,6 +103,53 @@
             <!-- To make the button round -->
         </Style>
 
+        <!-- Rounded Button Style with Hover/Click Animations -->
+        <Style x:Key="RoundedButtonStyleMini" TargetType="Button">
+            <Setter Property="Background" Value="#141414"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Margin" Value="10,5,-50,5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                        CornerRadius="5"
+                        BorderBrush="Transparent">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- Hover effect -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#5A6FB1"/>
+                                <!-- Add blue trail glow on hover -->
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="DodgerBlue" BlurRadius="10" ShadowDepth="0" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <!-- Pressed effect -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#4D5D99"/>
+                                <!-- Add blue trail glow when pressed -->
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="RoyalBlue" BlurRadius="15" ShadowDepth="0" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
 
         <!-- Hamburger Button Style -->
         <Style x:Key="HamburgerButtonStyle" TargetType="Button">
@@ -493,9 +540,25 @@
 
                             <Button Content="Affinity/MSI" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="MSI_Click"/>
                             <Button Content="EXE" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="CPUPriority_Click"/>
-                            <Button Content="SYSTEM.INI" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Systemini_Click"/>
+                            <Button FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="INI_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="▼" VerticalAlignment="Center" Margin="0,0,40,0" />
+                                    <TextBlock Text="INI" VerticalAlignment="Center" Margin="5,0,60,0"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button x:Name="SystemIniButton" Content="SYSTEM.INI" FontSize="12" Visibility="Collapsed" Style="{StaticResource RoundedButtonStyleMini}" Click="Systemini_Click"/>
+                            <Button x:Name="WinIniButton" Content="Win.INI" FontSize="12" Visibility="Collapsed" Style="{StaticResource RoundedButtonStyleMini}" Click="Winini_Click"/>
                             <Button Content="Memory" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="MemoryMan_Click"/>
                             <Button Content="Security" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Security_Click"/>
+                            <Button FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="CSP_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="▼" VerticalAlignment="Center" Margin="0,0,40,0" />
+                                    <TextBlock Text="CSPs" VerticalAlignment="Center" Margin="5,0,60,0"/>
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="MSFTButton" Content="MSFT" FontSize="12" Visibility="Collapsed" Style="{StaticResource RoundedButtonStyleMini}" Click="MSFT_Click"/>
+                            <Button x:Name="AbsoluteButton" Content="Absolute" FontSize="12" Visibility="Collapsed" Style="{StaticResource RoundedButtonStyleMini}" Click="Absolute_Click"/>
                             <Button Content="Telemetry" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Debloat_Click"/>
                             <Button Content="Storage" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Storage_Click"/>
                             <Button Content="File System" Visibility="Collapsed" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Supercache_Click"/>
@@ -728,7 +791,7 @@ HorizontalAlignment="Left"
 Margin="0,5,0,0"/>
 
 
-                            <TextBlock Text="➕ Added More Experimental Tweaks (JVM/Misc) in Memory" 
+                            <TextBlock Text="➕ Added Win.ini and INI Menu" 
 FontSize="14" 
 Foreground="LightGray" 
 HorizontalAlignment="Left" 

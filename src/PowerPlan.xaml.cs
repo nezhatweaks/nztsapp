@@ -1,9 +1,8 @@
 ﻿using Microsoft.Win32;
-using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Diagnostics;
 
 
 namespace NZTS_App
@@ -101,7 +100,7 @@ namespace NZTS_App
                 PowerPlanListBox.Items.Clear();
                 LoadPowerPlans();
                 PowerPlanListBox.SelectedItem = Path.GetFileName(dialog.FileName);
-                
+
             }
         }
 
@@ -128,7 +127,7 @@ namespace NZTS_App
                 if (key != null)
                 {
                     key.SetValue("PlatformAoAcOverride", value, RegistryValueKind.DWord);
-                    
+
                 }
                 else
                 {

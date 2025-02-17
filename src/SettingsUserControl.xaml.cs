@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq; // Ensure you have this NuGet package installed
 using System.IO;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using Newtonsoft.Json.Linq; // Ensure you have this NuGet package installed
 
 namespace NZTS_App.Views
 {

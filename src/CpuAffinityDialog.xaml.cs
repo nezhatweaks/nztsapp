@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace NZTS_App.Views
 {
@@ -21,6 +21,7 @@ namespace NZTS_App.Views
         }
 
         // Populate the list of CPU cores
+        
         public void InitializeDialog()
         {
             CpuCoreListBox.Items.Clear();
@@ -30,13 +31,15 @@ namespace NZTS_App.Views
                 {
                     Content = CpuCores[i],
                     Tag = i,
-                    IsChecked = false // By default, no CPU core selected
+                    IsChecked = false, // By default, no CPU core selected
+                    Foreground = new SolidColorBrush(Colors.White) // Set the text color to white
                 };
                 cpuCoreItem.Checked += CpuCore_Checked;
                 cpuCoreItem.Unchecked += CpuCore_Unchecked;
                 CpuCoreListBox.Items.Add(cpuCoreItem);
             }
         }
+
 
         // Method to pre-select the cores based on the provided list
         public void PreSelectCores(List<int> selectedCores)

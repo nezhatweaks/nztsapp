@@ -1,9 +1,7 @@
-﻿using System;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Text;
 
 
 namespace NZTS_App.Views
@@ -404,7 +402,7 @@ namespace NZTS_App.Views
 
                     // Log the action: Enabled multimedia tweaks
                     App.changelogUserControl?.AddLog("Applied", "Multimedia tweaks have been tweaked.");
-                    
+
                 }
                 else
                 {
@@ -422,7 +420,7 @@ namespace NZTS_App.Views
 
                     // Log the action: Disabled multimedia tweaks
                     App.changelogUserControl?.AddLog("Applied", "Multimedia tweaks have been disabled and reverted to default values.");
-                    
+
                 }
             }
             catch (UnauthorizedAccessException)
@@ -640,7 +638,7 @@ namespace NZTS_App.Views
                     }
 
                     key?.SetValue("Start", 1, RegistryValueKind.DWord);  // Set value to 1
-                    
+
                     mainWindow?.MarkSettingsApplied();
                     App.changelogUserControl?.AddLog("Applied", "Intel Processor service has been changed to 1.");
 
@@ -708,7 +706,7 @@ namespace NZTS_App.Views
                     }
 
                     key?.SetValue("Start", 3, RegistryValueKind.DWord);  // Set value to 3
-                    
+
                     mainWindow?.MarkSettingsApplied();
                     App.changelogUserControl?.AddLog("Applied", "Intel Processor service has been reset.");
 
@@ -744,7 +742,7 @@ namespace NZTS_App.Views
                     }
 
                     key?.SetValue("Start", 3, RegistryValueKind.DWord);  // Set value to 3
-                    
+
                     mainWindow?.MarkSettingsApplied();
                     App.changelogUserControl?.AddLog("Applied", "AMD Processor service has been reset.");
 
@@ -780,7 +778,7 @@ namespace NZTS_App.Views
                     }
 
                     key?.SetValue("Start", 1, RegistryValueKind.DWord);  // Set value to 1
-                    
+
                     mainWindow?.MarkSettingsApplied();
                     App.changelogUserControl?.AddLog("Applied", "AMD Processor service has been changed to 1.");
 
@@ -816,7 +814,7 @@ namespace NZTS_App.Views
                     }
 
                     key?.SetValue("Start", 4, RegistryValueKind.DWord);  // Set value to 4
-                    
+
                     mainWindow?.MarkSettingsApplied();
                     App.changelogUserControl?.AddLog("Applied", "AMD Processor service has been changed to 4.");
 
@@ -867,7 +865,7 @@ namespace NZTS_App.Views
 
 
 
-        
+
 
         private void HighlightIntelButton(int state)
         {

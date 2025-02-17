@@ -40,6 +40,9 @@
     <Compile Update="MonitorUserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="MSFTUserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="MSI.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -74,6 +77,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="WindowsUserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="WininiUserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -114,6 +120,12 @@
     <Page Update="MonitorUserControl.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="AbsoluteUserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MSFTUserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="MSI.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -148,6 +160,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="WindowsUserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="WininiUserControl.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

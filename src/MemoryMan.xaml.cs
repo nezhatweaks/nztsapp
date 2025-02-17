@@ -1,8 +1,7 @@
-﻿using System;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 
@@ -40,8 +39,8 @@ namespace NZTS_App.Views
             DisablePagingExecutiveToggle.Click += DisablePagingExecutiveToggle_Click;
             ContextSwitchDeadbandToggle.Click += ContextSwitchDeadbandToggle_Click;
             LatencySensitivityHintToggle.Click += LatencySensitivityHintToggle_Click;
-            DisableHeapCoalesceOnFreeToggle.Click += DisableHeapCoalesceOnFreeToggle_Click; 
-            LargePageMinimumToggle.Click += LargePageMinimumToggle_Click; 
+            DisableHeapCoalesceOnFreeToggle.Click += DisableHeapCoalesceOnFreeToggle_Click;
+            LargePageMinimumToggle.Click += LargePageMinimumToggle_Click;
             SecondLevelDataCacheToggle.Click += SecondLevelDataCacheToggle_Click;
             ThirdLevelDataCacheToggle.Click += ThirdLevelDataCacheToggle_Click;
             DisableOSMitigationsToggle.Click += DisableOSMitigationsToggle_Click;
@@ -149,7 +148,7 @@ namespace NZTS_App.Views
                         var trimThresholdOnMemoryPressureValue = key.GetValue("TrimThresholdOnMemoryPressure");
                         TrimThresholdOnMemoryPressureToggle.IsChecked = (trimThresholdOnMemoryPressureValue is int && (int)trimThresholdOnMemoryPressureValue == 0x10); // 0x10 = 16
 
-                        
+
 
                         // MmLargeSystemCache
                         var mmLargeSystemCacheValue = key.GetValue("MmLargeSystemCache");
@@ -421,7 +420,7 @@ namespace NZTS_App.Views
             }
         }
 
-        
+
 
         private void DisableHeapCoalesceOnFreeToggle_Click(object sender, RoutedEventArgs e)
         {
