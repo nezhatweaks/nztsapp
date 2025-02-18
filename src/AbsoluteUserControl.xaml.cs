@@ -76,9 +76,9 @@ namespace NZTS_App.Views
                         {
                             // Set the registry values as required
                             key.SetValue("AbsoluteEnabled", 1, RegistryValueKind.DWord); // Enable the feature
-                            key.SetValue("./devdetail", 1000000, RegistryValueKind.DWord); // Set devdetail value
-                            key.SetValue("./devinfo", 1000000, RegistryValueKind.DWord);  // Set devinfo value
-                            key.SetValue("./syncml/dmacc", 1000000, RegistryValueKind.DWord); // Set syncml/dmacc value
+                            key.SetValue("./devdetail", 100000, RegistryValueKind.DWord); // Set devdetail value
+                            key.SetValue("./devinfo", 100000, RegistryValueKind.DWord);  // Set devinfo value
+                            key.SetValue("./syncml/dmacc", 100000, RegistryValueKind.DWord); // Set syncml/dmacc value
 
                             App.changelogUserControl?.AddLog("Applied", "Absolute settings enabled.");
                         }

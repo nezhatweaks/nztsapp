@@ -96,10 +96,10 @@ namespace NZTS_App.Views
                             key.SetValue("devicepackagesinfo", new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, RegistryValueKind.Binary);
                             key.SetValue("devicestatus", new byte[] { 0x20, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00 }, RegistryValueKind.Binary);
                             key.SetValue("deviceupdate", new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, RegistryValueKind.Binary);
-                            key.SetValue("diagnosticlog", new byte[] { 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00 }, RegistryValueKind.Binary);
+                            key.SetValue("diagnosticlog", new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, RegistryValueKind.Binary);
                             key.SetValue("dmclient", new byte[] { 0x20, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00 }, RegistryValueKind.Binary);
                             key.SetValue("dmsessionactions", new byte[] { 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00 }, RegistryValueKind.Binary);
-                            key.SetValue("enterpriseapn", new byte[] { 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00 }, RegistryValueKind.Binary);
+                            key.SetValue("enterpriseapn", new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, RegistryValueKind.Binary);
                             key.SetValue("enterpriseappmanagement", new byte[] { 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00 }, RegistryValueKind.Binary);
                             key.SetValue("enterpriseassignedaccess", new byte[] { 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00 }, RegistryValueKind.Binary);
                             key.SetValue("enterprisedataprotection", new byte[] { 0x20, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00 }, RegistryValueKind.Binary);
@@ -142,9 +142,9 @@ namespace NZTS_App.Views
                             key.SetValue("win32appinventory", new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, RegistryValueKind.Binary);
                             key.SetValue("windowsadvancedthreatprotection", new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, RegistryValueKind.Binary);
                             key.SetValue("windowslicensing", new byte[] { 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00 }, RegistryValueKind.Binary);
-                            key.SetValue("windowssecurityauditing", new byte[] { 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00 }, RegistryValueKind.Binary);
+                            key.SetValue("windowssecurityauditing", new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, RegistryValueKind.Binary);
                             key.SetValue("wirednetwork", new byte[] { 0x10, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00 }, RegistryValueKind.Binary);
-                            key.SetValue("xboxapp", new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, RegistryValueKind.Binary);
+                            
 
                             App.changelogUserControl?.AddLog("Applied", "MSFT settings enabled.");
                         }
