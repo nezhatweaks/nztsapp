@@ -1016,6 +1016,16 @@ namespace NZTS_App
                 AbsoluteButton.Visibility = Visibility.Visible;  // Show the System.ini button
             }
 
+            // Toggle the visibility of the Debloat button
+            if (DebloatButton.Visibility == Visibility.Visible)
+            {
+                DebloatButton.Visibility = Visibility.Collapsed;  // Hide the System.ini button
+            }
+            else
+            {
+                DebloatButton.Visibility = Visibility.Visible;  // Show the System.ini button
+            }
+
         }
 
 

@@ -554,12 +554,12 @@
                             <Button FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="CSP_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="▼" VerticalAlignment="Center" Margin="0,0,40,0" />
-                                    <TextBlock Text="CSPs" VerticalAlignment="Center" Margin="5,0,60,0"/>
+                                    <TextBlock Text="Telemetry" VerticalAlignment="Center" Margin="5,0,60,0"/>
                                 </StackPanel>
                             </Button>
                             <Button x:Name="MSFTButton" Content="MSFT" FontSize="12" Visibility="Collapsed" Style="{StaticResource RoundedButtonStyleMini}" Click="MSFT_Click"/>
                             <Button x:Name="AbsoluteButton" Content="Absolute" FontSize="12" Visibility="Collapsed" Style="{StaticResource RoundedButtonStyleMini}" Click="Absolute_Click"/>
-                            <Button Content="Telemetry" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Debloat_Click"/>
+                            <Button x:Name="DebloatButton" Content="Debloat" FontSize="12" Visibility="Collapsed" Style="{StaticResource RoundedButtonStyleMini}" Click="Debloat_Click"/>
                             <Button Content="Storage" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Storage_Click"/>
                             <Button Content="File System" Visibility="Collapsed" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Supercache_Click"/>
                             <Button Content="Misc" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Monitor_Click"/>

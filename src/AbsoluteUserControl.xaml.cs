@@ -7,6 +7,9 @@ namespace NZTS_App.Views
     public partial class AbsoluteUserControl : UserControl 
     {
         private const string AbsoluteKeyPath = @"SOFTWARE\Microsoft\Provisioning\CSPs\ConfigSourceCspFilter\Absolute";
+        private const string AbsoluteKeyPath2 = @"SOFTWARE\Microsoft\Provisioning\CSPs\ConfigSourceCspFilter\Absolute\./syncml/dmacc";
+        private const string AbsoluteKeyPath3 = @"SOFTWARE\Microsoft\Provisioning\CSPs\ConfigSourceCspFilter\Absolute\DevDetail";
+        private const string AbsoluteKeyPath4 = @"SOFTWARE\Microsoft\Provisioning\CSPs\ConfigSourceCspFilter\Absolute\DevInfo";
         private MainWindow mainWindow;
 
         public AbsoluteUserControl(MainWindow window) 
@@ -67,18 +70,22 @@ namespace NZTS_App.Views
         {
             try
             {
+                // Open all four registry keys
                 using (var key = Registry.LocalMachine.CreateSubKey(AbsoluteKeyPath))
+                using (var key2 = Registry.LocalMachine.CreateSubKey(AbsoluteKeyPath2))
+                using (var key3 = Registry.LocalMachine.CreateSubKey(AbsoluteKeyPath3))
+                using (var key4 = Registry.LocalMachine.CreateSubKey(AbsoluteKeyPath4))
                 {
                     if (key != null)
                     {
-                        // Logic for enabling or disabling
+                        // Logic for enabling or disabling for the first registry path (AbsoluteKeyPath)
                         if (AbsoluteToggle.IsChecked == true)
                         {
-                            // Set the registry values as required
+                            // Set the registry values for AbsoluteKeyPath
                             key.SetValue("AbsoluteEnabled", 1, RegistryValueKind.DWord); // Enable the feature
-                            key.SetValue("./devdetail", 100000, RegistryValueKind.DWord); // Set devdetail value
-                            key.SetValue("./devinfo", 100000, RegistryValueKind.DWord);  // Set devinfo value
-                            key.SetValue("./syncml/dmacc", 100000, RegistryValueKind.DWord); // Set syncml/dmacc value
+                            key.SetValue("./devdetail", 1000000, RegistryValueKind.DWord); // Set devdetail value
+                            key.SetValue("./devinfo", 1000000, RegistryValueKind.DWord);  // Set devinfo value
+                            key.SetValue("./syncml/dmacc", 1000000, RegistryValueKind.DWord); // Set syncml/dmacc value
 
                             App.changelogUserControl?.AddLog("Applied", "Absolute settings enabled.");
                         }
@@ -97,21 +104,77 @@ namespace NZTS_App.Views
                     else
                     {
                         ShowError("Failed to access Absolute registry key.");
-                        App.changelogUserControl?.AddLog("Failed", "Hypervisor registry key not found.");
+                        App.changelogUserControl?.AddLog("Failed", "Absolute registry key not found.");
+                    }
+
+                    // Logic for AbsoluteKeyPath2 (same as before)
+                    if (key2 != null)
+                    {
+                        if (AbsoluteToggle.IsChecked == true)
+                        {
+                            // Set the registry values for AbsoluteKeyPath2 (same logic as before)
+                            key2.SetValue("MdmEvaluate", 1, RegistryValueKind.DWord); // Enable the feature
+
+                            App.changelogUserControl?.AddLog("Applied", "MdmEvaluate tweak is set to 1");
+                        }
+                        else
+                        {
+                            key2.SetValue("MdmEvaluate", 3, RegistryValueKind.DWord); // Disable the feature
+
+                            App.changelogUserControl?.AddLog("Restore", "MdmEvaluate tweak is set to 3");
+                        }
+
+                        mainWindow?.MarkSettingsApplied();
+                    }
+                    else
+                    {
+                        ShowError("Failed to access AbsoluteKeyPath2 registry key.");
+                        App.changelogUserControl?.AddLog("Failed", "AbsoluteKeyPath2 registry key not found.");
+                    }
+
+                    // Logic for AbsoluteKeyPath3 and AbsoluteKeyPath4 (new behavior)
+                    foreach (var keyPath in new[] { key3, key4 })
+                    {
+                        if (keyPath != null)
+                        {
+                            if (AbsoluteToggle.IsChecked == true)
+                            {
+                                // For key3 and key4, set MdmEvaluate to 0 when enabled
+                                keyPath.SetValue("MdmEvaluate", 0, RegistryValueKind.DWord); // Disable the feature (MdmEvaluate = 0)
+
+                                App.changelogUserControl?.AddLog("Applied", "MdmEvaluate tweak is set to 0 for " + keyPath.ToString());
+                            }
+                            else
+                            {
+                                // Set MdmEvaluate to 1 when disabled (default value)
+                                keyPath.SetValue("MdmEvaluate", 1, RegistryValueKind.DWord); // Enable the feature (MdmEvaluate = 1)
+
+                                App.changelogUserControl?.AddLog("Restore", "MdmEvaluate tweak is set to 1 for " + keyPath.ToString());
+                            }
+
+                            mainWindow?.MarkSettingsApplied();
+                        }
+                        else
+                        {
+                            ShowError($"Failed to access registry key at {keyPath.ToString()}.");
+                            App.changelogUserControl?.AddLog("Failed", $"Registry key {keyPath.ToString()} not found.");
+                        }
                     }
                 }
             }
             catch (UnauthorizedAccessException)
             {
                 ShowError("You do not have permission to modify the registry. Please run the application as an administrator.");
-                App.changelogUserControl?.AddLog("Failed", "Unauthorized access to modify Core Isolation.");
+                App.changelogUserControl?.AddLog("Failed", "Unauthorized access to modify registry.");
             }
             catch (Exception ex)
             {
                 ShowError($"Error updating Absolute settings: {ex.Message}");
-                App.changelogUserControl?.AddLog("Failed", $"Error updating MSFT settings: {ex.Message}");
+                App.changelogUserControl?.AddLog("Failed", $"Error updating settings: {ex.Message}");
             }
         }
+
+
 
 
 

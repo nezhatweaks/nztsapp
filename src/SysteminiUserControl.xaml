@@ -233,7 +233,7 @@
 
             <!-- Experimental Tab Content -->
             <StackPanel x:Name="ExperimentalContent" Visibility="Collapsed" Margin="5">
-                <TextBlock Text="Profile 1 for system.ini" FontSize="14" Foreground="White" HorizontalAlignment="Center"/>
+                <TextBlock Text="Profile 1 (Lower FPS/Better Input Lag)" FontSize="14" Foreground="White" HorizontalAlignment="Center"/>
                 <TextBox x:Name="ExperimentalTextBox" Style="{StaticResource DiscordTextBoxStyle}" Margin="10" Width="550" Height="200" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="False"/>
             </StackPanel>
         </StackPanel>

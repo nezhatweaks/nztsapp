@@ -7,3 +7,8 @@ node_modules/
 # Ignore Visual Studio build directories
 bin/
 obj/
+src/Updates/UpdateExtractor.runtimeconfig.json
+src/Updates/UpdateExtractor.exe
+src/Updates/UpdateExtractor.dll
+src/Updates/UpdateExtractor.deps.json
+src/Updates/UpdateExtractor.pdb

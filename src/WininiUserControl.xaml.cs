@@ -26,6 +26,9 @@ MAPI=1
 MinTimeSlice=1
 WinTimeSlice=1,1
 TimeWindowMinutes=0
+Latency=1
+SampleRate=1
+UseHWTimeStamp=1
 [fonts]
 [extensions]
 [mci extensions]
