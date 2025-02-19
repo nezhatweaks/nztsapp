@@ -8,6 +8,7 @@ namespace NZTS_App.Views
     public partial class SecurityUserControl : UserControl
     {
         private const string HypervisorKeyPath = @"SYSTEM\ControlSet001\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity";
+        private const string MdmCommonKeyPath = @"SOFTWARE\Microsoft\MdmCommon\Internal";
         private MainWindow mainWindow;
 
         public SecurityUserControl(MainWindow window)
@@ -18,26 +19,28 @@ namespace NZTS_App.Views
 
             // Temporarily detach event to avoid premature triggering during initialization
             CoreIsolationToggle.Click -= CoreIsolationToggle_Click;
+            ProtectionToggle.Click -= ProtectionToggle_Click;
 
             LoadCurrentSettings(); // Load current values on initialization
 
             // Reattach events after loading
             CoreIsolationToggle.Click += CoreIsolationToggle_Click;
+            ProtectionToggle.Click += ProtectionToggle_Click;
         }
 
         private void LoadCurrentSettings()
         {
             try
             {
-                // Load HypervisorEnforcedCodeIntegrity Enabled value
-                using (var key = Registry.LocalMachine.CreateSubKey(HypervisorKeyPath))
+                // Load HypervisorEnforcedCodeIntegrity Enabled value (Core Isolation)
+                using (var hypervisorKey = Registry.LocalMachine.CreateSubKey(HypervisorKeyPath))
                 {
-                    if (key != null)
+                    if (hypervisorKey != null)
                     {
-                        var enabledValue = key.GetValue("Enabled");
+                        var enabledValue = hypervisorKey.GetValue("Enabled");
                         if (enabledValue == null) // Key does not exist
                         {
-                            key.SetValue("Enabled", 0, RegistryValueKind.DWord); // Default value
+                            hypervisorKey.SetValue("Enabled", 0, RegistryValueKind.DWord); // Default value
                             CoreIsolationToggle.IsChecked = false; // Default state
                         }
                         else
@@ -49,6 +52,30 @@ namespace NZTS_App.Views
                     {
                         ShowError("Failed to access Hypervisor registry key.");
                         App.changelogUserControl?.AddLog("Failed", "Hypervisor registry key not found.");
+                    }
+                }
+
+                // Load ProtectionSessionUpdateFrequencyInMinutes value (MdmCommon settings)
+                using (var mdmCommonKey = Registry.LocalMachine.CreateSubKey(MdmCommonKeyPath))
+                {
+                    if (mdmCommonKey != null)
+                    {
+                        var sessionUpdateValue = mdmCommonKey.GetValue("ProtectionSessionUpdateFrequencyInMinutes");
+                        if (sessionUpdateValue == null) // Key does not exist
+                        {
+                            mdmCommonKey.SetValue("ProtectionSessionUpdateFrequencyInMinutes", 60, RegistryValueKind.DWord); // Default value
+                            ProtectionToggle.IsChecked = false; // Default state (assuming 60 minutes means toggled off)
+                        }
+                        else
+                        {
+                            // If the value is 99999999, it means the toggle is in "unlimited" mode
+                            ProtectionToggle.IsChecked = (sessionUpdateValue is int sessionUpdateInt && sessionUpdateInt == 99999999);
+                        }
+                    }
+                    else
+                    {
+                        ShowError("Failed to access MDM Common registry key.");
+                        App.changelogUserControl?.AddLog("Failed", "MdmCommon registry key not found.");
                     }
                 }
             }
@@ -63,6 +90,7 @@ namespace NZTS_App.Views
                 App.changelogUserControl?.AddLog("Failed", $"Error loading settings: {ex.Message}");
             }
         }
+
 
         private void CoreIsolationToggle_Click(object sender, RoutedEventArgs e)
         {
@@ -94,6 +122,46 @@ namespace NZTS_App.Views
                 App.changelogUserControl?.AddLog("Failed", $"Error updating Core Isolation: {ex.Message}");
             }
         }
+
+        private void ProtectionToggle_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                using (var key = Registry.LocalMachine.CreateSubKey(MdmCommonKeyPath))
+                {
+                    if (key != null)
+                    {
+                        // Set the ProtectionSessionUpdateFrequencyInMinutes value in the registry
+                        key.SetValue("ProtectionSessionUpdateFrequencyInMinutes", ProtectionToggle.IsChecked == true ? 99999999 : 60, RegistryValueKind.DWord);
+
+                        // Mark settings as applied
+                        mainWindow?.MarkSettingsApplied();
+
+                        // Log the change with the correct description
+                        App.changelogUserControl?.AddLog("Applied", $"Protection Session Update Frequency set to {(ProtectionToggle.IsChecked == true ? "Unlimited" : "60 minutes")}");
+                    }
+                    else
+                    {
+                        // Show error and log failure
+                        ShowError("Failed to access Hypervisor registry key.");
+                        App.changelogUserControl?.AddLog("Failed", "Hypervisor registry key not found.");
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                // Handle permission error and log failure
+                ShowError("You do not have permission to modify the registry. Please run the application as an administrator.");
+                App.changelogUserControl?.AddLog("Failed", "Unauthorized access to modify Protection Session Update Frequency.");
+            }
+            catch (Exception ex)
+            {
+                // Handle any other exceptions and log the error
+                ShowError($"Error updating Protection Session Update Frequency: {ex.Message}");
+                App.changelogUserControl?.AddLog("Failed", $"Error updating Protection Session Update Frequency: {ex.Message}");
+            }
+        }
+
 
         private void DefButton_Click(object sender, RoutedEventArgs e)
         {

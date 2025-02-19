@@ -122,9 +122,46 @@
                 </StackPanel>
             </Border>
 
+            <!-- ProtectionSessionUpdateFrequencyInMinutes Section -->
+            <TextBlock Text="Mdm Common" Foreground="White" FontSize="20" FontWeight="Bold" Margin="0,10,0,0" />
+            <Border BorderThickness="1" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="0,10,0,0" >
+                
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="ProtectionSessionUpdate (Unlimited)" FontWeight="Bold" Margin="0,0,10,0">
+                        <TextBlock.ToolTip>
+                            <ToolTip>
+                                <TextBlock>
+                        Disabling the Protection Session Update can enhance system performance but may reduce overall security.
+                        <LineBreak/>
+                        <Run Foreground="Orange">Warning: Disabling this feature can leave your system vulnerable to security risks.</Run>
+                                </TextBlock>
+                            </ToolTip>
+                        </TextBlock.ToolTip>
+        </TextBlock>
+                    <ToggleButton x:Name="ProtectionToggle" Style="{StaticResource iOSToggleButton}" Click="CoreIsolationToggle_Click" Width="50"/>
+
+                    <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Margin="14,0,10,0">
+                        <Ellipse Width="20" Height="20" Fill="#FFD700"/>
+                        <TextBlock Text="!" Foreground="White" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Grid.ToolTip>
+                            <ToolTip>
+                                <TextBlock>
+                        This feature is related to system security.
+                        <LineBreak/>
+                        Disabling it can reduce protection, making the system more susceptible to vulnerabilities.
+                                </TextBlock>
+                            </ToolTip>
+                        </Grid.ToolTip>
+                    </Grid>
+
+                </StackPanel>
+            </Border>
+
+
             <!-- New Warning about Removing Windows Defender -->
             <TextBlock Text="Paste this into Powershell File (Run As Admin)" Foreground="White" FontSize="15" FontWeight="Bold" Margin="0,10,0,0" />
-            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="80" Margin="0,10,0,0">
+            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="0,10,0,0">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                         <GradientStop Color="Red" Offset="0" />

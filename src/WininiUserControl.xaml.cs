@@ -29,6 +29,7 @@ TimeWindowMinutes=0
 Latency=1
 SampleRate=1
 UseHWTimeStamp=1
+Chunksize=1000000
 [fonts]
 [extensions]
 [mci extensions]
