@@ -1,6 +1,9 @@
 ﻿using Microsoft.Win32;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.IO;
+
 
 
 namespace NZTS_App.Views
@@ -9,6 +12,8 @@ namespace NZTS_App.Views
     {
         private const string HypervisorKeyPath = @"SYSTEM\ControlSet001\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity";
         private const string MdmCommonKeyPath = @"SOFTWARE\Microsoft\MdmCommon\Internal";
+        private const string MdmCommonKeyPathTrue = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MdmCommon\Internal";
+
         private MainWindow mainWindow;
 
         public SecurityUserControl(MainWindow window)
@@ -81,8 +86,8 @@ namespace NZTS_App.Views
             }
             catch (UnauthorizedAccessException)
             {
-                MessageBox.Show("You do not have permission to access the registry key. Please run the application as an administrator.");
-                App.changelogUserControl?.AddLog("Failed", "Unauthorized access to registry.");
+                
+                App.changelogUserControl?.AddLog("Warning", "Unauthorized access on ones of Security Tweaks.");
             }
             catch (Exception ex)
             {
@@ -90,6 +95,32 @@ namespace NZTS_App.Views
                 App.changelogUserControl?.AddLog("Failed", $"Error loading settings: {ex.Message}");
             }
         }
+
+        private void OpenRegistryPath_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Ensure the registry path is valid and properly formatted with the root key
+                if (!string.IsNullOrEmpty(MdmCommonKeyPathTrue) && MdmCommonKeyPathTrue.StartsWith(@"HKEY"))
+                {
+                    // Copy the path to the clipboard
+                    Clipboard.SetText(MdmCommonKeyPathTrue);
+                    
+                }
+                else
+                {
+                    ShowError("Invalid registry path.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Error copying to clipboard: {ex.Message}");
+            }
+        }
+
+
+
+
 
 
         private void CoreIsolationToggle_Click(object sender, RoutedEventArgs e)
