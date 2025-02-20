@@ -124,11 +124,14 @@
 
             <!-- ProtectionSessionUpdateFrequencyInMinutes Section -->
             <TextBlock Text="Mdm Common" Foreground="White" FontSize="20" FontWeight="Bold" Margin="0,10,0,0" />
-            <Border BorderThickness="1" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="0,10,0,0" >
-                
-
+            <Border BorderThickness="1" Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="0,10,0,0">
+                <Border.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Copy Path" Click="OpenRegistryPath_Click"/>
+                    </ContextMenu>
+                </Border.ContextMenu>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="ProtectionSessionUpdate (Unlimited)" FontWeight="Bold" Margin="0,0,10,0">
+                    <TextBlock Text="ProtectionSessionUpdate (999999)" FontWeight="Bold" Margin="0,0,10,0">
                         <TextBlock.ToolTip>
                             <ToolTip>
                                 <TextBlock>
@@ -154,9 +157,9 @@
                             </ToolTip>
                         </Grid.ToolTip>
                     </Grid>
-
                 </StackPanel>
             </Border>
+
 
 
             <!-- New Warning about Removing Windows Defender -->
