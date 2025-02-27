@@ -1294,13 +1294,13 @@ MinHeight="200"/>
                         Click="SwitchToVerifiedTab" 
                         Style="{StaticResource TabButtonStyle}" 
                         Tag="Active" 
-                        Width="175" Height="25"/>
+                        Width="175" Height="35"/>
                     <Button x:Name="ExperimentalButton" 
                         Content="Experimental" 
                         Click="SwitchToExperimentalTab" 
                         Style="{StaticResource TabButtonStyle}" 
                         Tag="Inactive" 
-                        Width="175" Height="25"/>
+                        Width="175" Height="35"/>
                 </StackPanel>
             </Grid>
         </ContentControl>

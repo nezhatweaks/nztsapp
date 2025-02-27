@@ -2,7 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008">
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             >
     <UserControl.Resources>
         <Style x:Key="iOSToggleButton" TargetType="ToggleButton">
             <Setter Property="Template">
@@ -132,7 +133,7 @@
                     <ScrollViewer.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="Width" Value="20"/>
+                            <Setter Property="Width" Value="25"/>
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="ScrollBar" >
@@ -383,13 +384,13 @@ Click="LargePageSizeInBytesToggle_Click" Width="50"/>
                     Click="SwitchToVerifiedTab" 
                     Style="{StaticResource TabButtonStyle}" 
                     Tag="Active" 
-                    Width="175" Height="25"/>
+                    Width="175" Height="35"/>
             <Button x:Name="ExperimentalButton" 
                     Content="Advanced" 
                     Click="SwitchToExperimentalTab" 
                     Style="{StaticResource TabButtonStyle}" 
                     Tag="Inactive" 
-                    Width="175" Height="25"/>
+                    Width="175" Height="35"/>
         </StackPanel>
     </Grid>
 </UserControl>

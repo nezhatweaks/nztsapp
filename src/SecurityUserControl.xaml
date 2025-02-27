@@ -135,9 +135,9 @@
                         <TextBlock.ToolTip>
                             <ToolTip>
                                 <TextBlock>
-                        Disabling the Protection Session Update can enhance system performance but may reduce overall security.
+                        Increasing the Protection Session Update can enhance system performance but may reduce overall security.
                         <LineBreak/>
-                        <Run Foreground="Orange">Warning: Disabling this feature can leave your system vulnerable to security risks.</Run>
+                        <Run Foreground="Orange">Warning: Changing this feature can leave your system vulnerable to security risks.</Run>
                                 </TextBlock>
                             </ToolTip>
                         </TextBlock.ToolTip>
@@ -152,7 +152,7 @@
                                 <TextBlock>
                         This feature is related to system security.
                         <LineBreak/>
-                        Disabling it can reduce protection, making the system more susceptible to vulnerabilities.
+                        Enabling it can reduce protection, making the system more susceptible to vulnerabilities.
                                 </TextBlock>
                             </ToolTip>
                         </Grid.ToolTip>

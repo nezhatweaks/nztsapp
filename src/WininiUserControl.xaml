@@ -201,19 +201,19 @@
                 Click="SwitchToCurrentTab" 
                 Style="{StaticResource TabButtonStyle}" 
                 Tag="Active" 
-                Width="120" Height="25"/>
+                Width="120" Height="35"/>
             <Button x:Name="VerifiedButton" 
                 Content="Default" 
                 Click="SwitchToVerifiedTab" 
                 Style="{StaticResource TabButtonStyle}" 
                 Tag="Inactive" 
-                Width="120" Height="25"/>
+                Width="120" Height="35"/>
             <Button x:Name="ExperimentalButton" 
                 Content="Tweaked" 
                 Click="SwitchToExperimentalTab" 
                 Style="{StaticResource TabButtonStyle}" 
                 Tag="Inactive" 
-                Width="120" Height="25"/>
+                Width="120" Height="35"/>
         </StackPanel>
 
         <!-- Tab Content -->
