@@ -24,6 +24,8 @@ MAPI=1
 ; for 16-bit app support
 [386Enh]
 MinTimeSlice=1
+AvgTimeSlice=1
+MaxTimeSlice=1
 WinTimeSlice=1,1
 TimeWindowMinutes=0
 Latency=1

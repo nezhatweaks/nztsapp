@@ -30,6 +30,8 @@ timer=timer.drv
 ; for 16-bit app support
 [386Enh]
 MinTimeSlice=1
+AvgTimeSlice=1
+MaxTimeSlice=1
 WinTimeSlice=1,1
 TimeSliceUpdateTickCount=1
 TimeWindowMinutes=0
