@@ -33,17 +33,19 @@ MinTimeSlice=1
 AvgTimeSlice=1
 MaxTimeSlice=1
 WinTimeSlice=1,1
-TimeSliceUpdateTickCount=1
+NetAsyncTimeout=0
+SyncTimeDivisor=1
+TimeSliceUpdateTickCount=0
 TimeWindowMinutes=0
 Auto-Detect-CPU=TRUE
 CpuSnooze=0
-MaxBiosPipes=32
-MinBiosPipes=32
+MaxBiosPipes=128
+MinBiosPipes=128
 DoubleBuffer=0
 Latency=1
 SampleRate=1
 UseHWTimeStamp=1
-Chunksize=1000000
+Chunksize=5000000
 LoadTop=0
 SystemReg=0
 woafont=dosapp.fon
@@ -51,6 +53,8 @@ EGA80WOA.FON=EGA80WOA.FON
 EGA40WOA.FON=EGA40WOA.FON
 CGA80WOA.FON=CGA80WOA.FON
 CGA40WOA.FON=CGA40WOA.FON
+
+
 
 [drivers]
 wave=mmdrv.dll
@@ -60,7 +64,10 @@ timer=timer.drv
 mciwave=mmsystem.dll
 
 [timer]
-TimeSliceUpdateTickCount=1";
+TimeSliceUpdateTickCount=1
+
+[NonWindowsApp]
+MouseExclusive=1 ";
 
         public SysteminiUserControl(MainWindow window)
         {

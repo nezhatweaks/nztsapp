@@ -27,6 +27,8 @@ MinTimeSlice=1
 AvgTimeSlice=1
 MaxTimeSlice=1
 WinTimeSlice=1,1
+NetAsyncTimeout=0
+SyncTimeDivisor=1
 TimeWindowMinutes=0
 Latency=1
 SampleRate=1
@@ -40,7 +42,9 @@ NoHWAccel=1
 [Mail]
 MAPI=1
 [timer]
-TimeSliceUpdateTickCount=1";
+TimeSliceUpdateTickCount=1
+[NonWindowsApp]
+MouseExclusive=1 ";
 
         public WininiUserControl(MainWindow window)
         {
