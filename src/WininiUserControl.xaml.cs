@@ -27,7 +27,7 @@ MinTimeSlice=1
 AvgTimeSlice=1
 MaxTimeSlice=1
 WinTimeSlice=1,1
-NetAsyncTimeout=0
+NetAsyncTimeout=-1
 SyncTimeDivisor=1
 TimeWindowMinutes=0
 Latency=1
@@ -44,7 +44,7 @@ MAPI=1
 [timer]
 TimeSliceUpdateTickCount=1
 [NonWindowsApp]
-MouseExclusive=1 ";
+MouseExclusive=1  ";
 
         public WininiUserControl(MainWindow window)
         {

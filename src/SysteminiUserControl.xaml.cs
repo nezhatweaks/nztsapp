@@ -33,7 +33,7 @@ MinTimeSlice=1
 AvgTimeSlice=1
 MaxTimeSlice=1
 WinTimeSlice=1,1
-NetAsyncTimeout=0
+NetAsyncTimeout=-1
 SyncTimeDivisor=1
 TimeSliceUpdateTickCount=0
 TimeWindowMinutes=0
@@ -54,8 +54,6 @@ EGA40WOA.FON=EGA40WOA.FON
 CGA80WOA.FON=CGA80WOA.FON
 CGA40WOA.FON=CGA40WOA.FON
 
-
-
 [drivers]
 wave=mmdrv.dll
 timer=timer.drv
@@ -67,7 +65,7 @@ mciwave=mmsystem.dll
 TimeSliceUpdateTickCount=1
 
 [NonWindowsApp]
-MouseExclusive=1 ";
+MouseExclusive=1";
 
         public SysteminiUserControl(MainWindow window)
         {
