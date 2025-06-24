@@ -35,8 +35,3 @@ NZTS APP is a powerful FPS (Frames Per Second) boosting program designed to enha
 4. Enjoy your enhanced gaming experience!
 
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-
