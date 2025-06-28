@@ -672,3 +672,10 @@ may consider it more useful to permit linking proprietary applications with
 the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
+
+This project includes code and resources from the Windows Defender Remover script by Ionut Bara, licensed under the Creative Commons Attribution-NonCommercial 4.0 International License.
+
+To view a copy of the license, visit: http://creativecommons.org/licenses/by-nc/4.0/
+
+Original project: https://github.com/ionuttbara/windows-defender-remover
+

@@ -1,6 +1,10 @@
 ﻿using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Controls;
+using NvAPIWrapper;
+using NvAPIWrapper.DRS;
+using NvAPIWrapper.DRS.SettingValues;
+
 
 namespace NZTS_App.Views
 {
@@ -8,6 +12,11 @@ namespace NZTS_App.Views
     {
         private const string DynamicPstateKeyPath = @"SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000";
         private const string NvidiaServiceKeyPath = @"SYSTEM\CurrentControlSet\Services\nvlddmkm";
+        private const string NVTweakKeyPath = @"Software\NVIDIA Corporation\Global\NVTweak";
+        private const int GestaltDefault = 0x203;
+        private const int GestaltOptimized = 0xF423F;
+        private const int SedonaHasRunDefault = 1;
+        private const int SedonaHasRunOptimized = 0;
         private MainWindow mainWindow;
 
         public NVIDIAUserControl(MainWindow window)
@@ -26,7 +35,10 @@ namespace NZTS_App.Views
         {
             LoadCurrentDynamicPStateValue();
             LoadNvidiaRegistrySettings();
+            LoadNVTweakSettings();
         }
+
+
 
         private void LoadCurrentDynamicPStateValue()
         {
@@ -97,6 +109,79 @@ namespace NZTS_App.Views
                 ShowError($"Error loading NVIDIA settings: {ex.Message}");
             }
         }
+
+        private void LoadNVTweakSettings()
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.OpenSubKey(NVTweakKeyPath))
+                {
+                    if (key != null)
+                    {
+                        var gestaltValue = key.GetValue("Gestalt");
+                        var sedonaValue = key.GetValue("SedonaHasRun");
+
+                        GestaltOptimizationSwitch.IsChecked = (gestaltValue is int gestalt && gestalt == GestaltOptimized);
+                        SedonaHasRunSwitch.IsChecked = (sedonaValue is int sedona && sedona == SedonaHasRunOptimized);
+                    }
+                    else
+                    {
+                        ShowError("Failed to access NVTweak registry key.");
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                ShowError("You do not have permission to access NVTweak registry keys.");
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Error loading NVTweak settings: {ex.Message}");
+            }
+        }
+
+        private void GestaltOptimizationSwitch_Click(object sender, RoutedEventArgs e)
+        {
+            bool isOptimized = GestaltOptimizationSwitch.IsChecked == true;
+            UpdateNVTweakSetting("Gestalt", isOptimized ? GestaltOptimized : GestaltDefault);
+        }
+
+        private void SedonaHasRunSwitch_Click(object sender, RoutedEventArgs e)
+        {
+            bool isOptimized = SedonaHasRunSwitch.IsChecked == true;
+            UpdateNVTweakSetting("SedonaHasRun", isOptimized ? SedonaHasRunOptimized : SedonaHasRunDefault);
+        }
+
+
+        private void UpdateNVTweakSetting(string valueName, int value)
+        {
+            try
+            {
+                using (var key = Registry.CurrentUser.OpenSubKey(NVTweakKeyPath, writable: true) ?? Registry.CurrentUser.CreateSubKey(NVTweakKeyPath))
+                {
+                    if (key != null)
+                    {
+                        key.SetValue(valueName, value, RegistryValueKind.DWord);
+                        App.changelogUserControl?.AddLog("Applied", $"{valueName} set to {value}");
+                        mainWindow?.MarkSettingsApplied();
+                    }
+                    else
+                    {
+                        ShowError($"Failed to access or create NVTweak registry key.");
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                ShowError("You do not have permission to modify NVTweak settings. Please run the application as an administrator.");
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Error updating {valueName}: {ex.Message}");
+            }
+        }
+
+
 
         private void DynamicPstateSwitch_Click(object sender, RoutedEventArgs e)
         {

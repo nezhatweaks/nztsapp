@@ -95,7 +95,7 @@
 
                 <!-- Reset Button -->
                 <Button Content="Reset to Default" Width="200" Height="26" Click="ResetMMCSS_Click"
-                        Background="#FFCC00" Foreground="Black" BorderThickness="0" Margin="0,10,0,0"/>
+                        Background="Red" Foreground="Black" BorderThickness="0" Margin="0,10,0,0"/>
             </StackPanel>
         </Border>
     </StackPanel>

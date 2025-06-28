@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Linq;
 
 namespace NZTS_App.Views
 {
@@ -38,6 +39,7 @@ namespace NZTS_App.Views
             LoadPciDevicesAsync();
             mainWindow = window;
             mainWindow.TitleTextBlock.Content = "Affinity";
+            CheckHyperThreading();
 
             // Initialize the benchmark and pass the metrics and status window
             _cpuBenchmark = new CpuBenchmark(new BenchmarkMetrics(), new CpuStatusWindow());
@@ -46,6 +48,32 @@ namespace NZTS_App.Views
             _cpuBenchmark.ProgressChanged += OnBenchmarkProgressChanged;
             _cpuBenchmark.BenchmarkCompleted += OnBenchmarkCompleted;
         }
+
+        private void CheckHyperThreading()
+        {
+            try
+            {
+                int logicalProcessorCount = Environment.ProcessorCount;
+                int physicalCoreCount = 0;
+
+                using (var searcher = new ManagementObjectSearcher("select NumberOfCores from Win32_Processor"))
+                {
+                    foreach (ManagementObject obj in searcher.Get())
+                    {
+                        if (obj["NumberOfCores"] != null)
+                            physicalCoreCount += Convert.ToInt32(obj["NumberOfCores"]);
+                    }
+                }
+
+                bool htEnabled = logicalProcessorCount > physicalCoreCount;
+                CpuStatusTextBlock.Text = htEnabled ? "HT/SMT: Enabled" : "HT/SMT: Disabled";
+            }
+            catch
+            {
+                CpuStatusTextBlock.Text = "HT: Unknown";
+            }
+        }
+
 
         // Event handler for the Benchmark button click
         private async void StartBenchmarkButton_Click(object sender, RoutedEventArgs e)

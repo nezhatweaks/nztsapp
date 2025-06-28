@@ -27,13 +27,14 @@ MinTimeSlice=1
 AvgTimeSlice=1
 MaxTimeSlice=1
 WinTimeSlice=1,1
-NetAsyncTimeout=-1
+NetAsyncTimeout=0
 SyncTimeDivisor=1
 TimeWindowMinutes=0
-Latency=1
 SampleRate=1
 UseHWTimeStamp=1
+UseHWTimeStamp=1
 Chunksize=1000000
+FastBlt=1
 [fonts]
 [extensions]
 [mci extensions]

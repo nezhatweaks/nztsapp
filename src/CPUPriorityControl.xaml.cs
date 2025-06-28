@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.IO;
 
 namespace NZTS_App
 {
@@ -205,6 +206,78 @@ namespace NZTS_App
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
+        private void BrowseExeButton_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "Executable Files (*.exe)|*.exe",
+                Title = "Select an Executable"
+            };
+
+            bool? result = openFileDialog.ShowDialog();
+
+            if (result == true && !string.IsNullOrEmpty(openFileDialog.FileName))
+            {
+                string exePath = openFileDialog.FileName;
+
+                ExePathTextBox.Text = exePath;
+                FullscreenOptToggle.IsEnabled = true;
+                UpdateToggleState(exePath);
+            }
+        }
+
+
+        private void UpdateToggleState(string exePath)
+        {
+            const string regPath = @"Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers";
+            using RegistryKey? key = Registry.CurrentUser.OpenSubKey(regPath, false);
+
+            if (key?.GetValue(exePath) is string value)
+            {
+                FullscreenOptToggle.IsChecked = value.Contains("DISABLEDXMAXIMIZEDWINDOWEDMODE");
+            }
+            else
+            {
+                FullscreenOptToggle.IsChecked = false;
+            }
+        }
+
+
+        private void FullscreenOptToggle_Checked(object sender, RoutedEventArgs e)
+        {
+            string exePath = ExePathTextBox.Text;
+
+            if (!string.IsNullOrWhiteSpace(exePath) && File.Exists(exePath))
+            {
+                using RegistryKey key = Registry.CurrentUser.CreateSubKey(
+                    @"Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers");
+                key.SetValue(exePath, "~ DISABLEDXMAXIMIZEDWINDOWEDMODE", RegistryValueKind.String);
+                App.changelogUserControl?.AddLog("Applied", $"You have disabled Fullscreen Optimizations for {ExePathTextBox.Text}.");
+            }
+            
+
+        }
+
+
+        private void FullscreenOptToggle_Unchecked(object sender, RoutedEventArgs e)
+        {
+            string exePath = ExePathTextBox.Text;
+
+            if (!string.IsNullOrWhiteSpace(exePath) && File.Exists(exePath))
+            {
+                using RegistryKey? key = Registry.CurrentUser.OpenSubKey(
+                    @"Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers", true);
+                if (key?.GetValue(exePath) != null)
+                {
+                    key.DeleteValue(exePath);
+                    App.changelogUserControl?.AddLog("Reverted", $"You have enabled Fullscreen Optimizations for {ExePathTextBox.Text}.");
+                }
+            }
+        }
+
+
+
 
         private void AddGameButton_Click(object sender, RoutedEventArgs e)
         {

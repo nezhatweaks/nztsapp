@@ -33,11 +33,19 @@ namespace NZTS_App
 {
     {"Win32PrioritySeparation", new List<Tuple<string, string, ValueType, bool, string>>()
     {
-        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "00fa332a", ValueType.DWord, false, "00000002") // default is 2
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl", "00fa2a2a", ValueType.DWord, false, "00000002") // default is 2
     }},
     {"ContextSwitchDeadband", new List<Tuple<string, string, ValueType, bool, string>>()
     {
         new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "00000001", ValueType.DWord, true, "00000000") // default is none
+    }},
+    {"Gestalt", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_CURRENT_USER\Software\NVIDIA Corporation\Global\NVTweak", "000f423f", ValueType.DWord, false, "00000203") // default is 203
+    }},
+    {"SedonaHasRun", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_CURRENT_USER\Software\NVIDIA Corporation\Global\NVTweak", "00000000", ValueType.DWord, false, "00000001") // default is 1
     }},
     {"LatencySensitivityHint", new List<Tuple<string, string, ValueType, bool, string>>()
     {
@@ -91,6 +99,10 @@ namespace NZTS_App
     {"LargePageSizeInBytes", new List<Tuple<string, string, ValueType, bool, string>>()
     {
         new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "00000000", ValueType.DWord, true, "00000000")
+    }},
+    {"SurvivorRatio", new List<Tuple<string, string, ValueType, bool, string>>()
+    {
+        new Tuple<string, string, ValueType, bool, string>(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management", "00000032", ValueType.DWord, true, "00000000")
     }},
     {"DisableHeapCoalesceOnFree", new List<Tuple<string, string, ValueType, bool, string>>()
     {
@@ -206,7 +218,7 @@ namespace NZTS_App
                     ApplyTweak(tweak);
                 }
 
-                MessageBox.Show("All optimizations have been applied successfully!");
+                MessageBox.Show("Quick Boost has been applied successfully!");
 
                 // Prompt the user to restart the computer
                 var result = MessageBox.Show("Changes have been applied. Would you like to restart your computer now?", "Restart Required", MessageBoxButton.YesNo, MessageBoxImage.Question);

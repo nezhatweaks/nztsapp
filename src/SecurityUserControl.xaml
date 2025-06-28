@@ -163,8 +163,8 @@
 
 
             <!-- New Warning about Removing Windows Defender -->
-            <TextBlock Text="Paste this into Powershell File (Run As Admin)" Foreground="White" FontSize="15" FontWeight="Bold" Margin="0,10,0,0" />
-            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="0,10,0,0">
+            <TextBlock Text="Paste this into Powershell (Run As Admin)" Foreground="White" FontSize="15" FontWeight="Bold" Margin="0,10,0,0" />
+            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="70" Margin="0,10,0,0">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                         <GradientStop Color="Red" Offset="0" />
@@ -172,19 +172,23 @@
                     </LinearGradientBrush>
                 </Border.Background>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="REMOVE Windows Security Center" FontWeight="Bold" Margin="0,5,10,5">
+                    <TextBlock FontWeight="Bold" Margin="0,5,10,5">
+    <Run Text="REMOVE Windows Security"/>
+    <LineBreak/>
+    <Run Text="+ All Mitigations"/>
                         <TextBlock.ToolTip>
                             <ToolTip>
-                                <TextBlock>
-                                    Removing Windows Defender and security features is irreversible.
-                                    <LineBreak/>
-                                    Once disabled, it is unlikely that these features can be restored unless a backup is available.
-                                    <LineBreak/>
-                                    <Run Foreground="Red">Warning: This may leave your system vulnerable to security threats.</Run>
+                                <TextBlock TextWrapping="Wrap">
+                Removing Windows Defender and security features is irreversible.
+                <LineBreak/>
+                Once disabled, it is unlikely that these features can be restored unless a backup is available.
+                <LineBreak/>
+                <Run Foreground="Red">Warning: This may leave your system vulnerable to security threats.</Run>
                                 </TextBlock>
                             </ToolTip>
                         </TextBlock.ToolTip>
-                    </TextBlock>
+</TextBlock>
+
 
                     <Button x:Name="DefButton" Content="Copy" Style="{StaticResource DiscordButtonStyle}" Click="DefButton_Click" Width="75" Height="30" Margin="0,0,0,0"/>
 

@@ -243,7 +243,7 @@ MinHeight="200"/>
                     </StackPanel>
                 </Border>
                 <!-- Toggle for FullScreen Optimizations -->
-                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0">
+                <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="50,10,0,0"  Visibility="Collapsed">
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                             <GradientStop Color="Green" Offset="0" />

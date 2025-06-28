@@ -29,10 +29,18 @@ NZTS APP is a powerful FPS (Frames Per Second) boosting program designed to enha
 
 ## Usage
 
-1. Launch NZTS APP.
-2. Click the **"Optimize All"** button to apply all optimizations.
-3. If you wish to remove all applied settings, click the **"Restore All"** button.
-4. Enjoy your enhanced gaming experience!
+1.Launch the NZTS APP.
+2.Click the blue menu button in the top-left corner to open the sidebar.
+3.Press the Quick Boost button to instantly apply all optimizations within seconds.
+4.Explore more settings, from verified to experimental, within the NZTS APP.
+5.Enjoy your enhanced gaming experience!
+
+## Credits
+
+This project uses the **Windows Defender Remover** script by [Ionut Bara](https://github.com/ionuttbara/windows-defender-remover). This work is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International License](http://creativecommons.org/licenses/by-nc/4.0/).
+
+Thank you for creating and maintaining this tool!
+
 
 ## License
 

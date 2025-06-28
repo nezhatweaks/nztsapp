@@ -8,10 +8,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <AssemblyVersion>0.8.0.0</AssemblyVersion>
-    <FileVersion>0.8.0.0</FileVersion>
+    <AssemblyVersion>0.9.0.0</AssemblyVersion>
+    <FileVersion>0.9.0.0</FileVersion>
     <PackageIcon>nezhalogo12.2.jpg</PackageIcon>
-    <ApplicationIcon>nezhalogo12.2.3.ico</ApplicationIcon>
+    <ApplicationIcon>nezhalogo5_ico.ico</ApplicationIcon>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     
 	  
@@ -39,6 +39,7 @@
     <None Remove="Images\valorant.png" />
     <None Remove="Images\welcome_img.jpg" />
     <None Remove="Images\welcome_img.png" />
+    <None Remove="Images\welcome_img2.png" />
     <None Remove="power-restore.bat" />
     <None Remove="power.bat" />
   </ItemGroup>
@@ -83,7 +84,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="nezhalogo12.2.3.ico" />
+    <Content Include="nezhalogo5_ico.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -101,6 +102,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentWPF" Version="0.10.2" />
     <PackageReference Include="Hardware.Info" Version="101.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NvAPIWrapper.Net" Version="0.8.1.101" />
@@ -181,6 +183,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\welcome_img.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\welcome_img2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

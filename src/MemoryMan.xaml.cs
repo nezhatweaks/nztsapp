@@ -87,6 +87,14 @@ namespace NZTS_App.Views
             DisableSmapToggle.Click += DisableSmapToggle_Click;
             KernelExecutePoolToggle.Click += KernelExecutePoolToggle_Click;
             NullDereferenceProtectionToggle.Click += NullDereferenceProtectionToggle_Click;
+            PageTableBiasToggle.Click += PageTableBiasToggle_Click;
+            MmZeroPageThreadPriorityToggle.Click += MmZeroPageThreadPriorityToggle_Click;
+            MmPageFrameCacheLimitToggle.Click += MmPageFrameCacheLimitToggle_Click;
+            MmKernelMapBiasToggle.Click += MmKernelMapBiasToggle_Click;
+            MmSystemFaultToleranceToggle.Click += MmSystemFaultToleranceToggle_Click;
+            MmPageFaultRetryQuantumToggle.Click += MmPageFaultRetryQuantumToggle_Click;
+            SurvivorRatioToggle.Click += SurvivorRatioToggle_Click;
+
 
 
         }
@@ -119,6 +127,9 @@ namespace NZTS_App.Views
 
                         var systemCacheDirtyPageThresholdValue = key.GetValue("SystemCacheDirtyPageThreshold");
                         SystemCacheDirtyPageThresholdToggle.IsChecked = systemCacheDirtyPageThresholdValue != null && (int)systemCacheDirtyPageThresholdValue == 3;
+
+                        var survivorRatioValue = key.GetValue("SurvivorRatio");
+                        SurvivorRatioToggle.IsChecked = survivorRatioValue != null && (int)survivorRatioValue == 0x32;
 
                         // StrictFileSharing
                         var strictFileSharingValue = key.GetValue("StrictFileSharing");
@@ -262,6 +273,26 @@ namespace NZTS_App.Views
                         var mmNullDereferenceProtectionValue = key.GetValue("MmNullDereferenceProtection");
                         NullDereferenceProtectionToggle.IsChecked = (mmNullDereferenceProtectionValue is int && (int)mmNullDereferenceProtectionValue == 0);
 
+                        // MmZeroPageThreadPriority
+                        var mmZeroPageThreadPriorityValue = key.GetValue("MmZeroPageThreadPriority");
+                        MmZeroPageThreadPriorityToggle.IsChecked = (mmZeroPageThreadPriorityValue is int && (int)mmZeroPageThreadPriorityValue == 5);
+
+                        // MmPageFrameCacheLimit
+                        var mmPageFrameCacheLimitValue = key.GetValue("MmPageFrameCacheLimit");
+                        MmPageFrameCacheLimitToggle.IsChecked = (mmPageFrameCacheLimitValue is int && (int)mmPageFrameCacheLimitValue == 0x4000);
+
+                        // MmKernelMapBias
+                        var mmKernelMapBiasValue = key.GetValue("MmKernelMapBias");
+                        MmKernelMapBiasToggle.IsChecked = (mmKernelMapBiasValue is int && (int)mmKernelMapBiasValue == 2);
+
+                        // MmSystemFaultTolerance
+                        var mmSystemFaultToleranceValue = key.GetValue("MmSystemFaultTolerance");
+                        MmSystemFaultToleranceToggle.IsChecked = (mmSystemFaultToleranceValue is int && (int)mmSystemFaultToleranceValue == 1);
+
+                        // MmPageFaultRetryQuantum
+                        var mmPageFaultRetryQuantumValue = key.GetValue("MmPageFaultRetryQuantum");
+                        MmPageFaultRetryQuantumToggle.IsChecked = (mmPageFaultRetryQuantumValue is int && (int)mmPageFaultRetryQuantumValue == 3);
+
                         // LargePageMinimum
                         var largePageMinimumValue = key.GetValue("LargePageMinimum");
                         LargePageMinimumToggle.IsChecked = (largePageMinimumValue is int largePageMinInt && largePageMinInt == unchecked((int)0xFFFFFFFF));
@@ -276,6 +307,10 @@ namespace NZTS_App.Views
                         // LargePageSizeInBytes
                         var LargePageSizeInByteseValue = key.GetValue("LargePageSizeInBytes");
                         LargePageSizeInBytesToggle.IsChecked = LargePageSizeInByteseValue != null;
+
+                        // PageTableBias
+                        var PageTableBiasValue = key.GetValue("PageTableBias");
+                        PageTableBiasToggle.IsChecked = PageTableBiasValue != null;
 
                         // LockPagesInMemoryValue
                         var LockPagesInMemoryValue = key.GetValue("LockPagesInMemory");
@@ -417,6 +452,18 @@ namespace NZTS_App.Views
             else
             {
                 DeleteRegistryValue("LatencySensitivityHint");
+            }
+        }
+
+        private void SurvivorRatioToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (SurvivorRatioToggle.IsChecked == true)
+            {
+                UpdateRegistryValue("SurvivorRatio", 50);
+            }
+            else
+            {
+                DeleteRegistryValue("SurvivorRatio");
             }
         }
 
@@ -696,6 +743,87 @@ namespace NZTS_App.Views
                 DeleteRegistryValue("MmEnforceCachePartitioning");
             }
         }
+
+        private void MmZeroPageThreadPriorityToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (MmZeroPageThreadPriorityToggle.IsChecked == true)
+            {
+                // Update both Mm and non-Mm registry values
+                UpdateRegistryValue("ZeroPageThreadPriority", 5);
+                UpdateRegistryValue("MmZeroPageThreadPriority", 5);
+            }
+            else
+            {
+                // Delete both Mm and non-Mm registry values
+                DeleteRegistryValue("ZeroPageThreadPriority");
+                DeleteRegistryValue("MmZeroPageThreadPriority");
+            }
+        }
+
+        private void MmPageFrameCacheLimitToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (MmPageFrameCacheLimitToggle.IsChecked == true)
+            {
+                // Update both Mm and non-Mm registry values
+                UpdateRegistryValue("PageFrameCacheLimit", 0x4000);
+                UpdateRegistryValue("MmPageFrameCacheLimit", 0x4000);
+            }
+            else
+            {
+                // Delete both Mm and non-Mm registry values
+                DeleteRegistryValue("PageFrameCacheLimit");
+                DeleteRegistryValue("MmPageFrameCacheLimit");
+            }
+        }
+
+        private void MmKernelMapBiasToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (MmPageFrameCacheLimitToggle.IsChecked == true)
+            {
+                // Update both Mm and non-Mm registry values
+                UpdateRegistryValue("KernelMapBias", 0x2);
+                UpdateRegistryValue("MmKernelMapBias", 0x2);
+            }
+            else
+            {
+                // Delete both Mm and non-Mm registry values
+                DeleteRegistryValue("KernelMapBias");
+                DeleteRegistryValue("MmKernelMapBias");
+            }
+        }
+
+        private void MmSystemFaultToleranceToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (MmSystemFaultToleranceToggle.IsChecked == true)
+            {
+                // Update both Mm and non-Mm registry values
+                UpdateRegistryValue("SystemFaultTolerance", 0x1);
+                UpdateRegistryValue("MmSystemFaultTolerance", 0x1);
+            }
+            else
+            {
+                // Delete both Mm and non-Mm registry values
+                DeleteRegistryValue("SystemFaultTolerance");
+                DeleteRegistryValue("MmSystemFaultTolerance");
+            }
+        }
+
+        private void MmPageFaultRetryQuantumToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (MmPageFaultRetryQuantumToggle.IsChecked == true)
+            {
+                // Update both Mm and non-Mm registry values
+                UpdateRegistryValue("PageFaultRetryQuantum", 0x3);
+                UpdateRegistryValue("MmPageFaultRetryQuantum", 0x3);
+            }
+            else
+            {
+                // Delete both Mm and non-Mm registry values
+                DeleteRegistryValue("PageFaultRetryQuantum");
+                DeleteRegistryValue("MmPageFaultRetryQuantum");
+            }
+        }
+
 
         private void InvalidateTlbOnForkToggle_Click(object sender, RoutedEventArgs e)
         {
@@ -1045,6 +1173,18 @@ namespace NZTS_App.Views
             else
             {
                 DeleteRegistryValue("TieredCompilation");
+            }
+        }
+
+        private void PageTableBiasToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (PageTableBiasToggle.IsChecked == true)
+            {
+                UpdateRegistryValue("PageTableBias", 2);
+            }
+            else
+            {
+                DeleteRegistryValue("PageTableBias");
             }
         }
 

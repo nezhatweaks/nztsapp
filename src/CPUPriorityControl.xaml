@@ -374,6 +374,54 @@ Click="LargePageSizeInBytesToggle_Click" Width="50"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
+
+                    <TextBlock Text="Fullscreen Optimizations Disabler" Foreground="White" FontSize="20" FontWeight="Bold" />
+                    <Border Background="#2F3136" Padding="10" CornerRadius="10" BorderThickness="1" BorderBrush="Transparent">
+                        <StackPanel Margin="0,0,0,20">
+                            <!-- Row: Browse + Path -->
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,-10">
+                                <!-- Browse Button -->
+                                <Button Content="Browse"
+                    Width="60"
+                    Margin="2"
+                    Click="BrowseExeButton_Click"
+                    Background="#272f38"
+                    Foreground="White" />
+
+                                <!-- Display selected path (non-editable, copyable) -->
+                                <TextBox Name="ExePathTextBox"
+                     Width="300"
+                     Margin="2"
+                     IsReadOnly="True"
+                     Background="#1e1f22"
+                     Foreground="White"
+                     BorderBrush="#444"
+                     BorderThickness="1"
+                     FontSize="14"
+                     VerticalContentAlignment="Center"
+                     Text="No directory selected...."
+                     HorizontalScrollBarVisibility="Auto"
+                     TextWrapping="NoWrap" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,20,0,0">
+                                <TextBlock Text="Disable Fullscreen Optimizations"
+               FontWeight="Bold"
+               Margin="0,0,20,0"
+               Foreground="White"
+               ToolTip="Disable Fullscreen Optimizations using registry." />
+
+                                <ToggleButton x:Name="FullscreenOptToggle"
+                  Style="{StaticResource iOSToggleButton}"
+                  Width="50"
+                  Checked="FullscreenOptToggle_Checked"
+                  Unchecked="FullscreenOptToggle_Unchecked"
+                  IsEnabled="False" />
+                            </StackPanel>
+
+                        </StackPanel>
+                    </Border>
+
                 </StackPanel>
             </ScrollViewer>
         </StackPanel>

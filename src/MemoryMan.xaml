@@ -277,7 +277,36 @@ MinHeight="200"/>
                             </StackPanel>
                         </Border>
 
-                        <!-- LargePageSizeInBytes -->
+                            <!-- SurvivorRatio -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                        <GradientStop Color="Green" Offset="0" />
+                                        <GradientStop Color="#2F3136" Offset="1" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Survivor Ratio (50)" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+                        The SurvivorRatio JVM option controls the size of the survivor spaces in the young generation.
+                        <LineBreak/>
+                        Increasing the SurvivorRatio can reduce garbage collection frequency,
+                        <LineBreak/>
+                        which may improve FPS in Java-based applications like Minecraft and might improve FPS in some non-Java games.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+
+                                    <ToggleButton x:Name="SurvivorRatioToggle" Style="{StaticResource iOSToggleButton}" Click="SurvivorRatioToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="SurvivorRatioStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+
+                            <!-- LargePageSizeInBytes -->
                         <Border Style="{StaticResource DiscordBorderStyle}" Visibility="Collapsed" Padding="10" Height="50" Margin="10,10,0,0">
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -610,7 +639,7 @@ MinHeight="200"/>
                             </StackPanel>
                         </Border>
 
-                            <TextBlock Text="Misc (May Lower FPS)" Foreground="White" FontSize="20" FontWeight="Bold" Margin="15,10,0,0" />
+                            <TextBlock Text="Misc (Use with INI Settings + Win32)" Foreground="White" FontSize="20" FontWeight="Bold" Margin="15,10,0,0" />
 
                             <!-- MmStrictFileSharing -->
                             <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
@@ -1277,6 +1306,121 @@ MinHeight="200"/>
                                     <TextBlock x:Name="NullDereferenceProtectionStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Border>
+
+                            <!-- Page Table Bias -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Page Table Bias" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+Enables page table isolation optimization in the kernel.
+<LineBreak/>
+This setting may improve performance on certain workloads by adjusting memory mapping behavior.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="PageTableBiasToggle" Style="{StaticResource iOSToggleButton}" Click="PageTableBiasToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="PageTableBiasStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Zero Page Thread Priority -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Zero Page Thread Priority" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+Sets the priority of the zero page thread in the memory manager.
+<LineBreak/>
+Adjusting this may affect how aggressively memory is zeroed in the background.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="MmZeroPageThreadPriorityToggle" Style="{StaticResource iOSToggleButton}" Click="MmZeroPageThreadPriorityToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="MmZeroPageThreadPriorityStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Page Frame Cache Limit -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Page Frame Cache Limit" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+Defines the maximum number of page frames to cache in the memory manager.
+<LineBreak/>
+Tuning this value can impact memory usage and performance.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="MmPageFrameCacheLimitToggle" Style="{StaticResource iOSToggleButton}" Click="MmPageFrameCacheLimitToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="MmPageFrameCacheLimitStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Kernel Map Bias -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Kernel Map Bias" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+Controls the memory mapping bias for kernel address space layout.
+<LineBreak/>
+Adjusting this can affect performance or compatibility with certain drivers.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="MmKernelMapBiasToggle" Style="{StaticResource iOSToggleButton}" Click="MmKernelMapBiasToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="MmKernelMapBiasStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- System Fault Tolerance -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="System Fault Tolerance" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+Enables memory fault tolerance mechanisms in the system.
+<LineBreak/>
+This setting can improve stability by allowing recovery from certain memory errors.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="MmSystemFaultToleranceToggle" Style="{StaticResource iOSToggleButton}" Click="MmSystemFaultToleranceToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="MmSystemFaultToleranceStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                            <!-- Page Fault Retry Quantum -->
+                            <Border Style="{StaticResource DiscordBorderStyle}" Padding="10" Height="50" Margin="10,10,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Page Fault Retry Quantum" FontWeight="Bold" Margin="0,0,10,0">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock>
+Specifies the number of retries the system will attempt for a page fault.
+<LineBreak/>
+This can influence system responsiveness during high memory pressure.
+                                                </TextBlock>
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+        </TextBlock>
+                                    <ToggleButton x:Name="MmPageFaultRetryQuantumToggle" Style="{StaticResource iOSToggleButton}" Click="MmPageFaultRetryQuantumToggle_Click" Width="50"/>
+                                    <TextBlock x:Name="MmPageFaultRetryQuantumStatusTextBlock" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+
 
                         </StackPanel>
                 </ScrollViewer>

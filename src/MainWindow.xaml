@@ -12,8 +12,8 @@
 
     <Window.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#191b1c" Offset="0.0" />
-            <GradientStop Color="#1b1d1f" Offset="1.0" />
+            <GradientStop Color="#0a0a0a" Offset="0.0" />
+            <GradientStop Color="#0a0a0a" Offset="0.3" />
         </LinearGradientBrush>
     </Window.Background>
 
@@ -25,11 +25,12 @@
 
         <!-- Rounded Button Style with Hover/Click Animations -->
         <Style x:Key="RoundedButtonStyle"  TargetType="Button">
-            <Setter Property="Background" Value="#141414"/>
+            <Setter Property="Background" Value="#313333"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="Height" Value="40"/>
+            <Setter Property="Height" Value="33"/>
             <Setter Property="Width" Value="180"/>
             <Setter Property="Margin" Value="10,5"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -38,18 +39,18 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                            CornerRadius="5"
+                            CornerRadius="4"
                             BorderBrush="Transparent">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <!-- Hover effect -->
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#5A6FB1"/>
+                                <Setter Property="Background" Value="#131414"/>
                             </Trigger>
                             <!-- Pressed effect -->
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="#4D5D99"/>
+                                <Setter Property="Background" Value="#020303"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -59,7 +60,7 @@
 
         <!-- Rounded Button Style with Hover/Click Animations -->
         <Style x:Key="RoundedButtonStyle2"  TargetType="Button">
-            <Setter Property="Background" Value="#a32c48"/>
+            <Setter Property="Background" Value="#2c6da3"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
@@ -72,18 +73,18 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                    CornerRadius="15"
+                    CornerRadius="5"
                     BorderBrush="Transparent">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <!-- Hover effect -->
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#d60939"/>
+                                <Setter Property="Background" Value="#4b8bbf"/>
                             </Trigger>
                             <!-- Pressed effect -->
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="#6e021b"/>
+                                <Setter Property="Background" Value="#64a7de"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -93,15 +94,40 @@
 
         <Style x:Key="RoundedButtonStyle3" TargetType="Button">
             <Setter Property="Width" Value="90"/>
-            <Setter Property="Height" Value="40"/>
+            <Setter Property="Height" Value="33"/>
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="Background" Value="#1e284a"/>
+            <Setter Property="BorderBrush" Value="Green"/>
+            <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Padding" Value="0"/>
             <Setter Property="Foreground" Value="White"/>
-            <!-- White text color -->
-            <!-- To make the button round -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="2"
+                        CornerRadius="15">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderBrush" Value="#4CAF50"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderBrush" Value="#388E3C"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
+
+
 
         <!-- Rounded Button Style with Hover/Click Animations -->
         <Style x:Key="RoundedButtonStyleMini" TargetType="Button">
@@ -260,7 +286,7 @@
                         <Border Background="{TemplateBinding Background}" 
                     BorderBrush="{TemplateBinding BorderBrush}" 
                     BorderThickness="{TemplateBinding BorderThickness}" 
-                    CornerRadius="15">
+                    CornerRadius="3">
                             <ContentPresenter HorizontalAlignment="Center" 
                                   VerticalAlignment="Center"/>
                         </Border>
@@ -275,7 +301,7 @@
                     <Setter Property="Background" Value="#5A5C60"/>
                 </Trigger>
                 <Trigger Property="Tag" Value="Active">
-                    <Setter Property="Background" Value="#4f2b82"/>
+                    <Setter Property="Background" Value="#4e85bf"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -336,7 +362,8 @@
                         <Border Background="{TemplateBinding Background}" 
                         BorderBrush="{TemplateBinding BorderBrush}" 
                         BorderThickness="{TemplateBinding BorderThickness}" 
-                        CornerRadius="5">
+                        CornerRadius="5"
+                        Visibility="Collapsed">
                             <ContentPresenter HorizontalAlignment="Center" 
                                       VerticalAlignment="Center"/>
                         </Border>
@@ -358,7 +385,7 @@
 
                 <!-- Active Tab Trigger based on Tag property -->
                 <Trigger Property="Tag" Value="Active">
-                    <Setter Property="Background" Value="#1d6b75"/>
+                    <Setter Property="Background" Value="#5d6e8f"/>
                     <!-- Active tab color -->
 
                     <!-- Active tab border color -->
@@ -380,7 +407,7 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Grid VerticalAlignment="Top" Background="#181a1c" Height="40" MouseDown="TitleBar_MouseDown">
+            <Grid VerticalAlignment="Top" Background="#0a0a0a" Height="40" MouseDown="TitleBar_MouseDown">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <!-- Placeholder for potential future use -->
@@ -410,7 +437,7 @@
 
                     <!-- Apply glow effect -->
                     <Button.Effect>
-                        <DropShadowEffect Color="Red" BlurRadius="80" Direction="270" ShadowDepth="0" Opacity="0.2"/>
+                        <DropShadowEffect Color="AliceBlue" BlurRadius="100" Direction="270" ShadowDepth="0" Opacity="0.4"/>
                     </Button.Effect>
 
                     
@@ -469,13 +496,20 @@
                         <ColumnDefinition Width="200"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
+                    
+                    
 
                     <!-- Sidebar with ZIndex -->
-                    <StackPanel x:Name="Sidebar" Orientation="Vertical" Background="#23272A" VerticalAlignment="Stretch" Visibility="Collapsed" Panel.ZIndex="1">
+                    <StackPanel x:Name="Sidebar" Orientation="Vertical" VerticalAlignment="Stretch" Visibility="Collapsed" Panel.ZIndex="1">
+                        <StackPanel.Background>
+                            <!-- Semi-transparent background with glassy look -->
+                            <SolidColorBrush Color="#AA1E1E1E" />
+                            <!-- Adjust alpha for glassiness -->
+                        </StackPanel.Background>
                         <!-- Sidebar Content Here -->
-                        <TextBlock Text="" FontWeight="Bold" FontSize="16" Foreground="White" Margin="0,0,0,-10"/>
+                        <TextBlock Text="" FontWeight="Bold" FontSize="16" Foreground="White" Margin="0,0,0,-50"/>
 
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0, 10, 0, 20">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="0, 10, 0, -20">
                             <Button x:Name="BasicTabButton" 
                         Content="Basic" 
                         FontSize="12" 
@@ -499,12 +533,12 @@
 
                         <!-- Basic Content (visible by default) -->
                         <StackPanel x:Name="BasicContent" Visibility="Visible">
-                            <TextBlock Text="1-Click" VerticalAlignment="Center" Margin="10" Visibility="Collapsed"/>
+                            
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Button Content="⚡️" FontSize="20" Style="{StaticResource RoundedButtonStyle3}" Click="OptimizeAll_Click">
+                                <Button Content="⚡️" FontSize="18" FontWeight="Bold" Style="{StaticResource RoundedButtonStyle3}" Click="OptimizeAll_Click">
                                     <!-- Apply glow effect -->
                                     <Button.Effect>
-                                        <DropShadowEffect Color="Blue" BlurRadius="90" Direction="270" ShadowDepth="0" Opacity="0.7"/>
+                                        <DropShadowEffect Color="BlueViolet" BlurRadius="40" Direction="270" ShadowDepth="1" Opacity="0.3"/>
                                     </Button.Effect>
 
                                     <!-- Tooltip -->
@@ -513,31 +547,28 @@
                                     </Button.ToolTip>
                                 </Button>
 
-                                <Button Content="❌" FontSize="20" Style="{StaticResource RoundedButtonStyle3}" Click="RestoreAll_Click">
+                                <Button Content="❌" FontSize="18" FontWeight="Bold" Style="{StaticResource RoundedButtonStyle3}" Click="RestoreAll_Click">
                                     <Button.ToolTip>
                                         <ToolTip Content="Restore Recommend Settings" />
                                     </Button.ToolTip>
                                 </Button>
                             </StackPanel>
 
-                            <Border Background="Transparent" Margin="0,20,0,10" />
+                            <Border Background="Transparent" Margin="0,10,0,10" />
 
                             <Button Content="Home" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="GoToHomePageButton_Click"/>
-                            <Button Content="Restore Point" Background="Green" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="BackupButton_Click"/>
+                            <Button Content="Restore Point" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="BackupButton_Click"/>
                             <Button Content="Logs" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Changelog_Click"/>
-                            <Button Content="Hardware" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="BIOSMan_Click" Visibility="Collapsed"/>
+                            <Button Content="Hardware" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="BIOSMan_Click"/>
                             <Button Content="Settings" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Settings_Click"/>
+                            <!-- Line separator with 50% opacity -->
+                            <Border Height="1" Background="#3d3d3d" Margin="0,10"/>
                             <Button Content="Power" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="PowerPlan_Click"/>
                             <Button Content="WinPriority" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Win32PrioritySeparation_Click"/>
                             <Button Content="Gaming" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Windows_Click"/>
                             <Button Content="MMCSS" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="MMCSS_Click"/>
                             <Button Content="NVIDIA" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Nvidia_Click"/>
                             <Button Content="Radeon" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="AMD_Click"/>
-                        </StackPanel>
-
-                        <!-- Advanced Content (hidden by default) -->
-                        <StackPanel x:Name="AdvancedContent" Visibility="Collapsed">
-
                             <Button Content="Affinity/MSI" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="MSI_Click"/>
                             <Button Content="EXE" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="CPUPriority_Click"/>
                             <Button FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="INI_Click">
@@ -563,6 +594,12 @@
                             <Button Content="Storage" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Storage_Click"/>
                             <Button Content="File System" Visibility="Collapsed" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Supercache_Click"/>
                             <Button Content="Misc" FontSize="12" Style="{StaticResource RoundedButtonStyle}" Click="Monitor_Click"/>
+                        </StackPanel>
+
+                        <!-- Advanced Content (hidden by default) -->
+                        <StackPanel x:Name="AdvancedContent" Visibility="Collapsed">
+
+                            
 
                         </StackPanel>
                     </StackPanel>
@@ -729,17 +766,13 @@ VerticalAlignment="Center">
                         </TransformGroup>
                     </ContentControl.RenderTransform>
                     
-                    <StackPanel>
+                    <StackPanel Margin="-357,-6,-344,-209">
                         <StackPanel x:Name="VerifiedContent" Visibility="Visible" 
                         MouseDown="VerifiedContent_MouseDown" 
                         MouseMove="VerifiedContent_MouseMove" 
                         MouseUp="VerifiedContent_MouseUp">
 
-                            <Image Source="Images/welcome_img.png" 
-                       Width="280" 
-                       Height="200" 
-                       HorizontalAlignment="Center" 
-                       Margin="0,50,0,0"/>
+                            
                             <TextBlock Text="NZTS APP" 
 FontWeight="Bold" 
 FontSize="30" 
@@ -748,10 +781,10 @@ HorizontalAlignment="Center"
 Margin="0,-30,0,0" Visibility="Collapsed"/>
                             
                             <TextBlock Text="Update your NIC/WIFI drivers before using NZTS APP." 
-FontSize="12" FontWeight="Bold" 
+FontSize="26" FontWeight="Bold" 
 Foreground="LightGray" 
 HorizontalAlignment="Center" 
-Margin="0,0,0,0"/>
+Margin="0,150,0,0"/>
                             
                             
                         </StackPanel>
@@ -765,55 +798,63 @@ Margin="0,0,0,0"/>
                FontSize="24" 
                Foreground="Gray" 
                HorizontalAlignment="Left" 
-               Margin="0,20,0,0"/>
+               Margin="500,20,0,0"/>
 
 
 
 
 
-                            <TextBlock Text="➕ Added Disable FullScreen Optimizations Tweak in Gaming" 
+                            <TextBlock Text="➕ Added Gestalt and SedonaHasRun tweaks in NVIDIA" 
                FontSize="14" 
                Foreground="LightGray" 
                HorizontalAlignment="Left" 
-               Margin="0,5,0,0"/>
+               Margin="320,5,0,0"/>
 
-                            <TextBlock Text="➖ Simplified the logic of removing WinDefend" 
+                            <TextBlock Text="➕ Added SurvivorRatio tweak in Memory" 
 FontSize="14" 
 Foreground="LightGray" 
 HorizontalAlignment="Left" 
-Margin="0,5,0,0"/>
-
-
-                            <TextBlock Text="➖ Removed LargePageSizeInBytes in Memory" 
+Margin="320,5,0,0"/>
+                            <TextBlock Text="➕ Added Disable Fullscreen Optimizations tweak in EXE" 
 FontSize="14" 
 Foreground="LightGray" 
 HorizontalAlignment="Left" 
-Margin="0,5,0,0"/>
+Margin="320,5,0,0"/>
+
+                            
+
+
+                            <TextBlock Text="➕ Added MSFT and Absolute Settings in Telemetry" 
+FontSize="14" 
+Foreground="LightGray" 
+HorizontalAlignment="Left" 
+Margin="320,5,0,0"/>
 
 
                             <TextBlock Text="➕ Added Win.ini and INI Menu" 
 FontSize="14" 
 Foreground="LightGray" 
 HorizontalAlignment="Left" 
-Margin="0,5,0,0"/>
+Margin="320,5,0,0"/>
 
                             <TextBlock Text="➕ Added SYSTEM.ini Tweaks in SYSTEM.ini" 
 FontSize="14" 
 Foreground="LightGray" 
 HorizontalAlignment="Left" 
-Margin="0,5,0,0"/>
+Margin="320,5,0,0"/>
 
 
 
 
 
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,35,0,0">
 
-                                <Button Content="#gaming" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="Windows_Click" />
+                                <Button Content="#nvidia" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="Nvidia_Click" />
                                 <Button Content="#process" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="CPUPriority_Click" />
                                 <Button Content="#memory" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="MemoryMan_Click" />
                                 <Button Content="#system.ini" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="Systemini_Click" />
                                 <Button Content="#security" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="Security_Click" />
+                                <Button Content="#exe" FontSize="14" Foreground="LightGray" Background="Transparent" BorderBrush="LightGray" Margin="5" Padding="5" Cursor="Hand" Click="CPUPriority_Click" />
 
                             </StackPanel>
 
@@ -830,20 +871,16 @@ Margin="0,5,0,0"/>
                         MouseUp="ResourcesContent_MouseUp">
                             <TextBlock Text="No resources available at this time." 
                            FontWeight="Bold" 
-                           FontSize="14" 
+                           FontSize="24" 
                            Foreground="Gray" 
                            HorizontalAlignment="Center" 
-                           Margin="0,20,0,0"/>
+                           Margin="0,120,0,0"/>
                             <TextBlock Text="Please check back later for updates." 
-                           FontSize="12" 
+                           FontSize="22" 
                            Foreground="LightGray" 
                            HorizontalAlignment="Center" 
                            Margin="0,5,0,0"/>
-                            <Image Source="Images/welcome_img.png"   
-                       Width="200" 
-                       Height="100" 
-                       HorizontalAlignment="Center" 
-                       Margin="0,10,0,0"/>
+                            
                         </StackPanel>
                     </StackPanel>
                 </ContentControl>
